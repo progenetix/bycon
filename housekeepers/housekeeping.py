@@ -37,8 +37,8 @@ def main():
 
     m_h         = BYC_DBS["mongodb_host"]
     m_d         = BYC_DBS["services_db"]
-    data_db     = ByconMongo().openMongoDatabase(ds_id)
-    services_db = ByconMongo().openMongoDatabase(m_d)
+    data_db     = ByconMongo(ds_id).openMongoDatabase()
+    services_db = ByconMongo(m_d).openMongoDatabase()
 
     ana_coll    = data_db[ BYC_DBS.get("collections", {}).get("analysis")   ]
     ind_coll    = data_db[ BYC_DBS.get("collections", {}).get("individual") ]

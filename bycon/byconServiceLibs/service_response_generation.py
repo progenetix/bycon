@@ -143,7 +143,7 @@ class ByconCollations:
             prdbug(f'... parsing collations for {ds_id}')
 
             fields = {"_id": 0}
-            f_s = ByconMongo().resultListFromQuery(ds_id, f_coll, query, fields)
+            f_s = ByconMongo(ds_id).resultListFromQuery(f_coll, query, fields)
             for f in f_s:
                 if BYC_PARS.get("include_descendant_terms", True) is False:
                     if int(f.get("code_matches", 0)) < 1:

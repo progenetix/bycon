@@ -1,5 +1,6 @@
 import csv, re, sys
 
+from collections import defaultdict
 from datetime import datetime
 
 from os import environ, path
@@ -11,6 +12,7 @@ from bycon import (
     BYC_PARS,
     BYC_DBS,
     ByconError,
+    ByconMongo,
     ByconVariant,
     CollationQuery,
     GenomeBins,
@@ -23,8 +25,6 @@ sys.path.append( services_lib_path )
 from datatable_utils import import_datatable_dict_line
 from file_utils import *
 
-################################################################################
-################################################################################
 ################################################################################
 
 class ByconBundler:
@@ -171,14 +171,12 @@ class ByconBundler:
     def analyses_variants_bundles(self):
         # TODO: This is similar to a keyed bundle component ...
         bb = self.bundle
-        c_p_l = []
         for p_o in bb.get("analyses", []):
             cs_id = p_o.get("id")
             p_o.update({
                 "variants": list(filter(lambda v: v.get("analysis_id", "___none___") == cs_id, bb["variants"]))
             })
-            c_p_l.append(p_o)          
-        self.analysisVariantsBundles = c_p_l
+            self.analysisVariantsBundles.append(p_o)          
         return self.analysisVariantsBundles
 
 
@@ -273,8 +271,7 @@ class ByconBundler:
             if not res_k in ds_res:
                 continue
 
-            mongo_client    = MongoClient(host=BYC_DBS["mongodb_host"])
-            sample_coll     = mongo_client[ds_id][bundle_type]
+            sample_coll     = ByconMongo(ds_id).openMongoColl(bundle_type)
             s_r             = ds_res[res_k]
             s_ids           = s_r["target_values"]
             r_no            = len(s_ids)
@@ -305,26 +302,29 @@ class ByconBundler:
                 self.bundle[bundle_type].append(p_o)
             prdbug(f'...... __analyses_bundle_from_result_set number: {len(self.bundle[bundle_type])}')
 
-        return
-
 
     #--------------------------------------------------------------------------#
 
     def __analyses_add_database_variants(self):
         bb = self.bundle
-        c_p_l = []
 
-        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
+        ds_a_s = defaultdict(list)
         for p_o in bb.get("analyses", []):
-            ds_id = p_o.get("dataset_id", "___none___")
-            var_coll = mongo_client[ds_id]["variants"]
-            cs_id = p_o.get("analysis_id", "___none___")
-            v_q = {"analysis_id": cs_id}
-            p_o.update({"variants": list(var_coll.find(v_q))})
-            c_p_l.append(p_o)
+            if not (ds_id := p_o.get("dataset_id")):
+                continue
+            ds_a_s[ds_id].append(p_o)
 
-        self.analysisVariantsBundles = c_p_l
-        return
+        for ds_id, p_os in ds_a_s.items():
+            var_coll = ByconMongo(ds_id).openMongoColl("variants")
+            for p_o in p_os:
+                if not (ds_id := p_o.get("dataset_id")):
+                    continue
+                if not (cs_id := p_o.get("analysis_id", "___none___")):
+                    continue
+                p_o.update({
+                    "variants": list(var_coll.find({"analysis_id": cs_id}))
+                })
+                self.analysisVariantsBundles.append(p_o)
 
 
     #--------------------------------------------------------------------------#

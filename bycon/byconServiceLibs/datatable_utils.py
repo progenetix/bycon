@@ -17,7 +17,6 @@ services_lib_path = path.join(path.dirname(path.abspath(__file__)))
 sys.path.append(services_lib_path)
 from file_utils import ExportFile
 
-
 ################################################################################
 
 class ByconDatatableExporter:
@@ -261,7 +260,7 @@ def add_geolocation_to_pgxdoc(pgxdoc, geoprov_id):
 
     m_d = BYC_DBS["services_db"]
     m_c = BYC_DBS.get("collections", {}).get("geolocs")
-    geo_coll = ByconMongo().openMongoColl(m_d, m_c)
+    geo_coll = ByconMongo(m_d).openMongoColl(m_c)
     geo_info = geo_coll.find_one({"id": geoprov_id}, {"_id": 0, "id": 0})
     if geo_info is None:
         return pgxdoc

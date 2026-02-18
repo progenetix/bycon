@@ -107,7 +107,7 @@ class ByconCollationsAddFrequencies:
         self.interval_count = GB.get_genome_bin_count()
         self.binning = GB.get_genome_binning()
         self.limit = BYC_PARS.get("limit", 200)
-        self.coll_coll = ByconMongo().openMongoColl(dataset_id, BYC_DBS["collections"]["collation"])
+        self.coll_coll = ByconMongo(dataset_id).openMongoColl(BYC_DBS["collections"]["collation"])
 
     #--------------------------------------------------------------------------#
     #----------------------------- public -------------------------------------#
@@ -172,7 +172,7 @@ class ByconCollationsAddFrequencies:
 
         prdbug(f'\n... after limit {len(ana_ids)}')
         query       = {"id": {"$in": ana_ids}, "operation.id": "EDAM:operation_3961"}
-        ana_cursor  = ByconMongo().resultCursorFromQuery(self.dataset_id, "analyses", query, {"_id": 0})
+        ana_cursor  = ByconMongo(self.dataset_id).resultCursorFromQuery("analyses", query, {"_id": 0})
         intervals, cnv_ana_count = self.GenomeBins.intervalFrequencyMaps(ana_cursor)
         prdbug(f'... retrieved {cnv_ana_count} CNV analyses')
 

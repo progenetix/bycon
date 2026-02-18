@@ -78,6 +78,7 @@ class ByconQuery:
         self.__query_from_filters()
         self.__query_from_geoquery()
 
+
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
@@ -85,6 +86,7 @@ class ByconQuery:
     def recordsQuery(self):
         prdbug(f"...recordsQuery: {self.queries}")
         return self.queries
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -94,6 +96,7 @@ class ByconQuery:
         for a_k, a_d in self.argument_definitions.items():
             if a_d.get("is_variant_par") or a_d.get("is_vqs_par"):
                 self.variant_par_names.append(a_k)
+
 
     # -------------------------------------------------------------------------#
 
@@ -120,6 +123,7 @@ class ByconQuery:
                 self.__update_queries_for_entity(q, entity)
                 self.queries.update({"expand": False})
 
+
     # -------------------------------------------------------------------------#
 
     def __id_query_add_variant_query(self, entity, entity_ids):
@@ -143,6 +147,7 @@ class ByconQuery:
             {"genomicVariant": {"query": q, "collection": "variants"}}
         )
 
+
     # -------------------------------------------------------------------------#
 
     def __queries_for_test_mode(self):
@@ -152,14 +157,14 @@ class ByconQuery:
             return
 
         e = self.response_entity_id
-        if (c := BYC_DBS.get("collections", {}).get(e, "___none___")) not in ByconMongo().collectionList(self.ds_id):
+        if (c := BYC_DBS.get("collections", {}).get(e, "___none___")) not in ByconMongo(self.ds_id).collectionList():
             return
 
         pipeline = [
             {"$sample": {"size": self.test_mode_count}},
             {"$project": {"_id": 0, "id": 1}}
         ]
-        rs = ByconMongo().resultListFromPipeline(self.ds_id, c, pipeline)
+        rs = ByconMongo(self.ds_id).resultListFromPipeline(c, pipeline)
         q = [{"id": {"$in": list(s.get("id", "___none___") for s in rs)}}]
         prdbug(f"... test mode query: {q}")
 
@@ -167,6 +172,7 @@ class ByconQuery:
             {self.response_entity_id: {"query": q, "collection": c}}
         )
         self.queries.update({"expand": False})
+
 
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
@@ -187,6 +193,7 @@ class ByconQuery:
             return
 
         self.queries["entities"].update({e: {"query": v_queries, "collection": c}})
+
 
     # -------------------------------------------------------------------------#
 
@@ -213,6 +220,7 @@ class ByconQuery:
                     vips.append(self.__parse_variant_parameters(vp))
 
         self.variant_multi_pars = vips
+
 
     # -------------------------------------------------------------------------#
 
@@ -273,6 +281,7 @@ class ByconQuery:
             variant_pars.pop(p_l, None)
 
         return v_p_c
+
 
     # -------------------------------------------------------------------------#
 
@@ -336,6 +345,7 @@ class ByconQuery:
         prdbug(f"__loop_multivars queries: {queries}")
 
         return queries
+
 
     ################################################################################
 
@@ -408,6 +418,7 @@ class ByconQuery:
         prdbug(f"...variant_request_type: {variant_request_type}")
         return variant_request_type
 
+
     # --------------------------------------------------------------------------#
 
     def __create_geneVariantRequest_query(self, v_pars):
@@ -437,6 +448,7 @@ class ByconQuery:
             return False
 
         return queries
+
 
     # --------------------------------------------------------------------------#
 
@@ -499,6 +511,7 @@ class ByconQuery:
             return False
         # TODO: Allele query...
 
+
     # --------------------------------------------------------------------------#
 
     def __create_cytoBandRequest_query(self, v_pars):
@@ -516,6 +529,7 @@ class ByconQuery:
 
         return self.__create_variantRangeRequest_query(v_pars)
 
+
     # --------------------------------------------------------------------------#
 
     def __create_aminoacidChangeRequest_query(self, v_pars):
@@ -530,6 +544,7 @@ class ByconQuery:
         }
 
         return v_q
+
 
     # --------------------------------------------------------------------------#
 
@@ -547,6 +562,7 @@ class ByconQuery:
 
         return v_q
 
+
     # --------------------------------------------------------------------------#
 
     def __create_variantTypeRequest_query(self, v_pars):
@@ -559,6 +575,7 @@ class ByconQuery:
         )
 
         return v_q
+
 
     # --------------------------------------------------------------------------#
 
@@ -619,6 +636,7 @@ class ByconQuery:
 
         return v_q
 
+
     # --------------------------------------------------------------------------#
 
     def __create_variantRangeRequest_query(self, v_pars):
@@ -652,6 +670,7 @@ class ByconQuery:
 
         return v_q
 
+
     # --------------------------------------------------------------------------#
 
     def __request_variant_size_limits(self, v_pars):
@@ -671,6 +690,7 @@ class ByconQuery:
             return s_q
 
         return None
+
 
     # --------------------------------------------------------------------------#
 
@@ -697,6 +717,7 @@ class ByconQuery:
 
         return v_q
 
+
     # --------------------------------------------------------------------------#
 
     def __create_variantAlleleRequest_query(self, v_pars):
@@ -721,6 +742,7 @@ class ByconQuery:
 
         return v_q
 
+
     # --------------------------------------------------------------------------#
 
     def __create_in_query_for_parameter(self, par, qpar, q_pars):
@@ -737,6 +759,7 @@ class ByconQuery:
 
         return {qpar: q_pars[par][0]}
 
+
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
@@ -751,7 +774,7 @@ class ByconQuery:
         if not (m_c := BYC_DBS.get("collections", {}).get("filteringTerm")):
             ByconError().addError("No filtering term collection defined!")
             return
-        self.filter_collection = ByconMongo().openMongoColl(m_d, m_c)
+        self.filter_collection = ByconMongo(m_d).openMongoColl(m_c)
         entity_filters_lists = self.__assemble_filter_lists()
 
         for f_entity, field_queries in entity_filters_lists.items():
@@ -764,6 +787,7 @@ class ByconQuery:
                         f_s_l.append({f_field: f_q_v})
 
             self.__update_queries_for_entity(f_s_l, f_entity)
+
 
     # -------------------------------------------------------------------------#
 
@@ -825,11 +849,13 @@ class ByconQuery:
 
         return f_lists
 
+
     # -------------------------------------------------------------------------#
 
     def __substitute_filter_id(self, f):
         f.update({"id": f.get("id", "___none___").replace("PMID:", "pubmed:")})
         return f
+
 
     # -------------------------------------------------------------------------#
 
@@ -842,10 +868,12 @@ class ByconQuery:
         f_val = re.sub(r"^!", "", f_val)
         return f_val, f_neg
 
+
     # -------------------------------------------------------------------------#
 
     def __filter_info_from_collationed_filter(self, f_val):
-        if f_info := self.filter_collection.find_one(
+        prdbug(f"...__filter_info_from_collationed_filter: {self.filter_collection}")
+        if (f_info := self.filter_collection.find_one(
             {"id": f_val},
             {
                 "_id": 0,
@@ -857,7 +885,7 @@ class ByconQuery:
                 "entity": 1,
                 "child_terms": 1,
             },
-        ):
+        )):
             return f_info
 
         return False
@@ -911,7 +939,7 @@ class ByconQuery:
         m_d = BYC_DBS["housekeeping_db"]
         m_c = BYC_DBS.get("collections", {}).get("handover")
 
-        ho_coll = ByconMongo().openMongoColl(m_d, m_c)
+        ho_coll = ByconMongo(m_d).openMongoColl(m_c)
         if not (h_o := ho_coll.find_one({"id": accessid})):
             return
 
@@ -1150,7 +1178,7 @@ class CollationQuery:
                 {"$sample": {"size": self.test_mode_count}},
                 {"$project": {"_id": 0, "id": 1}}
             ]
-            rs = ByconMongo().resultListFromPipeline(self.dataset_id, "collations", pipeline)
+            rs = ByconMongo(self.dataset_id).resultListFromPipeline("collations", pipeline)
             prdbug(f"...__coll_test_mode_query result\n\n{rs}")
             ids = list(s["id"] for s in rs)
             self.query = {"id": {"$in": ids}}

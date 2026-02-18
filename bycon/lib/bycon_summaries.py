@@ -57,8 +57,8 @@ class ByconSummaries:
                     )
 
         self.dataset_summaries  = [] 
-        self.data_client        = ByconMongo().openMongoDatabase(ds_id)
-        self.term_coll          = ByconMongo().openMongoColl(ds_id, "collations")
+        self.data_client        = ByconMongo(ds_id).openMongoDatabase()
+        self.term_coll          = ByconMongo(ds_id).openMongoColl("collations")
 
 
     # -------------------------------------------------------------------------#

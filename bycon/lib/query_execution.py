@@ -12,7 +12,7 @@ class ByconDatasetResults():
         self.dataset_id         = ds_id
         self.entity_defaults    = BYC["entity_defaults"]
         self.res_ent_id         = r_e_id = str(BYC.get("response_entity_id", "___none___"))
-        self.data_db            = ByconMongo().openMongoDatabase(ds_id)
+        self.data_db            = ByconMongo(ds_id).openMongoDatabase()
 
         # This is bycon and model specific; in the default model there would also
         # be `run` (which has it's data here as part of `analysis`). Also in

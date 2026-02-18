@@ -632,8 +632,8 @@ class ByconFilteringTerms:
         if "collation_type" not in fields:
             fields.update({"collation_type": 1})
 
-        f_s = ByconMongo().resultListFromQuery(
-            self.ds_id, self.data_collection, self.filtering_terms_query, fields
+        f_s = ByconMongo(self.ds_id).resultListFromQuery(
+            self.data_collection, self.filtering_terms_query, fields
         )
         t_f_t_s = []
         for f in f_s:
@@ -707,17 +707,17 @@ class ByconCollections:
         #     ds_stats = {}
         # ds_stats = stat[0].get("datasets", {})
 
-        for coll_id, coll in BYC["dataset_definitions"].items():
+        for ds_id, coll in BYC["dataset_definitions"].items():
             prdbug(
-                f"... processing dataset {coll_id} => {BYC.get('BYC_DATASET_IDS', [])}"
+                f"... processing dataset {ds_id} => {BYC.get('BYC_DATASET_IDS', [])}"
             )
-            if coll_id not in BYC.get("BYC_DATASET_IDS", []):
+            if ds_id not in BYC.get("BYC_DATASET_IDS", []):
                 continue
 
             counts = {}
             for e in self.queried_entities:
                 if c := BYC_DBS.get("collections", {}).get(e):
-                    d_c = ByconMongo().openMongoColl(coll_id, c)
+                    d_c = ByconMongo(ds_id).openMongoColl(c)
                     counts.update({e: d_c.count_documents({})})
 
             coll.update({"counts": counts})
@@ -745,7 +745,7 @@ class ByconCollections:
                 query = {"$and": [query, {"id": {"$in": c_q}}]}
 
         for ds_id in BYC["BYC_DATASET_IDS"]:
-            mongo_coll = ByconMongo().openMongoColl(ds_id, "collations")
+            mongo_coll = ByconMongo(ds_id).openMongoColl("collations")
             for cohort in mongo_coll.find(query, limit=limit):
                 self.collections.append(cohort)
 
@@ -778,7 +778,7 @@ class ByconResultSets:
 
         m_d = BYC_DBS["housekeeping_db"]
         m_c = BYC_DBS.get("collections", {}).get("handover")
-        self.ho_coll = ByconMongo().openMongoColl(m_d, m_c)
+        self.ho_coll = ByconMongo(m_d).openMongoColl(m_c)
 
         self.record_queries = ByconQuery().recordsQuery()
         self.__create_empty_result_sets()
@@ -948,7 +948,7 @@ class ByconResultSets:
             f"... retrieving data for dataset {ds_id}, collection {q_coll}, {len(q_v_s)} records"
         )
 
-        data_coll = ByconMongo().openMongoColl(ds_id, q_coll)
+        data_coll = ByconMongo(ds_id).openMongoColl(q_coll)
 
         r_s_res = []
         for q_v in q_v_s:

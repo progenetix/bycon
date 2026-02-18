@@ -16,7 +16,7 @@ class ByconInfo():
 
         m_d = BYC_DBS["housekeeping_db"]
         m_c = BYC_DBS.get("collections", {}).get("info")
-        self.info_coll = ByconMongo().openMongoColl(m_d, m_c)
+        self.info_coll = ByconMongo(m_d).openMongoColl(m_c)
 
     #--------------------------------------------------------------------------#
     #----------------------------- public -------------------------------------#
@@ -49,16 +49,16 @@ class ByconInfo():
     #--------------------------------------------------------------------------#
 
     def __dataset_update_counts(self, ds_id):
-        m_d     = ds_id
-        m_c     = BYC_DBS.get("collections", {}).get("collations")
-        collcoll = ByconMongo().openMongoColl(ds_id, m_c)
-        b_i_ds  = {
+        m_d         = ds_id
+        m_c         = BYC_DBS.get("collections", {}).get("collations")
+        collcoll    = ByconMongo(ds_id).openMongoColl(m_c)
+        b_i_ds      = {
             "counts": {},
             "collation_types": {},
             "collations": {},
             "updated": datetime.now().isoformat()
         }
-        ds_db   = ByconMongo().openMongoDatabase(m_d)
+        ds_db   = ByconMongo(m_d).openMongoDatabase()
         c_n     = ds_db.list_collection_names()
         for c in self.data_colls:
             if c not in c_n:

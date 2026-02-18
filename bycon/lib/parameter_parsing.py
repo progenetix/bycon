@@ -593,7 +593,7 @@ class ByconDatasets:
 
         m_d = BYC_DBS["housekeeping_db"]
         m_c = BYC_DBS.get("collections", {}).get("handover")
-        if not (h_o := ByconMongo().oneFromQuery(m_d, m_c, {"id": accessid})):
+        if not (h_o := ByconMongo(m_d).oneFromQuery(m_c, {"id": accessid})):
             return
         if (ds_id := str(h_o.get("ds_id"))) not in self.database_names:
             return

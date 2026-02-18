@@ -111,7 +111,7 @@ class ByconGeoResource:
     def __init__(self):
         m_d = BYC_DBS["services_db"]
         m_c = BYC_DBS.get("collections", {}).get("geolocs")
-        self.geolocs_coll       = ByconMongo().openMongoColl(m_d, m_c)
+        self.geolocs_coll       = ByconMongo(m_d).openMongoColl(m_c)
         self.atlantis_coords    = [ -71, 25 ]
         self.geo_distance       = 500000  # 500 km
 
@@ -121,7 +121,7 @@ class ByconGeoResource:
     # -------------------------------------------------------------------------#
 
     def update_geolocations(self, database=None, update_coll=None, query={}):
-        self.update_coll = ByconMongo().openMongoColl(database, update_coll)
+        self.update_coll = ByconMongo(database).openMongoColl(update_coll)
 
         gn = self.update_coll.count_documents({})
         atl_count = 0
