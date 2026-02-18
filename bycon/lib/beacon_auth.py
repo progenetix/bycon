@@ -1,5 +1,5 @@
 from bycon_helpers import prdbug
-from config import *
+from config import AUTHORIZATIONS, BYC, BYC_PARS, HTTP_HOST, GRANULARITY_LEVELS
 
 """
 This experimental authorization setup so far so far tests a method to define

@@ -1,25 +1,22 @@
 from isodate import date_isoformat
-from pymongo import MongoClient
+from datetime import datetime
 from progress.bar import Bar
 
-from bycon_helpers import *
-from config import *
+from bycon_helpers import ByconMongo, prjsonnice
+from config import BYC, BYC_DBS
 from parameter_parsing import ByconDatasets
 
 class ByconInfo():
     def __init__(self, distvars=True):
-        self.count_distvars = distvars
-        self.database_names = ByconDatasets().get_database_names()
-        self.dataset_ids = list(BYC["dataset_definitions"].keys())
-        self.data_colls = ["biosamples", "individuals", "variants", "analyses"]
-        self.today = date_isoformat(datetime.now())
-        self.status = {"date": self.today}
+        self.count_distvars     = distvars
+        self.database_names     = ByconDatasets().get_database_names()
+        self.dataset_ids        = list(BYC["dataset_definitions"].keys())
+        self.data_colls         = ["biosamples", "individuals", "variants", "analyses"]
+        self.status             = {"date": date_isoformat(datetime.now())}
 
-        m_h = BYC_DBS["mongodb_host"]
         m_d = BYC_DBS["housekeeping_db"]
         m_c = BYC_DBS.get("collections", {}).get("info")
-        self.mongo_client = MongoClient(host=m_h)
-        self.info_coll = self.mongo_client[m_d][m_c]
+        self.info_coll = ByconMongo(m_d).openMongoColl(m_c)
 
     #--------------------------------------------------------------------------#
     #----------------------------- public -------------------------------------#
@@ -27,7 +24,7 @@ class ByconInfo():
 
     def update_beaconinfo(self):
         self.__assess_datasets()
-        self.info_coll.delete_many({"date": self.today})
+        self.info_coll.delete_many(self.status)
         if not BYC["TEST_MODE"]:
             self.info_coll.insert_one(self.status)
             print(f'\n{self.__hl()}==> updated entry {self.status["date"]} in info collection')
@@ -52,17 +49,16 @@ class ByconInfo():
     #--------------------------------------------------------------------------#
 
     def __dataset_update_counts(self, ds_id):
-        m_d     = ds_id
-        m_c     = BYC_DBS.get("collections", {}).get("collations")
-        ds_db   = self.mongo_client[m_d]
-        collcoll = ds_db[m_c]
-        b_i_ds  = {
+        m_c         = BYC_DBS.get("collections", {}).get("collation")
+        collcoll    = ByconMongo(ds_id).openMongoColl(m_c)
+        b_i_ds      = {
             "counts": {},
             "collation_types": {},
             "collations": {},
             "updated": datetime.now().isoformat()
         }
-        c_n = ds_db.list_collection_names()
+        ds_db   = ByconMongo(ds_id).openMongoDatabase()
+        c_n     = ds_db.list_collection_names()
         for c in self.data_colls:
             if c not in c_n:
                 continue

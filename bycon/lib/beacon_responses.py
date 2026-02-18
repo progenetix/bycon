@@ -4,8 +4,9 @@ import yaml
 
 from datetime import datetime
 from deepmerge import always_merger
+from humps import camelize
 
-from bycon_helpers import ByconH, ByconMongo, dict_replace_values, prdbug, prjsoncam
+from bycon_helpers import ByconError, ByconH, ByconMongo, clean_empty_properties, dict_replace_values, prdbug, prjsoncam
 from bycon_summaries import ByconSummaries
 from config import BEACON_ROOT, BYC, BYC_DBS, BYC_PARS, HTTP_HOST
 from parameter_parsing import ByconFilters
@@ -19,15 +20,13 @@ from schema_parsing import ByconSchemas, RecordsHierarchy
 
 class BeaconResponseMeta:
     def __init__(self, data_response=None):
-        self.beacon_schema = BYC["response_entity"].get("defaultSchema", "___none___")
-        self.entity_defaults = BYC.get("entity_defaults", {})
-        self.response_meta = ByconSchemas(
-            "beaconResponseMeta", ""
-        ).get_schema_instance()
+        self.beacon_schema      = BYC["response_entity"].get("defaultSchema", "___none___")
+        self.entity_defaults    = BYC.get("entity_defaults", {})
+        self.response_meta      = ByconSchemas("beaconResponseMeta", "").get_schema_instance()
         self.returned_granularity = BYC.get("returned_granularity", "boolean")
-        self.data_response = data_response
-        self.record_queries = None
-        self.filters = ByconFilters().get_filters()
+        self.data_response      = data_response
+        self.record_queries     = None
+        self.filters            = ByconFilters().get_filters()
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -49,6 +48,7 @@ class BeaconResponseMeta:
 
     def __meta_add_parameters(self):
         r_m = self.response_meta
+
         if BYC["TEST_MODE"] is True:
             r_m.update({"test_mode": BYC["TEST_MODE"]})
         r_m.update({"returned_granularity": self.returned_granularity})
@@ -67,7 +67,7 @@ class BeaconResponseMeta:
             if not (p_v := r_m.get(p)):
                 r_m.pop(p, None)
 
-        self.response_meta.update(r_m)
+        self.response_meta = r_m
 
     # -------------------------------------------------------------------------#
 
@@ -187,6 +187,7 @@ class BeaconInfoResponse:
         self.data_response.update({"meta": BeaconResponseMeta().populatedMeta()})
         self.info_response_content = {}
 
+
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
@@ -195,14 +196,9 @@ class BeaconInfoResponse:
         self.__populateInfoResponse()
         response = self.info_response_content
         self.__response_add_returned_schemas()
-        r_k_s = []
-        for p in response.keys():
-            if "NoneType" in str(type(response[p])):
-                r_k_s.append(p)
-        for p in r_k_s:
-            response.pop(p, None)
-        self.data_response.update({"response": response})
+        self.data_response.update({"response": clean_empty_properties(response)})
         return self.data_response
+
 
     # -------------------------------------------------------------------------#
     # ---------------------------- private ------------------------------------#
@@ -237,6 +233,7 @@ class BeaconInfoResponse:
             self.info_response_content = beacon_info
             return
 
+
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 
@@ -247,9 +244,11 @@ class BeaconInfoResponse:
         ets = set()
         beacon_schemas = []
         for e_t, e_d in self.entity_defaults.items():
-            if e_d.get("is_beacon_entity", False) is True and e_t not in ets:
-                beacon_schemas.append(e_d.get("defaultSchema", {}))
-                ets.add(e_t)
+            prdbug(f"{e_t} => is_beacon_entity {e_d.get("is_beacon_entity", False)}")
+            if e_d.get("is_beacon_entity") and e_t not in ets:
+                if (d := e_d.get("defaultSchema")):
+                    beacon_schemas.append(d)
+                    ets.add(e_t)
             else:
                 prdbug(f"... skipping {e_t} schema")
 
@@ -280,6 +279,7 @@ class BeaconDataResponse:
             self.data_response.pop(m, None)
         self.data_time_init = datetime.now()
 
+
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
@@ -293,6 +293,7 @@ class BeaconDataResponse:
             return self.filteringTermsResponse()
         if "beaconAggregationConceptsResponse" in self.response_schema:
             return self.aggregationTermsResponse()
+
 
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
@@ -387,7 +388,7 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def __check_switch_to_error_response(self):
-        if not (r_q_e := self.record_queries.get("entities", {})):
+        if not self.record_queries.get("entities"):
             ByconError().addError("no valid query")
             self.data_response.update(
                 {
@@ -420,12 +421,7 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def __acknowledge_HIT(self):
-        if (
-            "HIT"
-            not in (
-                i_rs_r := BYC_PARS.get("include_resultset_responses", "ALL")
-            ).upper()
-        ):
+        if "HIT" not in BYC_PARS.get("include_resultset_responses", "ALL").upper():
             return
         rss = [rs for rs in self.result_sets if rs.get("exists", True) is True]
         self.result_sets = rss
@@ -433,12 +429,7 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def __acknowledge_MISS(self):
-        if (
-            "MISS"
-            not in (
-                i_rs_r := BYC_PARS.get("include_resultset_responses", "ALL")
-            ).upper()
-        ):
+        if "MISS" not in BYC_PARS.get("include_resultset_responses", "ALL").upper():
             return
         rss = [rs for rs in self.result_sets if rs.get("exists", True) is False]
         self.result_sets = rss
@@ -464,7 +455,6 @@ class BeaconDataResponse:
             "scope",
         ]
         for c in self.colls:
-            c_k = f"{c.get('scope', '')}.{c.get('db_key', '')}"
             c.update(
                 {
                     "id": c.get("id", "___none___"),
@@ -642,8 +632,8 @@ class ByconFilteringTerms:
         if "collation_type" not in fields:
             fields.update({"collation_type": 1})
 
-        f_s = ByconMongo().resultList(
-            self.ds_id, self.data_collection, self.filtering_terms_query, fields
+        f_s = ByconMongo(self.ds_id).resultListFromQuery(
+            self.data_collection, self.filtering_terms_query, fields
         )
         t_f_t_s = []
         for f in f_s:
@@ -717,17 +707,17 @@ class ByconCollections:
         #     ds_stats = {}
         # ds_stats = stat[0].get("datasets", {})
 
-        for coll_id, coll in BYC["dataset_definitions"].items():
+        for ds_id, coll in BYC["dataset_definitions"].items():
             prdbug(
-                f"... processing dataset {coll_id} => {BYC.get('BYC_DATASET_IDS', [])}"
+                f"... processing dataset {ds_id} => {BYC.get('BYC_DATASET_IDS', [])}"
             )
-            if coll_id not in BYC.get("BYC_DATASET_IDS", []):
+            if ds_id not in BYC.get("BYC_DATASET_IDS", []):
                 continue
 
             counts = {}
             for e in self.queried_entities:
                 if c := BYC_DBS.get("collections", {}).get(e):
-                    d_c = ByconMongo().openMongoColl(coll_id, c)
+                    d_c = ByconMongo(ds_id).openMongoColl(c)
                     counts.update({e: d_c.count_documents({})})
 
             coll.update({"counts": counts})
@@ -755,7 +745,7 @@ class ByconCollections:
                 query = {"$and": [query, {"id": {"$in": c_q}}]}
 
         for ds_id in BYC["BYC_DATASET_IDS"]:
-            mongo_coll = ByconMongo().openMongoColl(ds_id, "collations")
+            mongo_coll = ByconMongo(ds_id).openMongoColl("collations")
             for cohort in mongo_coll.find(query, limit=limit):
                 self.collections.append(cohort)
 
@@ -788,7 +778,7 @@ class ByconResultSets:
 
         m_d = BYC_DBS["housekeeping_db"]
         m_c = BYC_DBS.get("collections", {}).get("handover")
-        self.ho_coll = ByconMongo().openMongoColl(m_d, m_c)
+        self.ho_coll = ByconMongo(m_d).openMongoColl(m_c)
 
         self.record_queries = ByconQuery().recordsQuery()
         self.__create_empty_result_sets()
@@ -868,7 +858,6 @@ class ByconResultSets:
     # -------------------------------------------------------------------------#
 
     def __get_handover_access_key(self):
-        e = self.response_entity_id
         c = BYC_DBS.get("collections", {}).get(self.response_entity_id, "___none___")
         self.handover_key = f"{c}.id"
 
@@ -878,7 +867,6 @@ class ByconResultSets:
         for ds_id, d_s in self.datasets_results.items():
             if not d_s:
                 continue
-            info = {"counts": {}}
             for h_o_k, h_o in d_s.items():
                 if "target_values" not in h_o:
                     continue
@@ -960,7 +948,7 @@ class ByconResultSets:
             f"... retrieving data for dataset {ds_id}, collection {q_coll}, {len(q_v_s)} records"
         )
 
-        data_coll = ByconMongo().openMongoColl(ds_id, q_coll)
+        data_coll = ByconMongo(ds_id).openMongoColl(q_coll)
 
         r_s_res = []
         for q_v in q_v_s:
@@ -1043,21 +1031,16 @@ class ByconHO:
     # ----------------------------- public -------------------------------------#
     # --------------------------------------------------------------------------#
 
-    def get_dataset_handovers(self, ds_id=None, datasets_results={}):
+    def get_dataset_handovers(self, ds_id="___none___", datasets_results={}):
         self.dataset_handover = []
         if not self.include_handovers:
             return self.dataset_handover
         self.dataset_id = ds_id
-        if not (ds_def := self.dataset_definitions.get(str(ds_id))):
+        if not self.dataset_definitions.get(ds_id):
             return self.dataset_handover
         if not (ds_r := datasets_results.get(ds_id)):
             return self.dataset_handover
         self.dataset_results = ds_r
-
-        ds_h_o = list(
-            ds_def.get("handoverTypes", self.handover_types.keys())
-            & self.handover_types.keys()
-        )
 
         for h_o_t in self.handover_types.keys():
             self.__process_handover(h_o_t)
@@ -1131,8 +1114,8 @@ def print_yaml_response(this={}, status_code=200):
         print("Content-Type: application/x-yaml")
         print()
 
-    this = humps.camelize(this)
-    print(yaml.dump(humps.camelize(this)))
+    this = camelize(this)
+    print(yaml.dump(camelize(this)))
     print()
     exit()
 

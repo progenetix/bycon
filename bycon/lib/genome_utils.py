@@ -626,8 +626,12 @@ class GeneInfo:
 ################################################################################
 ################################################################################
 ################################################################################
+
 class GeneIntervals:
     def __init__(self, tsv_path=None):
+        # TODO: this should be checked outside of the class. E.g. standard
+        # use of --inputfile in the caller, reading in, and then using the
+        # created object as input here
         if tsv_path is None:
             tsv_path = BYC_PARS.get("gene_interval_tsv", "")
         if not tsv_path:

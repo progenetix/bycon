@@ -275,7 +275,7 @@ chr3:
     - this led to a problem at >220000 analyses, where then the query first
       matched all CNV samples before intersecting w/ the specific codes & therefore
       running into the upper limit of MongoDB
-    - `EDAM:operation_3961` is now a hard filter in the `intervalAidFrequencyMaps`
+    - `EDAM:operation_3961` is now a hard filter in the `intervalFrequencyMaps`
       function (TODO: better solution?)
 
 ### 2025-06-05: (v2.4.7 "Thessaloniki")

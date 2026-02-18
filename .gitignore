@@ -15,3 +15,7 @@ beaconplusWeb/.next
 beaconplusWeb/node_modules
 beaconplusWeb/out
 
+*.gz
+*.gz
+rsrc/mongodump/examplez.tar.gz
+*.gz

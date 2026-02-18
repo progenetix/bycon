@@ -18,32 +18,33 @@ from config import BYC, BYC_DBS, BYC_UNCAMELED, BYC_UPPER, HTTP_HOST
 
 
 class ByconMongo:
-    def __init__(self):
+    def __init__(self, db_name="___none___"):
         self.host_address   = BYC_DBS["mongodb_host"]
         self.client         = MongoClient(host=self.host_address)
         self.databases      = list(self.client.list_database_names())
+        self.db_name        = self.__check_db_name(db_name)
         self.collections    = []
 
     #--------------------------------------------------------------------------#
     #----------------------------- public -------------------------------------#
     #--------------------------------------------------------------------------#
     
-    def openMongoDatabase(self, db_name):
-        if self.__check_db_name(db_name) is False:
-            return False
-        self.db = self.client[db_name]
-        return self.client[db_name]
+    def openMongoDatabase(self):
+        if self.db_name is None:
+            ByconError().addError(f"`ByconMongo`: db does not exist")
+            return None
+        self.db = self.client[self.db_name]
+        return self.db
 
 
     #--------------------------------------------------------------------------#
 
-    def openMongoColl(self, db_name, coll_name="___none___"):
-        if self.__check_db_name(db_name) is False:
-            ByconError().addError(f"db {db_name} does not exist")
-            return False
-        self.db = self.client[db_name]
-        if self.__check_coll_name(coll_name) is False:
-            ByconError().addError(f"collection {db_name}.{coll_name} does not exist")
+    def openMongoColl(self, coll_name="___none___"):
+        if self.openMongoDatabase() is None:
+            return None
+        if not self.__check_coll_name(coll_name):
+            ByconError().addError(f"`openMongoColl`: collection {self.db_name}.{coll_name} does not exist")
+            prdbug(f"`openMongoColl`: Opening collection `{self.db_name}.{coll_name}` error ==>> does not exist")
             return False
         return self.db[coll_name]
 
@@ -56,21 +57,52 @@ class ByconMongo:
 
     #--------------------------------------------------------------------------#
 
-    def collectionList(self, db_name="___none___"):
-        if self.__check_db_name(db_name) is False:
-            ByconError().addError(f"db {db_name} does not exist")
-            return self.collections
-        self.db = self.client[db_name]
+    def collectionList(self):
+        if not self.openMongoDatabase():
+            return False
         self.collections = list(self.db.list_collection_names())
         return self.collections
 
 
     #--------------------------------------------------------------------------#
 
-    def resultList(self, db_name, coll_name, query, fields={}):
+    def resultCursorFromQuery(self, coll_name, query, fields={}):
+        coll = self.openMongoColl(coll_name)
+        return coll.find(query, fields)
+
+
+    #--------------------------------------------------------------------------#
+
+    def resultListFromQuery(self, coll_name, query, fields={}):
         results = []
-        if (coll := self.openMongoColl(db_name, coll_name)) is not False:
+        if (coll := self.openMongoColl(coll_name)) is not False:
             results = list(coll.find(query, fields))
+        return results
+
+
+    #--------------------------------------------------------------------------#
+
+    def resultCountFromQuery(self, coll_name, query) -> int:
+        if (coll := self.openMongoColl(coll_name)) is not False:
+            return coll.count_documents(query)
+        return 0
+
+
+    #--------------------------------------------------------------------------#
+
+    def oneFromQuery(self, coll_name, query={"no_field": "___none___"}):
+        if (coll := self.openMongoColl(coll_name)) is not False:
+            if (one := coll.find_one(query)):
+                return one
+        return None
+
+
+    #--------------------------------------------------------------------------#
+
+    def resultListFromPipeline(self, coll_name, pipeline=[]):
+        results = []
+        if (coll := self.openMongoColl(coll_name)) is not False:
+            results = list(coll.aggregate(pipeline))
         return results
 
 
@@ -81,7 +113,7 @@ class ByconMongo:
     def __check_db_name(self, db_name):
         if str(db_name) not in self.databases:
             ByconError().addError(f"db `{db_name}` does not exist")
-            return False
+            return None
         return db_name
 
 
@@ -156,10 +188,6 @@ class ByconH:
             return list(this)
         if len(list(this)) < 1:
             return []
-
-        if BYC.get("PAGINATED_STATUS", False):
-            return this
-        BYC.update({"PAGINATED_STATUS": True})
 
         p_range = [
             skip * limit,
@@ -314,20 +342,14 @@ def isonow():
 
 ################################################################################
 
-def clean_empty_fields(this_object, protected=["external_references"]):
+def clean_empty_properties(this_object, protected=["external_references"]):
     if not isinstance(this_object, dict):
         return this_object
-    for k in list(this_object.keys()):
-        if k in protected:
-            continue
-        if not this_object.get(k):
-            this_object.pop(k, None)
-        elif isinstance(this_object[k], dict):
-            if not this_object.get(k):
-                this_object.pop(k, None)
-        elif isinstance(this_object[k], list):
-            if len(this_object[k]) < 1:
-                this_object.pop(k, None)
+
+    r_k_s = [k for k, v in this_object.items() if v is None or v == {} or v == [] or v == ""]
+    for p in r_k_s:
+        if p not in protected:
+            del this_object[p]
 
     return this_object
 

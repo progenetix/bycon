@@ -6,14 +6,15 @@ import scipy.cluster
 
 class ByconCluster():
     def __init__(self, plv):
-        self.plv = plv
-        self.data = plv.get("results", [])
-        self.cluster_metric = plv.get("plot_cluster_metric", "complete")
+        self.plv            = plv
+        self.data           = plv.get("results", [])
+        self.cluster_metric = plv.get("plot_cluster_metric", "ward")
+        self.tree_side      = "right"
         self.samples_cluster_type = plv.get("plot_samples_cluster_type", "")
-        self.tree_side = "right"
-        self.matrix = []
-        self.dendrogram = {}
-        self.new_order = []
+
+        self.matrix         = []
+        self.dendrogram     = {}
+        self.new_order      = []
 
 
     # -------------------------------------------------------------------------#
@@ -78,7 +79,4 @@ class ByconCluster():
         self.new_order = scipy.cluster.hierarchy.leaves_list(linkage)
         self.dendrogram = scipy.cluster.hierarchy.dendrogram(linkage, no_plot=True, orientation=self.tree_side)
 
-
-################################################################################
-################################################################################
-################################################################################
+# the end ######################################################################

@@ -1,7 +1,8 @@
 #!/usr/local/bin/python3
 
+import random
+
 from bycon import *
-from pymongo import MongoClient
 
 from bycon import byconServiceLibs, ByconError
 from service_helpers import assert_single_dataset_or_exit
@@ -49,7 +50,7 @@ class MultiQueryResponses:
     def get_analysis_ids(self):
         self.target_path_id = "analyses"
         self.__run_multi_queries()
-        return self.entity_ids
+        return list(self.entity_ids)
 
 
     # -------------------------------------------------------------------------#
@@ -57,7 +58,7 @@ class MultiQueryResponses:
     def get_biosample_ids(self):
         self.target_path_id = "biosamples"
         self.__run_multi_queries()
-        return self.entity_ids
+        return list(self.entity_ids)
 
 
     # -------------------------------------------------------------------------#
@@ -65,7 +66,7 @@ class MultiQueryResponses:
     def get_individual_ids(self):
         self.target_path_id = "individuals"
         self.__run_multi_queries()
-        return self.entity_ids
+        return list(self.entity_ids)
 
 
     # -------------------------------------------------------------------------#
@@ -74,11 +75,12 @@ class MultiQueryResponses:
 
     def __run_multi_queries(self):
         ho_id = f'{self.target_path_id}.id'
+        BH = ByconH()
         for qek, qev in self.multiqueries.items():
             for p, v in qev.items():
                 BYC_PARS.update({p: v})
-            prjsontrue(qev)
-            prjsontrue(BYC_PARS)
+            # prjsontrue(qev)
+            # prjsontrue(BYC_PARS)
 
             BRS = ByconResultSets()
             ds_results = BRS.datasetsResults()
@@ -91,11 +93,17 @@ class MultiQueryResponses:
                 r_c = BRS.get_record_queries()
                 ByconError().addError(f'ERROR - no {qek} data for {self.ds_id}')
                 continue
+            if not (f_i_ids := ds.get(ho_id, {}).get("target_values", [])):
+                ByconError().addError(f'ERROR - no {ho_id} data for {self.ds_id}')
+                continue
+
+            # prjsontrue(ds)
             f_i_ids = ds[ho_id].get("target_values", [])
-            self.entity_ids = set(self.entity_ids)
-            self.entity_ids.update(random_samples(f_i_ids, min(BYC_PARS.get("limit", 200), len(f_i_ids))))
+            s_no = min(200, len(f_i_ids))
+            lim_ids = random.sample(f_i_ids, s_no)
+            self.entity_ids.update(lim_ids)
+            print(f"{qek}: {len(f_i_ids)}, {len(lim_ids)} ==>> {len(self.entity_ids)}")
             BYC["NOTES"].append(f'{qek} with {ds[ho_id].get("target_count", 0)} {self.target_path_id} hits')
-            self.entity_ids = list(self.entity_ids)
 
 
 ################################################################################

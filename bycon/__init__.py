@@ -10,9 +10,13 @@ Handles:
 - Parameter processing
 """
 
-import sys, logging, traceback
+import sys
+import logging
+import traceback
+
 from deepmerge import always_merger
-from os import path
+from os import path, scandir
+from pathlib import Path
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,13 +26,16 @@ logger = logging.getLogger(__name__)
 try:
     pkg_path = path.dirname(path.abspath(__file__))
     sys.path.append(pkg_path)
-    from config import *
+    from config import BYC, CONF_PATH, HTTP_HOST, LOC_PATH
 
     # the package namespace imports _all_ functions from _all_ modules
 
     bycon_lib_path = path.join( pkg_path, "lib" )
     sys.path.append( bycon_lib_path )
 
+
+    # the star imports should be replaced w/ functions/classes permitted for
+    # external use; so far a `from bycon import *` will make _all_available
     from beacon_auth import *
     from beacon_responses import *
     from bycon_helpers import *
@@ -109,11 +116,11 @@ try:
 
     # Merging Beacon & Services entryTypes but adding a flag to the Beacon ones
     b_e_t       = BYC.get("beacon_configuration",   {}).get("entryTypes", {})
+    for e_k in list(b_e_t.keys()):
+        b_e_t[e_k].update({"is_beacon_entity": True})
     s_e_t       = BYC.get("services_configuration", {}).get("entryTypes", {})
     e_d         = always_merger.merge(b_e_t, s_e_t)
-    for e_k in list(b_e_t.keys()):
-        e_d[e_k].update({"is_beacon_entity": True})
-
+ 
     # modifying aliases in definitions with global variables
     for v in ["BEACON_ROOT", "BEACON_API_VERSION"]:
         if (r_v := globals().get(v)):
@@ -125,7 +132,7 @@ try:
     infos       = BYC.get("beacon_map",     {}).get("informationalEndpoints", {})
 
     for e in list(endpoints.values()) + list(infos.values()) + list(services.values()):
-        if not (e_id := e.get("entryType", "___none___")) in e_d:
+        if (e_id := e.get("entryType", "___none___")) not in e_d:
             continue
         if (e_path_id := e.get("rootUrl")):
             e_path_id = e_path_id.strip("/").split("/")[-1].strip("/")
@@ -156,7 +163,7 @@ try:
         doms = [ Path(f).stem for f in doms ]
 
         # server specific setting of defaults dataset ids etc.
-        if not "___shell___" in HTTP_HOST:
+        if "___shell___" not in HTTP_HOST:
             for dr in doms:
                 prdbug(f'...checking domain definition => {dr}')
                 dd = load_yaml_empty_fallback(path.join(dom_df_p, f"{dr}.yaml" ))
@@ -190,7 +197,7 @@ try:
     # / parameters & modifications #############################################
 
 except Exception as e:
-    if not "___shell___" in HTTP_HOST:
+    if "___shell___" not in HTTP_HOST:
         print('Content-Type: text/plain')
         print('status: 302')
         print()

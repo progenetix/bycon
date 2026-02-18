@@ -9,6 +9,8 @@ from bycon import byconServiceLibs, ByconDatasets
 from bycon_importer import ByconImporter
 from service_helpers import assert_single_dataset_or_exit
 
+from queriesTester import MultiQueryResponses
+
 loc_path = path.dirname( path.abspath(__file__) )
 project_path = path.join(loc_path , pardir)
 rsrc_path = path.join(project_path, "rsrc")
@@ -67,14 +69,13 @@ BYC_PARS.update({"inputfile":"___dummy___"})
 BYC_PARS.update({"output": examples_db})
 ByconEntities().set_entities()
 
-# TODO: prototyping use of a seies of queries to collect matching
-# individuals & subsampling those. 
 a_i_ids = MultiQueryResponses(ds_id).get_individual_ids()
-proceed = input(f'Proceed importing {len(a_i_ids)} and depending records? (y/N): ')
+proceed = input(f'Proceed importing {len(a_i_ids)} and depending records into {examples_db}? (y/N): ')
 if not "y" in proceed.lower():
     exit()
 
 BYC_PARS.update({"individual_ids": list(a_i_ids)})    
+BYC_PARS.update({"output": examples_db})
 BRS = ByconResultSets()
 ds_results = BRS.datasetsResults()
 if not (ds := ds_results.get(ds_id)):
@@ -92,18 +93,19 @@ for coll in list(test_colls):
 mongo_db = mongo_client[examples_db]
 for coll in list(test_colls):
     if not BYC["TEST_MODE"]:
-        mongo_db.create_collection(coll)
+        r = mongo_db.create_collection(coll)
+        print(f'Created collection "{coll}" in database "{examples_db}".')
 
 ByconImporter(False).move_individuals_and_downstream_from_ds_results(ds_results)
 
 print(f"Finished re-creating the example database '{examples_db}'.")
-print(f"For full functionality you might want to run \n\n`{loc_path}/housekeeping.py -d {examples_db}`\n\nor continue with the following commands.\n")
+print(f"For full functionality you might want to run \n\n`{loc_path}/housekeeping.py -d {examples_db} --limit 0`\n\nor continue with the following commands.\n")
 
 proceed = input(f'Proceed with running the (time consuming) aggregation functions? (y/N): ')
 if not "y" in proceed.lower():
     exit()
 
-print(f'\n==> updating indexes for {examples_db}"')
+print(f'\n==> updating indexes for {examples_db}')
 system(f'{loc_path}/mongodbIndexer.py -d {examples_db}')
 
 cmd = f'{loc_path}/collationsCreator.py -d {examples_db} --limit 0'

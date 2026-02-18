@@ -688,6 +688,19 @@ $defs:
       - --inputfile
     description: a custom file to specify input data, usually tab-delimited with special header
 
+
+  # add predefined gene list for genome_binning
+  # TODO: naming & use... probably should just re-use --inputfile in the caller
+  # unless there could be a conflict (additional input file...)
+  gene_interval_tsv:
+    type: string
+    pattern: '^[\w\/\.\-]+$'
+    default: "cancer_gene_list.tsv"
+    cmdFlags:
+      - --geneIntervalTsv 
+    description: >-
+      path to a TSV file containing gene intervals. The file should at least contains: gene_id, gene_symbol, chrom, start, end.
+
   outputdir:
     type: string
     cmdFlags:
@@ -750,16 +763,6 @@ $defs:
     cmdFlags:
       - --chroBases
     description: only for the cytoband converter ... e.g. 8:0-120000000
-
-  # add predefined gene list for genome_binning
-  gene_interval_tsv:
-    type: string
-    pattern: '^[\w\/\.\-]+$'
-    default: "cancer_gene_list.tsv"
-    cmdFlags:
-      - --geneIntervalTsv 
-    description: >-
-      path to a TSV file containing gene intervals. The file should at least contains: gene_id, gene_symbol, chrom, start, end.
 
   ################################################################################
   # geographic ...

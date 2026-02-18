@@ -5,10 +5,8 @@ import numpy as np
 from copy import deepcopy
 from os import pardir, path
 
-from bycon_helpers import prdbug
+from bycon_helpers import ByconMongo, prdbug
 from config import BYC, BYC_DBS, BYC_PARS, HTTP_HOST
-from genome_utils import Cytobands
-from pymongo import MongoClient
 from genome_utils import Cytobands, GeneIntervals
 from bycon_helpers import prdbug
 
@@ -68,19 +66,18 @@ end:
 ################################################################################
 ################################################################################
 
-
 class GenomeBins:
     def __init__(self):
         self.interval_definitions = BYC.get("interval_definitions", {})
         self.variant_type_definitions = BYC.get("variant_type_definitions", {})
 
         CB = Cytobands()
-        self.cytobands = CB.get_all_cytobands()
-        self.cytolimits = CB.get_all_cytolimits()
-        self.genome_size = CB.get_genome_size()
+        self.cytobands      = CB.get_all_cytobands()
+        self.cytolimits     = CB.get_all_cytolimits()
+        self.genome_size    = CB.get_genome_size()
 
         self.binning = BYC_PARS.get("genome_binning", "1Mb")
-        self.genomic_intervals = []
+        self.genomic_intervals  = []
         self.cytoband_intervals = []
 
         self.interval_definitions.update({"genome_binning": self.binning})
@@ -160,19 +157,6 @@ class GenomeBins:
         self.__interval_counts_from_analyses()
         return self.interval_frequencies, self.analyses_count
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
-
-    def intervalAidFrequencyMaps(self, ds_id, analysis_ids=["___none___"]):
-        data_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        data_db = data_client[ds_id]
-        ana_coll = data_db["analyses"]
-        query = {"id": {"$in": analysis_ids}, "operation.id": "EDAM:operation_3961"}
-        if ana_coll.count_documents(query) < 1:
-            return {}, 0
-        self.analyses = ana_coll.find(query)
-        self.__interval_counts_from_analyses()
-        return self.interval_frequencies, self.analyses_count
 
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#
@@ -203,51 +187,45 @@ class GenomeBins:
     #--------------------------------------------------------------------------#
     
     def __generate_gene_intervals(self):
-        # generate genomic intervals from a gene list 
-        GI = GeneIntervals()
-        genes = GI.get_all_genes()
+        # generate genomic intervals from a gene list
+        # the list will be sorted by genomic start position
+        genes   = GeneIntervals().get_all_genes()
+        c_l     = self.cytolimits
 
         self.genomic_intervals = []
         i = 1
+        for chro in c_l.keys():
+            chro_genes = [ g for g in genes if g.get("chrom") == chro ]
+            chro_genes = sorted(chro_genes, key=lambda g: g.get("start", 0))
 
-        for g in genes:
-            chro = g.get("chrom")
-            start = g.get("start")
-            end = g.get("end")
-            size = end - start
-            gene_id = g.get("gene_id", "")
-            gene_symbol = g.get("gene_symbol", gene_id or "")
-            gene_type = g.get("gene_type", "")
+            for g in chro_genes:
+                chro            = g.get("chrom")
+                start           = g.get("start")
+                end             = g.get("end")
+                gene_id         = g.get("gene_id", "")
+                gene_symbol     = g.get("gene_symbol", gene_id or "")
+                gene_type       = g.get("gene_type", "")
 
-            cbs = Cytobands().cytobands_label_from_positions(chro, start, end)
-            arm = ""
-            if isinstance(cbs, str):
-                if "p" in cbs:
-                    arm = "p"
-                elif "q" in cbs:
-                    arm = "q"
+                cbs = str(Cytobands().cytobands_label_from_positions(chro, start, end))
+                base_keys = {"gene_id", "gene_symbol", "gene_type", "chrom", "start", "end"}
+                info = {k: v for k, v in g.items() if k not in base_keys}
 
-            base_keys = {"gene_id", "gene_symbol", "gene_type", "chrom", "start", "end"}
-            info = {k: v for k, v in g.items() if k not in base_keys}
-
-            if gene_type:
-                info.setdefault("gene_type", gene_type)
-
-            self.genomic_intervals.append({
-                "no": i,
-                "id": gene_id or gene_symbol,
-                "reference_name": chro,
-                "arm": arm,
-                "cytobands": f"{cbs}",
-                "start": start,
-                "end": end,
-                "size": size,
-                "gene_symbol": gene_symbol,
-                "info": info
-            })
-            i += 1
+                self.genomic_intervals.append({
+                    "no": i,
+                    "id": gene_id or gene_symbol,
+                    "reference_name": chro,
+                    "arm": "p" if "p" in cbs else "q" if "q" in cbs else "",
+                    "cytobands": cbs,
+                    "start": start,
+                    "end": end,
+                    "size": end - start,
+                    "gene_symbol": gene_symbol,
+                    "info": info
+                })
+                i += 1
 
         self.interval_count = len(self.genomic_intervals)
+
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
@@ -333,64 +311,61 @@ class GenomeBins:
     # --------------------------------------------------------------------------#
 
     def __interval_cnv_coverage_arrays(self):
+        # Initialize coverage maps with default values
         self.coverage_maps = self.maps.copy()
-        for cov_lab in self.cov_labs.values():
-            self.coverage_maps.update(
-                {cov_lab: [0 for i in range(self.interval_count)]}
-            )
-        for hl_lab in self.hl_labs.values():
-            self.coverage_maps.update({hl_lab: [0 for i in range(self.interval_count)]})
+        self.coverage_maps.update({"variant_count": 0})
+        for label in {**self.cov_labs, **self.hl_labs}.values():
+            self.coverage_maps[label] = [0] * self.interval_count
 
+        # Handle empty or non-iterable analysis_variants
         if type(self.analysis_variants).__name__ == "Cursor":
             self.analysis_variants.rewind()
 
-        if (v_no := len(list(self.analysis_variants))) < 1:
-            return
-
-        self.coverage_maps.update({"variant_count": v_no})
-
-        digests = set()
+        digests         = set()
         self.duplicates = set()
-        if type(self.analysis_variants).__name__ == "Cursor":
-            self.analysis_variants.rewind()
-        for v in self.analysis_variants:
-            # skipping non-CNV vars
-            if not "CopyNumberChange" in v.get("type", "__none__"):
-                continue
-            if (
-                v_t_c := v.get("variant_state", {}).get("id", "__NA__")
-            ) not in self.variant_type_definitions.keys():
-                continue
-            dup_del = self.variant_type_definitions[v_t_c].get("DUPDEL", "___none___")
-            if not (cov_lab := self.cov_labs[dup_del]):
-                continue
-            hl_dupdel = self.variant_type_definitions[v_t_c].get(
-                "HLDUPDEL", "___none___"
-            )
-            hl_lab = self.hl_labs.get(hl_dupdel)
 
-            if not (v_i_id := v.get("variant_internal_id")):
+        for variant in self.analysis_variants:
+            # skipping non-CNV vars
+            if "CopyNumberChange" not in variant.get("type", ""):
+                continue
+
+
+            variant_state_id = variant.get("variant_state", {}).get("id")
+            if variant_state_id not in self.variant_type_definitions:
+                continue
+
+            variant_def = self.variant_type_definitions[variant_state_id]
+            cov_label   = self.cov_labs.get(variant_def.get("DUPDEL"))
+            hl_label    = self.hl_labs.get(variant_def.get("HLDUPDEL"))
+
+            if not cov_label:
+                continue
+
+            if not (v_i_id := variant.get("variant_internal_id")):
                 continue
             if v_i_id in digests:
                 if "___shell___" in HTTP_HOST:
-                    BYC["WARNINGS"].append(v)
+                    BYC["WARNINGS"].append(variant)
                     print(
-                        f"\n¡¡¡ {v_i_id} already counted for {v.get('analysis_id', None)}"
+                        f"\n¡¡¡ {v_i_id} already counted for {variant.get('analysis_id')}"
                     )
-                    if v.get("_id"):
-                        self.duplicates.add(v.get("_id"))
+                    if variant.get("_id"):
+                        self.duplicates.add(variant.get("_id"))
                 continue
-            else:
-                digests.add(v_i_id)
+
+            digests.add(v_i_id)
 
             for i, intv in enumerate(self.genomic_intervals):
-                if self.__has_overlap(intv, v):
-                    ov_end = min(intv["end"], v["location"]["end"])
-                    ov_start = max(intv["start"], v["location"]["start"])
-                    ov = ov_end - ov_start
-                    self.coverage_maps[cov_lab][i] += ov
-                    if hl_lab:
-                        self.coverage_maps[hl_lab][i] += ov
+                if self.__has_overlap(intv, variant):
+                    overlap_end     = min(intv["end"], variant["location"]["end"])
+                    overlap_start   = max(intv["start"], variant["location"]["start"])
+                    overlap_length  = overlap_end - overlap_start
+                    self.coverage_maps[cov_label][i] += overlap_length
+                    if hl_label:
+                        self.coverage_maps[hl_label][i] += overlap_length
+
+            self.coverage_maps["variant_count"] += 1
+
 
     # --------------------------------------------------------------------------#
     # --------------------------------------------------------------------------#

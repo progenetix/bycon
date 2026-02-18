@@ -599,6 +599,14 @@ force mode, e.g. for update or insert (cmd line)
 **description:**
 a custom file to specify input data, usually tab-delimited with special header    
 
+#### `gene_interval_tsv` 
+**type:** string    
+**pattern:** `^[\w\/\.\-]+$`    
+**default:** `cancer_gene_list.tsv`    
+**cmdFlags:** `--geneIntervalTsv`    
+**description:**
+path to a TSV file containing gene intervals. The file should at least contains: gene_id, gene_symbol, chrom, start, end.    
+
 #### `outputdir` 
 **type:** string    
 **cmdFlags:** `--outputdir`    
