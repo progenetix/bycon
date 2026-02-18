@@ -1,56 +1,27 @@
+#!/usr/local/bin/python3
+
 import csv
 from os import path
+from os import environ
+from progress.bar import Bar
+
 from pathlib import Path
 from pymongo import MongoClient
 import sys
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-
 from bycon import *
 from byconServiceLibs import *
 
-def _collect_analysis_ids(cs_coll):
-    ana_ids = BYC_PARS.get("analysis_ids", [])
+# ./housekeepers/testgenemap.py -d progenetix --genomeBinning genes --geneIntervalTsv "cancer_gene_list.tsv" --limit 0
 
-    if ana_ids:
-        return ana_ids
-
-    collected = []
-    pipeline = [
-        {
-            "$lookup": {
-                "from": "biosamples",
-                "localField": "biosample_id",
-                "foreignField": "id",
-                "as": "bs",
-            }
-        },
-        {"$unwind": "$bs"},
-        {
-            "$match": {
-                "bs.biosample_status.label": {"$ne": "reference sample"}
-            }
-        },
-        {
-            "$project": {
-                "_id": 0,
-                "id": 1,
-            }
-        },
-    ]
-
-    for doc in cs_coll.aggregate(pipeline):
-        ana_id = doc.get("id")
-        if ana_id:
-            collected.append(ana_id)
-    
-    return collected
+################################################################################
 
 def main():
     assert_single_dataset_or_exit()
     ds_id = BYC["BYC_DATASET_IDS"][0]
+    BYC_PARS["filters"] = [{"id": "EFO:0009656"}]  # "neoplastic sample"
+    output_path = path.join("/", "Users", environ.get('USER'), "Downloads", "gene_cnv_test.tsv")
+    output_file = BYC_PARS.get("outputfile") or output_path
 
     GB = GenomeBins()
     print(f'Using binning="{GB.get_genome_binning()}" with {GB.get_genome_bin_count()} intervals.')
@@ -60,8 +31,15 @@ def main():
     cs_coll = data_db["analyses"]
     v_coll = data_db["variants"]
 
-    ana_ids = _collect_analysis_ids(cs_coll)
-    if not ana_ids:
+    ana_ids = BYC_PARS.get("analysis_ids", [])
+    if len(ana_ids) < 1:
+        record_queries = ByconQuery().recordsQuery() # will be populated from the filter...
+        DR = ByconDatasetResults(ds_id, record_queries)
+        ds_results = DR.retrieveResults()
+        ana_ids = ds_results["analyses.id"]["target_values"]
+        print(f"Collected {len(ana_ids)} analysis IDs from dataset results based on filters.")
+
+    if len(ana_ids) < 1:
         print("No analyses selected (analysisIds empty and no analyses found). Exiting.")
         return
 
@@ -73,14 +51,9 @@ def main():
         print("No genomic intervals found (check genome_binning / gene_interval_tsv). Exiting.")
         return
 
-    # TODO: No hardcoded paths
-    downloads_dir = "/Users/bgadmin/Downloads"
-    out_name = BYC_PARS.get("outputfile") or "gene_cnv_test.tsv"
-    out_name = path.basename(out_name)  
-    out_path = path.join(downloads_dir, out_name)
-    print(f"Writing per-gene CNV fractions to: {out_path}")
+    print(f"Writing per-gene CNV fractions to: {output_file}")
 
-    with open(out_path, "w", newline="") as out_f:
+    with open(output_file, "w", newline="") as out_f:
         writer = csv.writer(out_f, delimiter="\t")
         writer.writerow([
             "analysis_id",
@@ -96,7 +69,9 @@ def main():
         ])
 
         #for ana_id in ana_ids:
+
         total_analyses = len(ana_ids)
+        bar = Bar("{} analyses".format(ds_id), max = total_analyses, suffix='%(percent)d%%'+" of "+str(total_analyses) )
         for idx, ana_id in enumerate(ana_ids, start=1):
             cs_vars = v_coll.find({"analysis_id": ana_id})
             maps, cnv_stats, chro_stats, duplicates = GB.getAnalysisFracMapsAndStats(
@@ -127,10 +102,16 @@ def main():
                 ])
 
             if idx % 1000 == 0 or idx == total_analyses:
-                print(f"[testgenemap] Processed {idx}/{total_analyses} analyses")
-
+                print(f"\n[testgenemap] Processed {idx}/{total_analyses} analyses")
+            bar.next()
+        bar.finish()
     print("Done.")
 
+
+
+################################################################################
+################################################################################
+################################################################################
 
 if __name__ == "__main__":
     main()

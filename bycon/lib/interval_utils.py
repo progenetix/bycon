@@ -76,7 +76,7 @@ class GenomeBins:
         self.cytolimits     = CB.get_all_cytolimits()
         self.genome_size    = CB.get_genome_size()
 
-        self.binning = BYC_PARS.get("genome_binning", "1Mb")
+        self.binning            = BYC_PARS.get("genome_binning", "1Mb")
         self.genomic_intervals  = []
         self.cytoband_intervals = []
 

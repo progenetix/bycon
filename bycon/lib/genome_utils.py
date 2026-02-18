@@ -635,7 +635,7 @@ class GeneIntervals:
         if tsv_path is None:
             tsv_path = BYC_PARS.get("gene_interval_tsv", "")
         if not tsv_path:
-            raise ValueError("No TSV path provided for gene intervals (gene_interval_tsc is empty).")
+            raise ValueError("No TSV path provided for gene intervals (gene_interval_tsv is empty).")
         if not path.isabs(tsv_path):
             genome_rsrc_path = ChroNames().genomePath()
             tsv_path = path.join(genome_rsrc_path, tsv_path)
