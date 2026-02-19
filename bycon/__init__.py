@@ -36,7 +36,7 @@ try:
 
     # the star imports should be replaced w/ functions/classes permitted for
     # external use; so far a `from bycon import *` will make _all_available
-    from beacon_auth import *
+    from bycon_auth import ByconAuth
     from beacon_responses import *
     from bycon_helpers import *
     from bycon_summaries import *
@@ -191,8 +191,7 @@ try:
     # Global setting of the TEST_MODE flag for the current request
     BYC.update({"TEST_MODE": ByconH().truth(BYC_PARS.get("test_mode"))})
 
-    set_user_name()
-    set_returned_granularities()    
+    ByconAuth()    
 
     # / parameters & modifications #############################################
 

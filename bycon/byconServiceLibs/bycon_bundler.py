@@ -8,6 +8,8 @@ from datetime import datetime
 from os import environ, path
 from copy import deepcopy
 
+# ------------------------------- bycon imports -------------------------------#
+
 from bycon import (
     BYC,
     BYC_PARS,
@@ -69,9 +71,7 @@ class ByconBundler:
             "analyses_by_id":           {},
             "individuals_by_id":        {},
             "biosamples_by_id":         {},
-            "info": {
-                "errors":               []
-            }
+            "info": {"errors":          []}
         }
 
         self.plotDataBundle = {
@@ -461,10 +461,8 @@ class ByconBundler:
  
         prdbug(f'... __isetBundlesFromCollationParameters query {query}')
 
-        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         for ds_id in self.datset_ids:
-            coll_db = mongo_client[ds_id]
-            for collation_f in coll_db["collations" ].find(query):
+            for collation_f in ByconMongo(ds_id).resultCursorFromQuery("collations", query):
                 if not (fmap := collation_f.get(fmap_name)):
                     continue
                 fmap_count = fmap.get("frequencymap_samples", 0)

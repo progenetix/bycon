@@ -1,6 +1,8 @@
 import re
-
 import humps
+
+# ------------------------------- bycon imports -------------------------------#
+
 from bycon_helpers import (
     ByconError,
     ByconH,

@@ -1,7 +1,7 @@
 from uuid import uuid4
 
-from config import *
-from bycon_helpers import *
+from config import BYC, BYC_DBS, VARIANTS_RESPONSE_LIMIT
+from bycon_helpers import ByconMongo, prdbug
 from schema_parsing import RecordsHierarchy
 
 ################################################################################
@@ -12,7 +12,7 @@ class ByconDatasetResults():
         self.dataset_id         = ds_id
         self.entity_defaults    = BYC["entity_defaults"]
         self.res_ent_id         = r_e_id = str(BYC.get("response_entity_id", "___none___"))
-        self.data_db            = ByconMongo(ds_id).openMongoDatabase()
+        self.bycon_mongo        = ByconMongo(ds_id)
 
         # This is bycon and model specific; in the default model there would also
         # be `run` (which has it's data here as part of `analysis`). Also in
@@ -73,13 +73,12 @@ class ByconDatasetResults():
     # -------------------------------------------------------------------------#
 
     def __generate_queries(self, BQ):
-        c_n_s = self.data_db.list_collection_names()
+        c_n_s = self.bycon_mongo.collectionList()
         q_e_s = BQ.get("entities", {})
         for e, q_o in q_e_s.items():
-            c = BYC_DBS.get("collections", {}).get(e, "___none___")
-            if (q := q_o.get("query")) and c in c_n_s:
-                self.queries.update({e: q})
-                # self.queries.update({c: q})
+            if (q := q_o.get("query")):
+                if str(c := BYC_DBS.get("collections", {}).get(e)) in c_n_s:
+                    self.queries.update({e: q})
 
 
     # -------------------------------------------------------------------------#
@@ -111,9 +110,11 @@ class ByconDatasetResults():
 
 
         """
-        t_c = h_o_def.get("collection")
-        d_k_s = h_o_def.get("upstream_ids", [])
-        m_k = h_o_def.get("id_parameter", "id")
+        t_c     = h_o_def.get("collection")
+        d_k_s   = h_o_def.get("upstream_ids", [])
+        m_k     = h_o_def.get("id_parameter", "id")
+
+        t_coll  = self.bycon_mongo.openMongoColl(t_c)
 
         d_group = {'_id': 0, "distincts_id": {'$addToSet': f'$id'}}
         for d_k in d_k_s:
@@ -127,7 +128,7 @@ class ByconDatasetResults():
             # Aggregation pipeline to get distinct values for each key since
             # geo $near queries don't work in aggregation pipelines
             if "geo_location.geometry" in qq:
-                ids = self.data_db[t_c].distinct("id", qq)
+                ids = t_coll.distinct("id", qq)
                 qq = {"id": {"$in": ids}}
 
             pipeline = [
@@ -135,7 +136,7 @@ class ByconDatasetResults():
                 { "$sample": { "size": 220000 }},
                 { '$group': d_group }
             ]
-            result = list(self.data_db[t_c].aggregate(pipeline))
+            result = list(t_coll.aggregate(pipeline))
 
             id_matches = {m_k: []}
             for d_k in d_k_s:
@@ -158,9 +159,9 @@ class ByconDatasetResults():
     # -------------------------------------------------------------------------#
 
     def __refetch_entity_id_response(self, h_o_def, query):
-        t_c = h_o_def.get("collection")
-        id_k = h_o_def.get("id_parameter")
-        ids = self.data_db[t_c].distinct("id", query)
+        t_c     = h_o_def.get("collection")
+        id_k    = h_o_def.get("id_parameter")
+        ids     = self.bycon_mongo.distinctsFromQuery(t_c, "id", query)
 
         if (ex_resp := self.id_responses.get(id_k)):
             self.id_responses.update({id_k: {"values": list(set(ex_resp.get("values", [])) & set(ids))}})
@@ -207,7 +208,7 @@ class ByconDatasetResults():
             id_p = f"{e}_id"
             v_ids = []
             for ana_id in self.id_responses.get("analysis_id", {}).get("values", []):
-                v_ids += self.data_db["variants"].distinct("id", {"analysis_id": ana_id})
+                v_ids += self.bycon_mongo.distinctsFromQuery("variants", "id", {"analysis_id": ana_id})
             v_ids = list(set(v_ids))
 
             v_no = len(v_ids)

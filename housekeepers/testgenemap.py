@@ -28,7 +28,6 @@ def main():
 
     data_client = MongoClient(host=BYC_DBS["mongodb_host"])
     data_db = data_client[ds_id]
-    cs_coll = data_db["analyses"]
     v_coll = data_db["variants"]
 
     ana_ids = BYC_PARS.get("analysis_ids", [])

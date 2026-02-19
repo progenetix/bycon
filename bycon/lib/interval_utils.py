@@ -1,14 +1,16 @@
 import re
 import sys
+
 import numpy as np
 
 from copy import deepcopy
 from os import pardir, path
 
+# ------------------------------- bycon imports -------------------------------#
+
 from bycon_helpers import ByconMongo, prdbug
 from config import BYC, BYC_DBS, BYC_PARS, HTTP_HOST
 from genome_utils import Cytobands, GeneIntervals
-from bycon_helpers import prdbug
 
 ################################################################################
 
@@ -70,13 +72,15 @@ class GenomeBins:
     def __init__(self):
         self.interval_definitions = BYC.get("interval_definitions", {})
         self.variant_type_definitions = BYC.get("variant_type_definitions", {})
+        self.binning = BYC_PARS.get("genome_binning", "1Mb")
 
         CB = Cytobands()
         self.cytobands      = CB.get_all_cytobands()
         self.cytolimits     = CB.get_all_cytolimits()
         self.genome_size    = CB.get_genome_size()
 
-        self.binning            = BYC_PARS.get("genome_binning", "1Mb")
+        self.int_min_frac   =   self.interval_definitions.get("interval_min_fraction", {}).get("value", 0.001)
+ 
         self.genomic_intervals  = []
         self.cytoband_intervals = []
 
@@ -490,51 +494,52 @@ class GenomeBins:
         analyses with CNV statusmaps and return a list of standard genomic interval
         objects with added per-interval quantitative data.
         """
-        min_f = self.interval_definitions["interval_min_fraction"].get("value", 0.001)
-        self.interval_frequencies = deepcopy(self.genomic_intervals)
-        int_no = self.interval_count
 
         pars = {
             "gain": {"cov_l": "dup", "hl_l": "hldup"},
             "loss": {"cov_l": "del", "hl_l": "hldel"},
         }
 
-        self.analyses_count = 0
-        # analyses can be either a list or a MongoDB Cursor (which has to be reset)
+        # analyses can be either a list or a MongoDB Cursor (which has to be
+        # reset after accessing its contents)
         if type(self.analyses).__name__ == "Cursor":
             self.analyses.rewind()
+
+        self.analyses_count = 0
+        self.interval_frequencies = deepcopy(self.genomic_intervals)
 
         f_factor = 0
         if (a_no := len(list(self.analyses))) > 0:
             f_factor = 100 / a_no
             self.analyses_count = a_no
 
+        # iterating for gain and loss types (keys in `pars`)
         for t in pars.keys():
-            covs = np.zeros((self.analyses_count, int_no))
-            hls = np.zeros((self.analyses_count, int_no))
+            covs    = np.zeros((self.analyses_count, self.interval_count))
+            hls     = np.zeros((self.analyses_count, self.interval_count))
+
             # MongoDB specific
             if type(self.analyses).__name__ == "Cursor":
                 self.analyses.rewind()
-            cov_l = pars[t].get("cov_l")
-            hl_l = pars[t].get("hl_l", cov_l)
+
+            cov_l   = pars[t].get("cov_l")
+            hl_l    = pars[t].get("hl_l", cov_l)
             for i, analysis in enumerate(self.analyses):
                 # the fallback is also a zeroed array ...
-                covs[i] = analysis["cnv_statusmaps"].get(cov_l, [0] * int_no)
-                hls[i] = analysis["cnv_statusmaps"].get(hl_l, [0] * int_no)
+                covs[i] = analysis["cnv_statusmaps"].get(cov_l, [0] * self.interval_count)
+                hls[i]  = analysis["cnv_statusmaps"].get(hl_l, [0] * self.interval_count)
 
             # counting all occurrences of an interval for the current type > interval_min_fraction
-            counts = np.count_nonzero(covs >= min_f, axis=0)
-            frequencies = np.around(counts * f_factor, 3)
-            hlcounts = np.count_nonzero(hls >= min_f, axis=0)
-            hlfrequencies = np.around(hlcounts * f_factor, 3)
+            counts          = np.count_nonzero(covs >= self.int_min_frac, axis=0)
+            frequencies     = np.around(counts * f_factor, 3)
+            hlcounts        = np.count_nonzero(hls >= self.int_min_frac, axis=0)
+            hlfrequencies   = np.around(hlcounts * f_factor, 3)
 
             for i, interval in enumerate(self.interval_frequencies):
-                self.interval_frequencies[i].update(
-                    {
-                        f"{t}_frequency": frequencies[i],
-                        f"{t}_hlfrequency": hlfrequencies[i],
-                    }
-                )
+                self.interval_frequencies[i].update({
+                    f"{t}_frequency": frequencies[i],
+                    f"{t}_hlfrequency": hlfrequencies[i],
+                })
 
         if type(self.analyses).__name__ == "Cursor":
             self.analyses.close()

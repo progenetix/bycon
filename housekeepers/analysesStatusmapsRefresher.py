@@ -3,11 +3,22 @@ from datetime import datetime
 from isodate import date_isoformat
 from os import path
 from pathlib import Path
-from pymongo import MongoClient
 from progress.bar import Bar
 
-from bycon import *
-from byconServiceLibs import *
+from bycon import (
+    BYC,
+    BYC_PARS,
+    ByconDatasetResults,
+    ByconMongo,
+    ByconQuery,
+    GenomeBins
+)
+from byconServiceLibs import (
+    ask_limit_reset,
+    assert_single_dataset_or_exit,
+    set_collation_types,
+    write_log
+)
 
 log_path = Path(path.join(log_path_root(), "analyses_statusmaps_logs"))
 log_path.mkdir(parents=True, exist_ok=True)
@@ -26,21 +37,18 @@ log_path.mkdir(parents=True, exist_ok=True)
 """
 ################################################################################
 
-GB = GenomeBins()
 ask_limit_reset()
 assert_single_dataset_or_exit()
-
-ds_id = BYC["BYC_DATASET_IDS"][0]
 set_collation_types()
+
+ds_id           = BYC["BYC_DATASET_IDS"][0]
+GB              = GenomeBins()
+limit           = BYC_PARS.get("limit", 0)
+cs_coll         = ByconMongo(ds_id).openMongoColl("analyses")
+v_coll          = ByconMongo(ds_id).openMongoColl("variants")
+record_queries  = ByconQuery().recordsQuery()
+
 print(f'=> Using data values from {ds_id} for {GB.get_genome_bin_count()} intervals...')
-
-limit = BYC_PARS.get("limit", 0)
-data_client = MongoClient(host=BYC_DBS["mongodb_host"])
-data_db = data_client[ ds_id ]
-cs_coll = data_db[ "analyses" ]
-v_coll = data_db[ "variants" ]
-
-record_queries = ByconQuery().recordsQuery()
 
 ds_results = {}
 if len(record_queries["entities"].keys()) > 0:
@@ -57,28 +65,27 @@ if not ds_results.get("analyses.id"):
         if limit > 0:
             if limit == c_i:
                 break
-    cs_no = len(ana_ids)
-    print(f'¡¡¡ Using {cs_no} analyses from {ds_id} !!!')
 else:
     ana_ids = ds_results["analyses.id"]["target_values"]
-    cs_no = len(ana_ids)
+
+cs_no = len(ana_ids)
 
 print(f'Re-generating statusmaps with {GB.get_genome_bin_count()} intervals for {cs_no} analyses...')
-bar = Bar("{} analyses".format(ds_id), max = cs_no, suffix='%(percent)d%%'+" of "+str(cs_no) )
-counter = 0
-updated = 0
-
-proceed = input(f'Do you want to continue to update database **{ds_id}**?\n(Y|n): ')
-if "n" in proceed.lower():
+if "n" in input(f'Do you want to continue to update database **{ds_id}**?\n(Y|n): ').lower():
     exit()
 
-duplicates = []
+counter     = 0
+updated     = 0
+duplicates  = []
 no_cnv_type = 0
+
+bar = Bar("{} analyses".format(ds_id), max = cs_no, suffix='%(percent)d%%'+" of "+str(cs_no) )
+
 for ana_id in ana_ids:
     ana = cs_coll.find_one( { "id": ana_id } )
     _id = ana.get("_id")
     counter += 1
-    if "EDAM:operation_3227" in ana.get("operation",{"id":"EDAM:operation_3961"}).get("id", "EDAM:operation_3961"):
+    if "EDAM:operation_3227" in ana.get("operation", {"id":"EDAM:operation_3961"}).get("id", "EDAM:operation_3961"):
         no_cnv_type += 1
         continue
 

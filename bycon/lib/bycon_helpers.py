@@ -12,6 +12,8 @@ from datetime import datetime
 from pathlib import Path
 from pymongo import MongoClient
 
+# ------------------------------- bycon imports -------------------------------#
+
 from config import BYC, BYC_DBS, BYC_UNCAMELED, BYC_UPPER, HTTP_HOST
 
 ################################################################################
@@ -105,6 +107,14 @@ class ByconMongo:
             results = list(coll.aggregate(pipeline))
         return results
 
+
+    #--------------------------------------------------------------------------#
+
+    def distinctsFromQuery(self, coll_name, field="id", query={}):
+        distincts = []
+        if (coll := self.openMongoColl(coll_name)) is not None:
+            distincts = coll.distinct(field, query)
+        return distincts
 
     #--------------------------------------------------------------------------#
     #---------------------------- private -------------------------------------#

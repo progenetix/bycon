@@ -2,9 +2,13 @@ from isodate import date_isoformat
 from datetime import datetime
 from progress.bar import Bar
 
+# ------------------------------- bycon imports -------------------------------#
+
 from bycon_helpers import ByconMongo, prjsonnice
 from config import BYC, BYC_DBS
 from parameter_parsing import ByconDatasets
+
+################################################################################
 
 class ByconInfo():
     def __init__(self, distvars=True):
