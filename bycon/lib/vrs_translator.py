@@ -516,7 +516,12 @@ class CnvTranslator(_Translator):
 
 
 class AdjacencyTranslator(_Translator):
-    """Class for translating formats from format to VRS Adjacency"""
+    """Class for translating formats from format to VRS Adjacency
+    So far this is bycon specific and just utilizes the models.SequenceLocation
+    wrapper for both sides of an adjacency, w/o support for linkers etc.
+    The input format is a concatenation of 2 sequence locations w/ ranges
+    for both sides.
+    """
 
     def __init__(
         self,

@@ -33,14 +33,13 @@ try:
     bycon_lib_path = path.join( pkg_path, "lib" )
     sys.path.append( bycon_lib_path )
 
-
     # the star imports should be replaced w/ functions/classes permitted for
-    # external use; so far a `from bycon import *` will make _all_available
-    from bycon_auth import ByconAuth
+    # external use; so far a `from bycon import *` will make _all_ available
     from beacon_responses import *
+    from bycon_auth import ByconAuth
     from bycon_helpers import *
-    from bycon_summaries import *
     from bycon_info import *
+    from bycon_summaries import *
     from genome_utils import *
     from interval_utils import *
     from parameter_parsing import *

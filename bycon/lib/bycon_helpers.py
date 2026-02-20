@@ -18,7 +18,6 @@ from config import BYC, BYC_DBS, BYC_UNCAMELED, BYC_UPPER, HTTP_HOST
 
 ################################################################################
 
-
 class ByconMongo:
     def __init__(self, db_name=None):
         self.host_address   = BYC_DBS["mongodb_host"]
@@ -26,6 +25,7 @@ class ByconMongo:
         self.databases      = list(self.client.list_database_names())
         self.db_name        = self.__check_db_name(db_name)
         self.collections    = []
+
 
     #--------------------------------------------------------------------------#
     #----------------------------- public -------------------------------------#
@@ -116,6 +116,7 @@ class ByconMongo:
             distincts = coll.distinct(field, query)
         return distincts
 
+
     #--------------------------------------------------------------------------#
     #---------------------------- private -------------------------------------#
     #--------------------------------------------------------------------------#
@@ -147,6 +148,7 @@ class ByconError:
     def __init__(self):
         self.errors = BYC["ERRORS"]
         self.caller = inspect.stack()[-1].function
+
 
     #--------------------------------------------------------------------------#
     #----------------------------- public -------------------------------------#
@@ -193,6 +195,7 @@ class ByconH:
         if str(this).lower() in ["1", "true", "y", "yes"]:
             return True
         return False
+
 
     #--------------------------------------------------------------------------#
 

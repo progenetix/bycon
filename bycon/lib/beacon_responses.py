@@ -42,6 +42,7 @@ class BeaconResponseMeta:
         self.__meta_add_received_request_summary_parameters()
         return self.response_meta
 
+
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
@@ -68,6 +69,7 @@ class BeaconResponseMeta:
                 r_m.pop(p, None)
 
         self.response_meta = r_m
+
 
     # -------------------------------------------------------------------------#
 
@@ -331,6 +333,7 @@ class BeaconDataResponse:
 
         return self.data_response
 
+
     # -------------------------------------------------------------------------#
 
     def collectionsResponse(self):
@@ -351,6 +354,7 @@ class BeaconDataResponse:
         )
         return self.data_response
 
+
     # -------------------------------------------------------------------------#
 
     def filteringTermsResponse(self):
@@ -368,6 +372,7 @@ class BeaconDataResponse:
         )
         return self.data_response
 
+
     # -------------------------------------------------------------------------#
 
     def aggregationTermsResponse(self):
@@ -382,6 +387,7 @@ class BeaconDataResponse:
             {"meta": BeaconResponseMeta(self.data_response).populatedMeta()}
         )
         return self.data_response
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -401,6 +407,7 @@ class BeaconDataResponse:
             self.data_response.pop("response", None)
             self.data_response.pop("response_summary", None)
 
+
     # -------------------------------------------------------------------------#
 
     def __resultSetResponse_force_autorized_granularities(self):
@@ -418,6 +425,7 @@ class BeaconDataResponse:
             self.data_response["response_summary"].pop("num_total_results", None)
             self.data_response.pop("response", None)
 
+
     # -------------------------------------------------------------------------#
 
     def __acknowledge_HIT(self):
@@ -426,6 +434,7 @@ class BeaconDataResponse:
         rss = [rs for rs in self.result_sets if rs.get("exists", True) is True]
         self.result_sets = rss
 
+
     # -------------------------------------------------------------------------#
 
     def __acknowledge_MISS(self):
@@ -433,6 +442,7 @@ class BeaconDataResponse:
             return
         rss = [rs for rs in self.result_sets if rs.get("exists", True) is False]
         self.result_sets = rss
+
 
     # -------------------------------------------------------------------------#
 
@@ -466,11 +476,13 @@ class BeaconDataResponse:
             for k in pop_keys:
                 c.pop(k, None)
 
+
     # -------------------------------------------------------------------------#
 
     def __response_clean_parameters(self):
         r_m = self.data_response.get("response", {})
         r_m.pop("$schema", None)
+
 
     # -------------------------------------------------------------------------#
 
@@ -488,6 +500,7 @@ class BeaconDataResponse:
         self.data_response.update(
             {"response_summary": {"num_total_results": t_count, "exists": t_exists}}
         )
+
 
     # -------------------------------------------------------------------------#
 
@@ -551,6 +564,7 @@ class ByconFilteringTerms:
 
         self.delivery_keys = BYC_PARS.get("delivery_keys", def_keys)
 
+
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
@@ -561,12 +575,14 @@ class ByconFilteringTerms:
         self.__return_filter_resources()
         return self.filtering_terms, self.filter_resources, self.filtering_terms_query
 
+
     # -------------------------------------------------------------------------#
 
     def filteringTermsList(self):
         self.__filtering_terms_query()
         self.__return_filtering_terms()
         return self.filtering_terms
+
 
     # -------------------------------------------------------------------------#
 
@@ -575,11 +591,13 @@ class ByconFilteringTerms:
         self.__return_filtering_terms()
         return [x.get("id") for x in self.filtering_terms]
 
+
     # -------------------------------------------------------------------------#
 
     def get_query(self):
         self.__filtering_terms_query()
         return self.filtering_terms_query
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -623,6 +641,7 @@ class ByconFilteringTerms:
 
         self.filtering_terms_query = query
 
+
     # -------------------------------------------------------------------------#
 
     def __return_filtering_terms(self):
@@ -643,6 +662,7 @@ class ByconFilteringTerms:
             t_f_t_s.append(f)
 
         self.filtering_terms = t_f_t_s
+
 
     # -------------------------------------------------------------------------#
 
@@ -679,6 +699,7 @@ class ByconCollections:
         self.collections_queries = {}
         self.queried_entities = RecordsHierarchy().entities()
 
+
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
@@ -687,6 +708,7 @@ class ByconCollections:
         self.__collections_return_datasets()
         self.__collections_return_cohorts()
         return self.collections, self.collections_queries
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -698,6 +720,7 @@ class ByconCollections:
 
         self.__datasets_update_latest_stats()
         self.collections_queries.update({"datasets": {}})
+
 
     # -------------------------------------------------------------------------#
 
@@ -728,6 +751,7 @@ class ByconCollections:
                     coll.update({t: f"{d}T00:00:00+00:00"})
             self.collections.append(coll)
 
+
     # -------------------------------------------------------------------------#
 
     def __collections_return_cohorts(self):
@@ -755,7 +779,6 @@ class ByconCollections:
 ################################################################################
 ################################################################################
 ################################################################################
-
 
 class ByconResultSets:
     def __init__(self):
