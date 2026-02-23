@@ -172,13 +172,16 @@ class ByconBundler:
     def analyses_variants_bundles(self):
         # TODO: This is similar to a keyed bundle component ...
         bb = self.bundle
+        avb = []
+
         for p_o in bb.get("analyses", []):
             cs_id = p_o.get("id")
             p_o.update({
                 "variants": list(filter(lambda v: v.get("analysis_id", "___none___") == cs_id, bb["variants"]))
             })
-            self.analysisVariantsBundles.append(p_o)          
-        return self.analysisVariantsBundles
+            avb.append(p_o)
+
+        return avb       
 
 
     #--------------------------------------------------------------------------#
@@ -324,7 +327,7 @@ class ByconBundler:
                 p_o.update({
                     "variants": list(var_coll.find({"analysis_id": cs_id}))
                 })
-                self.analysisVariantsBundles.append(p_o)
+                self.analysisVarsBundles.append(p_o)
 
 
     #--------------------------------------------------------------------------#
