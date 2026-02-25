@@ -48,7 +48,7 @@ cs_coll         = ByconMongo(ds_id).openMongoColl("analyses")
 v_coll          = ByconMongo(ds_id).openMongoColl("variants")
 record_queries  = ByconQuery().recordsQuery()
 
-print(f'=> Using data values from {ds_id} for {GB.get_genome_bin_count()} intervals...')
+print(f'=> Using data values from {ds_id} for {GB.getGenomeBinCount()} intervals...')
 
 ds_results = {}
 if len(record_queries["entities"].keys()) > 0:
@@ -70,7 +70,7 @@ else:
 
 cs_no = len(ana_ids)
 
-print(f'Re-generating statusmaps with {GB.get_genome_bin_count()} intervals for {cs_no} analyses...')
+print(f'Re-generating statusmaps with {GB.getGenomeBinCount()} intervals for {cs_no} analyses...')
 if "n" in input(f'Do you want to continue to update database **{ds_id}**?\n(Y|n): ').lower():
     exit()
 
@@ -114,7 +114,7 @@ bar.finish()
 
 print(f"{counter} analyses were processed")
 print(f"{no_cnv_type} analyses were not from CNV calling")
-print(f'{updated} analyses were updated for\n    `cnv_statusmaps`\n    `cnv_stats`\n    `cnv_chro_stats`\nusing {GB.get_genome_bin_count()} bins ({BYC_PARS.get("genome_binning", "")})')
+print(f'{updated} analyses were updated for\n    `cnv_statusmaps`\n    `cnv_stats`\n    `cnv_chro_stats`\nusing {GB.getGenomeBinCount()} bins ({BYC_PARS.get("genome_binning", "")})')
 
 if len(duplicates) > 0:
     print(f'¡¡¡ {len(duplicates)} duplicate variant entries were found !!!')

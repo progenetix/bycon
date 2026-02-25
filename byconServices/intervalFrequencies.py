@@ -15,8 +15,8 @@ def intervalFrequencies():
 
     file_type = BYC_PARS.get("output", "___none___")
     if "pgxseg" in file_type or "pgxfreq" in file_type:
-        PGXfreq(ifb).stream_pgxfreq()
+        PGXfreq(ifb).streamPGXfreq()
     elif "matrix" in file_type:
-        PGXfreq(ifb).stream_pgxmatrix()
+        PGXfreq(ifb).streamPGXmatrix()
 
     ByconServiceResponse().print_populated_response(ifb)

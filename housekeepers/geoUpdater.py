@@ -49,11 +49,11 @@ modification date : date of last modification in yyyy-MM-dd format
 
 cities_f_n = "cities500.txt"
 fieldnames = ["geonameid", "name", "asciiname", "alternatenames", "latitude", "longitude", "feature_class", "feature_code", "country_code", "cc2", "admin1_code", "admin2_code", "admin3_code", "admin4_code", "population", "elevation", "dem", "timezone", "modification_date"]
-cities, fieldnames = ByconTSVreader().file_to_dictlist(path.join( geo_rsrc_path, cities_f_n), fieldnames=fieldnames, max_count=0)
+cities, fieldnames = ByconTSVreader().fileToDictlist(path.join( geo_rsrc_path, cities_f_n), fieldnames=fieldnames, max_count=0)
 
 countries_f_n = "countryInfo.txt"
 fieldnames = ["ISO", "ISO3", "ISO-Numeric", "fips", "Country", "Capital", "Area(in sq km)", "Population", "Continent", "tld", "CurrencyCode", "CurrencyName", "Phone", "Postal Code Format", "Postal Code Regex", "Languages", "geonameid", "neighbours", "EquivalentFipsCode"]
-countries, fieldnames = ByconTSVreader().file_to_dictlist(path.join( geo_rsrc_path, countries_f_n), fieldnames=fieldnames, max_count=0)
+countries, fieldnames = ByconTSVreader().fileToDictlist(path.join( geo_rsrc_path, countries_f_n), fieldnames=fieldnames, max_count=0)
 
 continents ={
 	"AF": "Africa",

@@ -24,7 +24,7 @@ assert_single_dataset_or_exit()
 MAF_file = BYC_PARS.get("inputfile")
 print(f'... processing {MAF_file}')
 
-data, fields = ByconTSVreader().file_to_dictlist(MAF_file)
+data, fields = ByconTSVreader().fileToDictlist(MAF_file)
 
 data_ids = set()
 for l in data:

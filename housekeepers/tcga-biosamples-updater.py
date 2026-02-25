@@ -12,7 +12,7 @@ from byconServiceLibs import assert_single_dataset_or_exit, ByconTSVreader
 tcga_file = BYC_PARS.get("inputfile")
 print(f'... processing {tcga_file}')
 
-data, fields = ByconTSVreader().file_to_dictlist(tcga_file)
+data, fields = ByconTSVreader().fileToDictlist(tcga_file)
 
 mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])["progenetix"]
 bios_coll = mongo_client["biosamples"]

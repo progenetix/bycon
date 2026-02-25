@@ -73,7 +73,7 @@ class ByconTSVreader():
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def file_to_dictlist(self, filepath, fieldnames=None, max_count=None):
+    def fileToDictlist(self, filepath, fieldnames=None, max_count=None):
         if type(max_count) is int:
             self.max_lines = max_count
         with open(filepath, newline='') as self.tsv_data:

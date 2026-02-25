@@ -9,8 +9,7 @@ from byconServiceLibs import import_datatable_dict_line
 
 BI = ByconImporter()
 BV = ByconVariant()
-BI.get_input_file()
-variants, fieldnames = BI.read_records("genomicVariant")
+variants, fieldnames = BI.readEntityTable("genomicVariant")
 i = 0
 for v in variants:
 	i += 1

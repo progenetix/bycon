@@ -84,7 +84,7 @@ class ByconBundler:
     #----------------------------- public -------------------------------------#
     #--------------------------------------------------------------------------#
 
-    def read_pgx_file(self, filepath):
+    def readPGXfile(self, filepath):
         self.filepath = filepath
 
         h_lines = []
@@ -93,9 +93,9 @@ class ByconBundler:
                 line = line.strip()
                 if line.startswith("#"):
                     h_lines.append(line)
-        prdbug(f'... read_pgx_file with {len(h_lines)} metadata lines')
+        prdbug(f'... readPGXfile with {len(h_lines)} metadata lines')
 
-        d_lines, fieldnames = ByconTSVreader().file_to_dictlist(self.filepath, max_count=0)
+        d_lines, fieldnames = ByconTSVreader().fileToDictlist(self.filepath, max_count=0)
         self.header = h_lines
         self.data = d_lines
         self.fieldnames = fieldnames
@@ -105,11 +105,11 @@ class ByconBundler:
 
     #--------------------------------------------------------------------------#
 
-    def read_probedata_file(self, filepath):
+    def readProbedataFile(self, filepath):
         self.filepath = filepath
         self.probedata = []
 
-        p_lines, fieldnames = ByconTSVreader().file_to_dictlist(self.filepath, max_count=0)
+        p_lines, fieldnames = ByconTSVreader().fileToDictlist(self.filepath, max_count=0)
 
         p_o = {
             "probe_id": False,
@@ -142,7 +142,7 @@ class ByconBundler:
     #--------------------------------------------------------------------------#
 
     def pgxseg_to_keyed_bundle(self, filepath):
-        self.read_pgx_file(filepath)
+        self.readPGXfile(filepath)
         if not "biosample_id" in self.fieldnames:
             self.errors.append("¡¡¡ The `biosample_id` parameter is required for variant assignment !!!")
             return

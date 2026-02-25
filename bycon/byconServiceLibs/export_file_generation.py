@@ -1,7 +1,7 @@
 import sys, re
 
 from datetime import datetime
-from os import path, environ
+from os import path
 from pymongo import MongoClient
 
 from bycon import (
@@ -11,6 +11,7 @@ from bycon import (
     ByconError,
     ByconID,
     ByconH,
+    ByconMongo,
     ByconVariant,
     BYC_DBS,
     HTTP_HOST,
@@ -43,7 +44,7 @@ class PGXfreq:
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def stream_pgxfreq(self):
+    def streamPGXfreq(self):
         self.__add_header_line()
         self.__add_frequency_lines()
         open_text_streaming(self.filename)
@@ -54,7 +55,7 @@ class PGXfreq:
 
     # -------------------------------------------------------------------------#
 
-    def stream_pgxmatrix(self):
+    def streamPGXmatrix(self):
         self.filename = "interval_frequencies.pgxmatrix"
         self.__add_matrix_header_line()
         self.__add_frequency_matrix_lines()
@@ -69,8 +70,8 @@ class PGXfreq:
     # -------------------------------------------------------------------------#
 
     def __add_meta_lines(self):
-        g_b = GenomeBins().get_genome_binning()
-        i_no = GenomeBins().get_genome_bin_count()
+        g_b = GenomeBins().getGenomeBinningID()
+        i_no = GenomeBins().getGenomeBinCount()
         self.output_lines.append(f'#meta=>genome_binning={g_b};interval_number={i_no}')
         for f_set in self.frequencysets:
             line = ["#group=>"]
@@ -99,7 +100,7 @@ class PGXfreq:
     # -------------------------------------------------------------------------#
 
     def __add_matrix_header_line(self):
-        g_b_s = GenomeBins().get_genome_bins()
+        g_b_s = GenomeBins().getGenomeBins()
         line = ["group_id"]
         for iv in g_b_s:
             line.append(f'{iv["reference_name"]}:{int(iv["start"]):09}-{int(iv["end"]):09}:DUP')
@@ -134,7 +135,6 @@ class PGXseg:
         dataset_defs = BYC.get("dataset_definitions", {})
         self.dataset_definition = dataset_defs.get(self.ds_id, {})
         self.dataset_result = dataset_results.get(self.ds_id, {})
-        self.mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
         self.header_cols = self.datatable_mappings.get("ordered_pgxseg_columns", [])
         self.bios_pars = self.datatable_mappings["$defs"]["biosample"]["parameters"]
         self.variant_mappings = self.datatable_mappings["$defs"]["genomicVariant"]["parameters"]
@@ -150,7 +150,7 @@ class PGXseg:
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def stream_pgxseg(self):
+    def streamPGXseg(self):
         open_text_streaming(self.filename)
         for l in self.output_lines:
             print(l)
@@ -208,12 +208,12 @@ class PGXseg:
             v_instances.append(BV.byconVariant(v_s))
         v_instances = list(sorted(v_instances, key=lambda x: (f'{x["location"]["chromosome"].replace("X", "XX").replace("Y", "YY").zfill(2)}', x["location"]['start'])))
         for v in v_instances:
-            self.variant_line(v)
+            self.__variant_line(v)
 
 
     # -------------------------------------------------------------------------#
 
-    def variant_line(self, v_pgxseg):
+    def __variant_line(self, v_pgxseg):
         line = []
         for par in self.header_cols:
             par_defs = self.variant_mappings.get(par, {})
@@ -265,7 +265,7 @@ class PGXbed:
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def stream_pgxbed(self):
+    def streamPGXbed(self):
         if "igv" in self.flavour:
             self.__add_igv_variants()
         else:
@@ -278,7 +278,7 @@ class PGXbed:
 
     #--------------------------------------------------------------------------#
 
-    def bed_ucsc_link(self):
+    def bedUCSClink(self):
         self.__add_ucsc_variants()
         self.__write_bed_file()
         self.ucsc_link += f'&position={self.chro}:{min(self.starts_ends)+1}-{max(self.starts_ends)}&hgt.customText={self.bed_url}'
@@ -287,7 +287,7 @@ class PGXbed:
 
     #--------------------------------------------------------------------------#
 
-    def bedfile_link(self):
+    def bedfileLink(self):
         if "igv" in self.flavour:
             self.__add_igv_variants()
         else:
@@ -388,7 +388,7 @@ class PGXbed:
 ################################################################################
 
 def __pgxmatrix_interval_header(info_columns):
-    GBins = GenomeBins().get_genome_bins()
+    GBins = GenomeBins().getGenomeBins()
     int_line = info_columns.copy()
     for iv in GBins:
         int_line.append(f'{iv["reference_name"]}:{int(iv["start"]):09}-{int(iv["end"]):09}:DUP')
@@ -414,15 +414,14 @@ def export_callsets_matrix(datasets_results, ds_id):
     skip = BYC_PARS.get("skip", 0)
     limit = BYC_PARS.get("limit", 0)
     g_b = BYC_PARS.get("genome_binning", "")
-    i_no = GenomeBins().get_genome_bin_count()
+    i_no = GenomeBins().getGenomeBinCount()
 
     m_format = "values" if "val" in BYC_PARS.get("output", "") else "coverage"
 
     if not (cs_r := datasets_results[ds_id].get("analyses.id")):
         return
-    mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-    bs_coll = mongo_client[ ds_id ][ "biosamples" ]
-    cs_coll = mongo_client[ ds_id ][ "analyses" ]
+    bs_coll = ByconMongo(ds_id).openMongoColl("biosamples")
+    cs_coll = ByconMongo(ds_id).openMongoColl("analyses")
 
     open_text_streaming("interval_callset_matrix.pgxmatrix")
 

@@ -24,7 +24,7 @@ def main():
     output_file = BYC_PARS.get("outputfile") or output_path
 
     GB = GenomeBins()
-    print(f'Using binning="{GB.get_genome_binning()}" with {GB.get_genome_bin_count()} intervals.')
+    print(f'Using binning="{GB.getGenomeBinningID()}" with {GB.getGenomeBinCount()} intervals.')
 
     data_client = MongoClient(host=BYC_DBS["mongodb_host"])
     data_db = data_client[ds_id]
@@ -44,7 +44,7 @@ def main():
 
     print(f"Will compute per-gene CNV maps for {len(ana_ids)} analyses from dataset '{ds_id}'.")
 
-    intervals = GB.get_genome_bins()
+    intervals = GB.getGenomeBins()
     n_int = len(intervals)
     if n_int == 0:
         print("No genomic intervals found (check genome_binning / gene_interval_tsv). Exiting.")

@@ -104,8 +104,8 @@ class ByconCollationsAddFrequencies:
         self.dataset_id = dataset_id
         GB = GenomeBins()
         self.GenomeBins = GB
-        self.interval_count = GB.get_genome_bin_count()
-        self.binning = GB.get_genome_binning()
+        self.interval_count = GB.getGenomeBinCount()
+        self.binning = GB.getGenomeBinningID()
         self.limit = BYC_PARS.get("limit", 200)
         self.coll_coll = ByconMongo(dataset_id).openMongoColl(BYC_DBS["collections"]["collation"])
 

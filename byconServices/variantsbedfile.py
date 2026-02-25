@@ -28,6 +28,6 @@ def variantsbedfile():
     f_d = ByconResultSets().get_flattened_data()
     BED = PGXbed(f_d)
     if "ucsc" in BYC_PARS.get("output", "bed").lower():
-        print_uri_rewrite_response(BED.bed_ucsc_link())
-    print_uri_rewrite_response(BED.bedfile_link())
+        print_uri_rewrite_response(BED.bedUCSClink())
+    print_uri_rewrite_response(BED.bedfileLink())
 

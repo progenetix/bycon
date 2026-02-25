@@ -6,6 +6,15 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2026-02-25 (v2.7.5)
+
+* summaries code optimization
+    - consistent structure of aggregation in MongoDB w/ `id`, `label` in `$group`
+      stage instead of postprocessing
+    - new object format for `splits` and `terms`
+* more _codeSmetics_, e.g. more consistent use of `ByconMongo` instead of direct
+  pymongo use; reduction of star imports, renaming more exposed class functions to camelCase...
+
 ### 2026-02-06 (v2.7.4)
 
 * rewrote the aggregation part to now only have single concepts in `aggregation_terms`

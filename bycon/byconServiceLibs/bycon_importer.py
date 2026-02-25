@@ -63,19 +63,13 @@ class ByconImporter():
     #----------------------------- public -------------------------------------#
     #--------------------------------------------------------------------------#
 
-    def get_dataset_id(self):
-        return self.dataset_id
-
-
-    #--------------------------------------------------------------------------#
-
-    def get_input_file(self):
+    def getInputfilePath(self):
         return self.input_file
 
 
     #--------------------------------------------------------------------------#
 
-    def read_records(self, entity="___none___"):
+    def readEntityTable(self, entity="___none___"):
         if not entity in self.import_entities:
             print(f'!!! No correct entity provided.')
             exit()
@@ -147,7 +141,7 @@ class ByconImporter():
 
     def retrieve_variant_identifiers(self):
         bb = ByconBundler()
-        data = bb.read_pgx_file(self.input_file)
+        data = bb.readPGXfile(self.input_file)
         variants = data.data
         v_i_c = len(variants)
         print(f'=> The file contains {v_i_c} variants')
@@ -292,7 +286,7 @@ class ByconImporter():
         iid = self.import_id
 
         bb = ByconBundler()
-        self.data_in = bb.read_pgx_file(self.input_file)
+        self.data_in = bb.readPGXfile(self.input_file)
         print(f'=> The input file contains {len(self.data_in.data)} items')
 
         self.import_docs = []

@@ -15,4 +15,4 @@ the path is interpreted for an biosample `id` value if there is an entry at
 def pgxsegvariants():
     rss = ByconResultSets().datasetsResults()
     ds_id = list(rss.keys())[0]
-    PGXseg(rss, ds_id).stream_pgxseg()
+    PGXseg(rss, ds_id).streamPGXseg()
