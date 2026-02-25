@@ -1,7 +1,7 @@
 import re
 
 from config import BYC, BYC_DBS, BYC_PARS
-from bycon_helpers import ByconMongo, days_from_iso8601duration, prdbug
+from bycon_helpers import ByconMongo, days_from_iso8601duration, prdbug, prjsonnice
 
 ################################################################################
 ################################################################################
@@ -169,8 +169,11 @@ class ByconSummaries:
         else:
             agg_p.append({ "$sort": { "count": -1 } })
 
+
         if len(agg_d := list(data_coll.aggregate(agg_p))) < 1:
             return
+        # prjsonnice(agg_p)
+        # prjsonnice(agg_d)
 
         if concepts[0].get("sorted") is True:
             k = list(agg_d[0]["_id"].keys())[0]
@@ -178,13 +181,14 @@ class ByconSummaries:
                 if "order" in d.keys():
                     agg_d = sorted(agg_d, key=lambda x: x["_id"][k].get("order", 9999))
 
-        # label lookups only for term-based aggregations
+        # TODO: split methods for distinctCount vs. distribution ...
+
         for a in agg_d:
             if not (i_k := a.get("_id")):
                 continue
             c_v_s = []
             if not i_k.values():
-                id_v_s = ["Undefined"]
+                id_v_s = [{"id": "undefined", "label": "undefined"}]
             else:
                 id_v_s = list(i_k.values())
 
@@ -194,26 +198,21 @@ class ByconSummaries:
                 id_v_s.append({"id": "undefined", "label": "undefined"})
             
             for v in id_v_s:
-                if type(v) is dict and "id" in v:
-                    label = str(v.get("label", v.get("id")))
-                    c_v_s.append({"id": str(v.get("id")), "label": label})
-                    continue
-                label = str(v)
-                if (coll := self.term_coll.find_one( {"id": v})):
-                    label = str(coll.get("label", label))
-                    c_v_s.append({"id": str(v), "label": label})
-                    continue
-                c_v_s.append({"id": str(v), "label": label})
+                c_v_s.append({"id": str(v.get("id")), "label": str(v.get("label", v.get("id")))})
 
+            # excluding if the NO_MATCH flag is present in any of the categories
             include = True
             for c in c_v_s:
-                if str(c.get("id")) == "NO_MATCH":
+                if c["id"] == "NO_MATCH":
                     include = False
-            if include is True:
-                a_v["distribution"].append({
-                    "concept_values": c_v_s,
-                    "count": a.get("count", 0)
-                })
+
+            if include is False:
+                continue
+
+            a_v["distribution"].append({
+                "concept_values": c_v_s,
+                "count": a.get("count", 0)
+            })
 
         if len(a_v.get("distribution", [])) > 0:
             self.dataset_summaries.append(a_v)
@@ -226,8 +225,36 @@ class ByconSummaries:
             return _id
         if (_id := self.__switch_branches_from_splits(concept)):
             return _id
+        return self.__id_from_property(concept)
+
+
+    # -------------------------------------------------------------------------#
+
+    def __id_from_property(self, concept):
+        """
+        TBD
+        db.biosamples.aggregate([
+            {"$group": {"_id": "$individual_info.sex.id", label: {$first: "$individual_info.sex.label"}, id: {$first: "$individual_info.sex.id"}, "count": { "$sum": 1 }}},
+        ])
+
+        This is the "all distinct values" aggregation, assuming that it happens
+        on a property that has an `id` and `label` field. If there is no label
+        field (or the field is not an `.id`) than the same field will be used
+        for both.
+        CAVE: There might be cases wher incongruent labels lead then to separate
+        aggregation objects. This could be avoided by using a construct like
+        below which retrieves a label from the first match; however, it is not clear
+        how this can be achieved for lists of aggregations.
+        """
+
+        c_id = concept.get("id", "___none___")
         scope, concept_id = concept.get("property", "___none___.___none___").split('.', 1)
-        return f"${concept_id}"
+        concept_label = concept_id.replace(".id", ".label")
+        return {
+            "id": f"${concept_id}", "label": f"${concept_label}"
+        }
+
+        # return f"${concept_id}"
 
 
     # -------------------------------------------------------------------------#
@@ -300,16 +327,17 @@ class ByconSummaries:
 
         ```
         db.biosamples.aggregate([
+            {$match: {"histological_diagnosis.id": "NCIT:C3058"}},
             { $group: {
                 "_id": {
                     "ageAtDiagnosis": {
                         $switch: {
                             "branches": [
-                                { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 365 ] }, "then": "<P1Y" },
-                                { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 1825 ] }, "then": "<P5Y" },
-=                               { "case": { $lt: [ "$individual_info.index_disease.onset.age_days", 14600 ] }, "then": "<P40Y" }
+                                { "case": { $lt: [ "$individual_info.age_days", 365 ] }, "then": {"id": "<P1Y", "label": "younger than 1y"}},
+                                { "case": { $lt: [ "$individual_info.age_days", 1825 ] }, "then": {"id": "<P5Y", "label": "1y to <5y"} },
+                                { "case": { $lt: [ "$individual_info.age_days", 14600 ] }, "then": {"id": "<P40Y", "label": "5y to <40y"} }
                             ],
-                            "default": "undefined"
+                            "default": {"id": "undefined", "label": "undefined"}
                         }
                     }
                 },
