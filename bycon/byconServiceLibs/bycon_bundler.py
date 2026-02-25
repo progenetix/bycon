@@ -480,7 +480,6 @@ class ByconBundler:
                     "interval_frequencies": fmap.get("intervals", [])
                 }                    
                 self.intervalFreqsBundles.append(r_o)
-        mongo_client.close( )
 
 
 ################################################################################
