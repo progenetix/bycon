@@ -1,12 +1,11 @@
 {
   "scripts": {
     "dev": "next",
-    "build": "npm run lint && npm run test && next build && next export",
+    "build": "npm run lint && npm run test && next build",
     "update": "env-cmd -f env/production npm run-script build",
     "staging": "env-cmd -f env/staging npm run-script build",
     "local": "env-cmd -f env/local npm run-script build",
     "start": "next start",
-    "export": "next export",
     "test": "jest",
     "lint": "eslint src"
   },

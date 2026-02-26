@@ -1,4 +1,5 @@
 module.exports = {
+  output: 'export',
   // eslint-disable-next-line no-unused-vars
   webpack(config, options) {
     config.module.rules.push({
@@ -9,5 +10,5 @@ module.exports = {
   },
   staticPageGenerationTimeout: 120,
   trailingSlash: true,
-  productionBrowserSourceMaps: true
+  productionBrowserSourceMaps: true,
 }
