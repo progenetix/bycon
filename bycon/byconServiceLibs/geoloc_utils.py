@@ -55,9 +55,9 @@ class ByconGeolocs:
                 par_defs = p_defs[p]
                 default = par_defs.get("default", "")
                 v_s = line.get(p, default)
-                prdbug(p)
-                prdbug(par_defs)
-                prdbug(v_s)
+                # prdbug(p)
+                # prdbug(par_defs)
+                # prdbug(v_s)
 
                 p_vals.update({p: RefactoredValues(par_defs).refVal(v_s)})
 
@@ -446,8 +446,9 @@ class ByconMap:
         label = label.replace("'", "\\'")
 
         count = float(p.get("marker_count", 1))
+        # prdbug(f"Marker count for {label}: {count}")
         size = int(count * m_f * math.sqrt(float(self.plv.get("marker_scale", 2))))
-        marker_icon = p.get("marker_icon", "")
+        marker_icon = str(p.get("marker_icon"))
 
         if ".png" in marker_icon or ".jpg" in marker_icon:
             m_t = "marker"
@@ -480,6 +481,7 @@ L.{}([{}, {}], {{
         count,
         label
     )
+
 
         return map_marker
 

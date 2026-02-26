@@ -122,7 +122,7 @@ class ByconPlotPars:
             if len(pp_pv := re.split(r':|=', ppv)) != 2:
                 continue
             pp, pv = pp_pv
-            prdbug(f'__process_plot_parameters {pp} => {pv}')
+            # prdbug(f'__process_plot_parameters {pp} => {pv}')
             if pv.lower() in ["null", "undefined", "none"]:
                 continue
             if len(pv) < 1:
@@ -134,7 +134,7 @@ class ByconPlotPars:
                 # this handles repeated parameter definitions in plotVars string
                 pv = ",".join(list(map(str, (bps.get(pp, ""), pv))))
             bps.update({pp: pv})
-            prdbug(f'__process_plot_parameters {pp} => {pv}')
+            # prdbug(f'__process_plot_parameters {pp} => {pv}')
 
         for p_k, p_d in p_d_p.items():
             if not p_k in bps:
@@ -142,8 +142,10 @@ class ByconPlotPars:
             p_k_t = p_d_p[p_k].get("type", "string")
             p_d = bps.get(p_k)
 
+            # prdbug(f"__process_plot_parameters type {p_k} => {p_k_t}")
             if "array" in p_k_t:
                 p_i_t = p_d_p[p_k].get("items", "string")
+                # prdbug(f"__process_plot_parameters  {p_k} => {p_i_t}")
                 if type(p_d) is not list:
                     p_d = re.split(',', p_d)
                 if "int" in p_i_t:

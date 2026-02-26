@@ -19,6 +19,7 @@ def geolocations():
     GEOL = ByconGeolocs()
     if "inputfile" in BYC_PARS:
         results     = GEOL.get_locations_from_web()
+        # prdbug(results)
     else:
         query       = GeoQuery().get_geoquery()
         if not query:
