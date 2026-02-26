@@ -1,0 +1,1631 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the bycon GA4GH Beacon framework">
+      
+      
+        <meta name="author" content="Michael Baudis">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../img/site-logo-topright.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+    
+    
+      
+        <title>Argument definitions - bycon Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#argument-definitions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="bycon Documentation" class="md-header__button md-logo" aria-label="bycon Documentation" data-md-component="logo">
+      
+  <img src="../../img/site-logo-topright.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            bycon Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Argument definitions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/progenetix/bycon" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bycon
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="bycon Documentation" class="md-nav__button md-logo" aria-label="bycon Documentation" data-md-component="logo">
+      
+  <img src="../../img/site-logo-topright.png" alt="logo">
+
+    </a>
+    bycon Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/progenetix/bycon" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bycon
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent Changes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup & Maintainance
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Setup & Maintainance
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../importers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Importing Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../housekeepers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Housekeeping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beacon API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Beacon API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API-beacon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beacon API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API-services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API-parameters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Parameters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../beaconplus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Front End
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Repositories
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code Repositories
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/progenetix/bycon" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bycon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/progenetix/progenetix-web" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Progenetix Front End
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    More Info
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    More Info
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://progenetix.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Progenetix Site
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://baudisgroup.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    baudisgroup@UZH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://docs.genomebeacons.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beacon Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#argument-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Argument Definitions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>Argument definitions</h1>
+
+<h3 id="argument-definitions">Argument Definitions<a class="headerlink" href="#argument-definitions" title="Permanent link">&para;</a></h3>
+<h4 id="user_name"><code>user_name</code><a class="headerlink" href="#user_name" title="Permanent link">&para;</a></h4>
+<p><strong>description:</strong>
+TODO: Temporary(?) for authentication testing.  <br />
+<strong>type:</strong> string  <br />
+<strong>pattern:</strong> <code>^\w+$</code>  <br />
+<strong>cmdFlags:</strong> <code>--userName</code>  <br />
+<strong>in:</strong> query    </p>
+<h4 id="request_entity_path_id"><code>request_entity_path_id</code><a class="headerlink" href="#request_entity_path_id" title="Permanent link">&para;</a></h4>
+<p><strong>description:</strong></p>
+<ul>
+<li>data entry point, equal to the first REST path element in Beacon     </li>
+<li>this only is used for command-line tests instead of the REST path
+  value seen by the stack in web server mode  <br />
+<strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>-p,--requestEntityPathId</code>  <br />
+<strong>default:</strong> <code>info</code>    </li>
+</ul>
+<h4 id="response_entity_path_id"><code>response_entity_path_id</code><a class="headerlink" href="#response_entity_path_id" title="Permanent link">&para;</a></h4>
+<p><strong>description:</strong></p>
+<ul>
+<li>optional data delivery entry point, for {id} paths     </li>
+<li>for command line (see above), but also potentially for selecting
+  a special response entity in byconaut services (e.g. <code>indviduals</code>
+  in <code>/sampletable/</code>)  <br />
+<strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>-r,--responseEntityPathId</code>    </li>
+</ul>
+<h4 id="id"><code>id</code><a class="headerlink" href="#id" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> id  <br />
+<strong>pattern:</strong> <code>^\w[\w\:\-\,]+?\w$</code>  <br />
+<strong>cmdFlags:</strong> <code>--id</code>  <br />
+<strong>description:</strong></p>
+<ul>
+<li>An id     </li>
+<li>This parameter only makes sense for specific REST entry types where
+  it is used in place of the path parameter (<code>.../__request_entity_path_id__/{id}/</code>)  <br />
+<strong>in:</strong> path  <br />
+<strong>examples:</strong>  <ul>
+<li><code>$ref</code>: <code>#/examples/id</code>    </li>
+</ul>
+</li>
+</ul>
+<h4 id="filter_precision"><code>filter_precision</code><a class="headerlink" href="#filter_precision" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>--filterPrecision</code>  <br />
+<strong>description:</strong>
+Either <code>start</code> or <code>exact</code> for matching "filter" values in some services, e.g. <code>OntologyMaps</code> or Publications. Not used for standard Beacon functions.  <br />
+<strong>default:</strong> <code>exact</code>    </p>
+<h4 id="skip"><code>skip</code><a class="headerlink" href="#skip" title="Permanent link">&para;</a></h4>
+<p><strong>description:</strong>
+Number of pages to be skipped. In POST <code>pagination.skip</code>.  <br />
+<strong>type:</strong> integer  <br />
+<strong>cmdFlags:</strong> <code>--skip</code>  <br />
+<strong>default:</strong> <code>0</code>  <br />
+<strong>in:</strong> query    </p>
+<h4 id="limit"><code>limit</code><a class="headerlink" href="#limit" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> integer  <br />
+<strong>cmdFlags:</strong> <code>-l,--limit</code>  <br />
+<strong>description:</strong>
+Limit to number of documents returned; a value of 0 sets to unlimited. In POST <code>pagination.limit</code>.  <br />
+<strong>default:</strong> <code>200</code>  <br />
+<strong>local:</strong> 0  <br />
+<strong>in:</strong> query    </p>
+<h4 id="test_mode"><code>test_mode</code><a class="headerlink" href="#test_mode" title="Permanent link">&para;</a></h4>
+<p><strong>description:</strong>
+Activates the Beacon test setting, i.e. returning some random documents  <br />
+<strong>type:</strong> boolean  <br />
+<strong>cmdFlags:</strong> <code>-t,--testMode</code>  <br />
+<strong>default:</strong> <code>False</code>  <br />
+<strong>in:</strong> query  <br />
+<strong>beacon_query:</strong> True    </p>
+<h4 id="requested_granularity"><code>requested_granularity</code><a class="headerlink" href="#requested_granularity" title="Permanent link">&para;</a></h4>
+<p><strong>description:</strong>
+The requested granularity of the beacon  <br />
+<strong>type:</strong> string  <br />
+<strong>enum:</strong> <code>boolean,count,aggregated,record</code>  <br />
+<strong>pattern:</strong> <code>^\w+$</code>  <br />
+<strong>cmdFlags:</strong> <code>--requestedGranularity</code>  <br />
+<strong>default:</strong> <code>record</code>  <br />
+<strong>in:</strong> query  <br />
+<strong>examples:</strong><br />
+    - <code>$ref</code>: <code>#/examples/requested_granularity</code>    </p>
+<h4 id="include_resultset_responses"><code>include_resultset_responses</code><a class="headerlink" href="#include_resultset_responses" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>--includeResultsetResponses</code>  <br />
+<strong>description:</strong></p>
+<ul>
+<li>include resultset responses, e.g. HIT, MISS     </li>
+<li>kind of a holdover from Beacon pre-v1 but HIT &amp; ALL might have
+  some use in networks  <br />
+<strong>default:</strong> <code>HIT</code>  <br />
+<strong>in:</strong> query    </li>
+</ul>
+<h4 id="filters"><code>filters</code><a class="headerlink" href="#filters" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>  <br />
+<strong>cmdFlags:</strong> <code>--filters</code>  <br />
+<strong>description:</strong>
+prefixed filter values, comma concatenated; or objects in POST  <br />
+<strong>in:</strong> query  <br />
+<strong>beacon_query:</strong> True  <br />
+<strong>examples:</strong><br />
+    - <code>$ref</code>: <code>#/examples/filters</code>    </p>
+<h4 id="include_descendant_terms"><code>include_descendant_terms</code><a class="headerlink" href="#include_descendant_terms" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> boolean  <br />
+<strong>cmdFlags:</strong> <code>--includeDescendantTerms</code>  <br />
+<strong>description:</strong>
+Global treatment of descendant terms for <code>filters</code>  <br />
+<strong>default:</strong> <code>True</code>    </p>
+<h4 id="dataset_ids"><code>dataset_ids</code><a class="headerlink" href="#dataset_ids" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>  <br />
+<strong>cmdFlags:</strong> <code>-d,--datasetIds</code>  <br />
+<strong>description:</strong>
+dataset ids    </p>
+<h4 id="aggregators"><code>aggregators</code><a class="headerlink" href="#aggregators" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>  <br />
+<strong>cmdFlags:</strong> <code>--aggregators</code>  <br />
+<strong>description:</strong>
+Experimental for Beacon v2+ for indicating which aggregations to provide    </p>
+<h4 id="age_splits"><code>age_splits</code><a class="headerlink" href="#age_splits" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>  <br />
+<strong>cmdFlags:</strong> <code>--ageSplits</code>  <br />
+<strong>description:</strong>
+Experimental for Beacon v2+ aggregation of ageAtDiagnosis by ISO8601 durations    </p>
+<h4 id="followup_splits"><code>followup_splits</code><a class="headerlink" href="#followup_splits" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>  <br />
+<strong>cmdFlags:</strong> <code>--followupSplits</code>  <br />
+<strong>description:</strong>
+Experimental for Beacon v2+ aggregation of followupTime by ISO8601 durations    </p>
+<h4 id="request_profile_id"><code>request_profile_id</code><a class="headerlink" href="#request_profile_id" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>pattern:</strong> <code>^\w+$</code>  <br />
+<strong>db_key:</strong> None  <br />
+<strong>cmdFlags:</strong> <code>--requestProfileId</code>  <br />
+<strong>default:</strong> <code>Bv2GenericVariantRequest</code>  <br />
+<strong>description:</strong>
+profile ID for the request, to indicate variant query type  <br />
+<strong>beacon_query:</strong> True  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="vrs_type"><code>vrs_type</code><a class="headerlink" href="#vrs_type" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>pattern:</strong> <code>^\w+$</code>  <br />
+<strong>db_key:</strong> type  <br />
+<strong>cmdFlags:</strong> <code>--vrsType</code>  <br />
+<strong>description:</strong>
+VRS variant schema type, e.g. <code>Allele</code> or <code>CopyNumberChange</code>  <br />
+<strong>beacon_query:</strong> False  <br />
+<strong>is_vqs_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="reference_accession"><code>reference_accession</code><a class="headerlink" href="#reference_accession" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> location.sequence_id  <br />
+<strong>pattern:</strong> <code>^\w+.*?\w?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--referenceAccession</code>  <br />
+<strong>description:</strong>
+reference accession, i.e. a versioned sequence reference ID  <br />
+<strong>beacon_query:</strong> False  <br />
+<strong>is_vqs_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="copy_change"><code>copy_change</code><a class="headerlink" href="#copy_change" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> variant_state.id  <br />
+<strong>pattern:</strong> <code>^\w+[\w \-\:]\w+?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--copyChange</code>  <br />
+<strong>description:</strong>
+variant type, e.g. EFO:0030067 or DUP  <br />
+<strong>beacon_query:</strong> False  <br />
+<strong>is_vqs_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="sequence_length"><code>sequence_length</code><a class="headerlink" href="#sequence_length" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>db_key:</strong> info.var_length  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>integer</code>    <br />
+    - <code>pattern</code>: <code>^\d+?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--sequenceLength</code>  <br />
+<strong>description:</strong></p>
+<ul>
+<li>
+<p>length (range) of variant sequence</p>
+</li>
+<li>
+<p>should replace variant_min_length and variant_max_length  <br />
+<strong>beacon_query:</strong> False  <br />
+<strong>is_vqs_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+</li>
+</ul>
+<h4 id="breakpoint_range"><code>breakpoint_range</code><a class="headerlink" href="#breakpoint_range" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>db_key:</strong> adjoined_sequences.start  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>integer</code>    <br />
+    - <code>pattern</code>: <code>^\d+?$</code>  <br />
+<strong>minItems:</strong> 2  <br />
+<strong>maxItems:</strong> 2  <br />
+<strong>cmdFlags:</strong> <code>--breakpointRange</code>  <br />
+<strong>description:</strong>
+range for breakpoint or lower chromosome position in adjacency  <br />
+<strong>beacon_query:</strong> False  <br />
+<strong>is_vqs_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="adjacency_accession"><code>adjacency_accession</code><a class="headerlink" href="#adjacency_accession" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> adjoined_sequences.sequence_id  <br />
+<strong>pattern:</strong> <code>^\w+.*?\w?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--adjacencyAccession</code>  <br />
+<strong>description:</strong>
+adjacency accession, i.e. a versioned sequence reference ID  <br />
+<strong>beacon_query:</strong> False  <br />
+<strong>is_vqs_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="adjacency_range"><code>adjacency_range</code><a class="headerlink" href="#adjacency_range" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>db_key:</strong> adjoined_sequences.start  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>integer</code>    <br />
+    - <code>pattern</code>: <code>^\d+?$</code>  <br />
+<strong>minItems:</strong> 2  <br />
+<strong>maxItems:</strong> 2  <br />
+<strong>cmdFlags:</strong> <code>--adjacencyRange</code>  <br />
+<strong>description:</strong>
+range for higher chromosome position in adjacency  <br />
+<strong>beacon_query:</strong> False  <br />
+<strong>is_vqs_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="assembly_id"><code>assembly_id</code><a class="headerlink" href="#assembly_id" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>pattern:</strong> <code>^\w+?[\w\-\.]*?\w*?$</code>  <br />
+<strong>db_key:</strong> assembly_id  <br />
+<strong>cmdFlags:</strong> <code>--assemblyId</code>  <br />
+<strong>description:</strong>
+assembly id; currently not used in bycon's version  <br />
+<strong>is_variant_par:</strong> True    </p>
+<h4 id="reference_name"><code>reference_name</code><a class="headerlink" href="#reference_name" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> location.sequence_id  <br />
+<strong>pattern:</strong> <code>^\w+.*?\w?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--referenceName</code>  <br />
+<strong>description:</strong>
+chromosome  <br />
+<strong>beacon_query:</strong> True  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>in:</strong> query  <br />
+<strong>examples:</strong><br />
+    - <code>$ref</code>: <code>#/examples/reference_name</code>    </p>
+<h4 id="mate_name"><code>mate_name</code><a class="headerlink" href="#mate_name" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> adjoined_sequences.sequence_id  <br />
+<strong>pattern:</strong> <code>^\w+.*?\w?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--mateName</code>  <br />
+<strong>description:</strong>
+chromosome  <br />
+<strong>beacon_query:</strong> True  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>in:</strong> query  <br />
+<strong>examples:</strong> <code>{'emptyValue': {'value': '', 'summary': 'A versioned reference ID or a chromsome name / number'}}</code>    </p>
+<h4 id="reference_bases"><code>reference_bases</code><a class="headerlink" href="#reference_bases" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> state.reference_sequence  <br />
+<strong>pattern:</strong> <code>^[ACGTN]+$</code>  <br />
+<strong>cmdFlags:</strong> <code>--referenceBases</code>  <br />
+<strong>description:</strong>
+reference bases  <br />
+<strong>beacon_query:</strong> True  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="alternate_bases"><code>alternate_bases</code><a class="headerlink" href="#alternate_bases" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> state.sequence  <br />
+<strong>pattern:</strong> <code>^[ACGTN]+$</code>  <br />
+<strong>cmdFlags:</strong> <code>--alternateBases</code>  <br />
+<strong>description:</strong>
+alternate bases  <br />
+<strong>beacon_query:</strong> True  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="variant_type"><code>variant_type</code><a class="headerlink" href="#variant_type" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> variant_state.id  <br />
+<strong>pattern:</strong> <code>^\w+[\w \-\:]\w+?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--variantType</code>  <br />
+<strong>description:</strong>
+variant type, e.g. EFO:0030067 or DUP  <br />
+<strong>beacon_query:</strong> True  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>in:</strong> query  <br />
+<strong>examples:</strong><br />
+    - <code>$ref</code>: <code>#/examples/variant_type</code>    </p>
+<h4 id="start"><code>start</code><a class="headerlink" href="#start" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>db_key:</strong> location.start  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>integer</code>    <br />
+    - <code>pattern</code>: <code>^\d+?$</code>  <br />
+<strong>minItems:</strong> 1  <br />
+<strong>maxItems:</strong> 2  <br />
+<strong>cmdFlags:</strong> <code>--start</code>  <br />
+<strong>description:</strong>
+genomic start position  <br />
+<strong>beacon_query:</strong> True  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>is_vqs_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="end"><code>end</code><a class="headerlink" href="#end" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>db_key:</strong> location.end  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>integer</code>    <br />
+    - <code>pattern</code>: <code>^\d+?$</code>  <br />
+<strong>minItems:</strong> 1  <br />
+<strong>maxItems:</strong> 2  <br />
+<strong>cmdFlags:</strong> <code>--end</code>  <br />
+<strong>description:</strong>
+genomic end position  <br />
+<strong>beacon_query:</strong> True  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>is_vqs_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="mate_start"><code>mate_start</code><a class="headerlink" href="#mate_start" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> integer  <br />
+<strong>db_key:</strong> adjoined_sequences.start  <br />
+<strong>pattern:</strong> <code>^\d+?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--mateStart</code>  <br />
+<strong>description:</strong>
+genomic start position of fusion partner breakpoint region  <br />
+<strong>is_variant_par:</strong> True    </p>
+<h4 id="mate_end"><code>mate_end</code><a class="headerlink" href="#mate_end" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> integer  <br />
+<strong>db_key:</strong> adjoined_sequences.end  <br />
+<strong>pattern:</strong> <code>^\d+?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--MateEnd</code>  <br />
+<strong>description:</strong>
+genomic end position of fusion partner breakpoint region  <br />
+<strong>is_variant_par:</strong> True    </p>
+<h4 id="variant_min_length"><code>variant_min_length</code><a class="headerlink" href="#variant_min_length" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> integer  <br />
+<strong>db_key:</strong> info.var_length  <br />
+<strong>pattern:</strong> <code>^\d+?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--variantMinLength</code>  <br />
+<strong>description:</strong>
+The minimal variant length in bases e.g. for CNV queries.  <br />
+<strong>beacon_query:</strong> True  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="variant_max_length"><code>variant_max_length</code><a class="headerlink" href="#variant_max_length" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> integer  <br />
+<strong>db_key:</strong> info.var_length  <br />
+<strong>pattern:</strong> <code>^\d+?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--variantMaxLength</code>  <br />
+<strong>description:</strong>
+The maximum variant length in bases e.g. for CNV queries.  <br />
+<strong>beacon_query:</strong> True  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>in:</strong> query    </p>
+<h4 id="gene_id"><code>gene_id</code><a class="headerlink" href="#gene_id" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>pattern</code>: <code>^\w+?(\w+?(\-\w+?)?)?$</code>    <br />
+    - <code>type</code>: <code>string</code>  <br />
+<strong>db_key:</strong> None  <br />
+<strong>cmdFlags:</strong> <code>--geneId</code>  <br />
+<strong>description:</strong>
+one or more (comma concatenated) gene ids  <br />
+<strong>beacon_query:</strong> True  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>is_vqs_par:</strong> True  <br />
+<strong>in:</strong> query  <br />
+<strong>examples:</strong><br />
+    - <code>$ref</code>: <code>#/examples/gene_id</code>    </p>
+<h4 id="aminoacid_change"><code>aminoacid_change</code><a class="headerlink" href="#aminoacid_change" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> molecular_attributes.aminoacid_changes  <br />
+<strong>pattern:</strong> <code>^\w+?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--aminoacidChange</code>  <br />
+<strong>description:</strong>
+Aminoacid alteration in 1 letter format  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>in:</strong> query  <br />
+<strong>examples:</strong><br />
+    - <code>$ref</code>: <code>#/examples/aminoacid_change</code>    </p>
+<h4 id="genomic_allele_short_form"><code>genomic_allele_short_form</code><a class="headerlink" href="#genomic_allele_short_form" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> identifiers.genomicHGVS_id  <br />
+<strong>pattern:</strong> <code>^\w+.*\w$</code>  <br />
+<strong>cmdFlags:</strong> <code>--genomicAlleleShortForm</code>  <br />
+<strong>description:</strong>
+Genomic HGVSId descriptor  <br />
+<strong>is_variant_par:</strong> True  <br />
+<strong>in:</strong> query  <br />
+<strong>examples:</strong> <code>{'gHGVS': {'value': 'NC_000017.11:g.7674232C&gt;G'}}</code>    </p>
+<h4 id="variant_query_digests"><code>variant_query_digests</code><a class="headerlink" href="#variant_query_digests" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>db_key:</strong> None  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>    <br />
+    - <code>pattern</code>: <code>^(?:chro?)?([12]?[\dXY]):(\d+?(?:-\d+?)?)(?:--(\d+?(?:-\d+?)?))?(?::([\w\:\&gt;]+?))?$</code>  <br />
+<strong>cmdFlags:</strong> <code>--variantQueryDigests</code>  <br />
+<strong>description:</strong>
+EXPERIMENTAL Variant query digest-style short form  <br />
+<strong>examples:</strong> <code>{'DELdigest': {'value': '9:9000001-21975098--21967753-24000000:DEL'}}</code>    </p>
+<h4 id="variant_multi_pars"><code>variant_multi_pars</code><a class="headerlink" href="#variant_multi_pars" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>db_key:</strong> None  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>object</code>  <br />
+<strong>cmdFlags:</strong> <code>--variantMultiPars</code>  <br />
+<strong>description:</strong>
+EXPERIMENTAL List of multiple variant queries, for POST    </p>
+<h4 id="variant_internal_id"><code>variant_internal_id</code><a class="headerlink" href="#variant_internal_id" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> variant_internal_id  <br />
+<strong>pattern:</strong> <code>^\w[\w\:\-\,]+?\w$</code>  <br />
+<strong>cmdFlags:</strong> <code>--variantInternalId</code>  <br />
+<strong>description:</strong>
+An id value used for all variant instances of the same composition; a kind of <code>digest</code>  <br />
+<strong>examples:</strong> <code>{'EFO_0030067': {'value': '11:52900000-134452384:EFO_0030067'}}</code>    </p>
+<h4 id="accessid"><code>accessid</code><a class="headerlink" href="#accessid" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>db_key:</strong> id  <br />
+<strong>pattern:</strong> <code>^\w[\w\-]+?\w$</code>  <br />
+<strong>cmdFlags:</strong> <code>--accessid</code>  <br />
+<strong>description:</strong>
+An accessid for retrieving handovers etc.  <br />
+<strong>examples:</strong><br />
+    - <code>$ref</code>: <code>#/examples/accessid</code>    </p>
+<h4 id="file_id"><code>file_id</code><a class="headerlink" href="#file_id" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>pattern:</strong> <code>^\w[\w\-]+?\w$</code>  <br />
+<strong>cmdFlags:</strong> <code>--fileId</code>  <br />
+<strong>description:</strong>
+A file id e.g. as generated by the uploader service  <br />
+<strong>examples:</strong><br />
+    - <code>$ref</code>: <code>#/examples/file_id</code>    </p>
+<h4 id="path_ids"><code>path_ids</code><a class="headerlink" href="#path_ids" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>    <br />
+    - <code>pattern</code>: <code>^\w[\w,:-]+\w$</code>  <br />
+<strong>cmdFlags:</strong> <code>--pathIds</code>  <br />
+<strong>description:</strong>
+ids in the path    </p>
+<h4 id="biosample_ids"><code>biosample_ids</code><a class="headerlink" href="#biosample_ids" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>    <br />
+    - <code>pattern</code>: <code>^\w[\w,:-]+\w$</code>  <br />
+<strong>byc_entity:</strong> biosample  <br />
+<strong>cmdFlags:</strong> <code>--biosampleIds</code>  <br />
+<strong>description:</strong>
+biosample ids    </p>
+<h4 id="analysis_ids"><code>analysis_ids</code><a class="headerlink" href="#analysis_ids" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>    <br />
+    - <code>pattern</code>: <code>^\w[\w,:-]+\w$</code>  <br />
+<strong>byc_entity:</strong> analysis  <br />
+<strong>cmdFlags:</strong> <code>--analysisIds</code>  <br />
+<strong>description:</strong>
+analysis ids    </p>
+<h4 id="individual_ids"><code>individual_ids</code><a class="headerlink" href="#individual_ids" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>    <br />
+    - <code>pattern</code>: <code>^\w[\w,:-]+\w$</code>  <br />
+<strong>byc_entity:</strong> individual  <br />
+<strong>cmdFlags:</strong> <code>--individualIds</code>  <br />
+<strong>description:</strong>
+subject ids    </p>
+<h4 id="variant_ids"><code>variant_ids</code><a class="headerlink" href="#variant_ids" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>    <br />
+    - <code>pattern</code>: <code>^\w[\w,:-]+\w$</code>  <br />
+<strong>byc_entity:</strong> genomicVariant  <br />
+<strong>cmdFlags:</strong> <code>--variantIds</code>  <br />
+<strong>description:</strong>
+variant ids    </p>
+<h4 id="debug_mode"><code>debug_mode</code><a class="headerlink" href="#debug_mode" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> boolean  <br />
+<strong>cmdFlags:</strong> <code>--debugMode</code>  <br />
+<strong>description:</strong>
+debug setting  <br />
+<strong>default:</strong> <code>False</code>    </p>
+<h4 id="test_mode_count"><code>test_mode_count</code><a class="headerlink" href="#test_mode_count" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> integer  <br />
+<strong>cmdFlags:</strong> <code>--testModeCount</code>  <br />
+<strong>description:</strong>
+setting the number of documents reurned in test mode  <br />
+<strong>default:</strong> <code>5</code>    </p>
+<h4 id="output"><code>output</code><a class="headerlink" href="#output" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>--output</code>  <br />
+<strong>description:</strong>
+For defining a special output format, mostly for <code>byconaut</code> services use. Examples:</p>
+<ul>
+<li><code>cnvstats</code>, for <code>analyses</code>, to present some CNV statistics     </li>
+<li><code>pgxseg</code>, using the <code>.pgxseg</code> variant file format     </li>
+<li><code>text</code>, for some services to deliver a text table instead of JSON     </li>
+<li>for the target database when copying...    </li>
+</ul>
+<h4 id="include_handovers"><code>include_handovers</code><a class="headerlink" href="#include_handovers" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> boolean  <br />
+<strong>default:</strong> <code>True</code>  <br />
+<strong>cmdFlags:</strong> <code>--includeHandovers</code>  <br />
+<strong>description:</strong>
+only used for web requests &amp; testing    </p>
+<h4 id="method"><code>method</code><a class="headerlink" href="#method" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>--method</code>  <br />
+<strong>description:</strong>
+special method  <br />
+<strong>default:</strong> <code>None</code>    </p>
+<h4 id="group_by"><code>group_by</code><a class="headerlink" href="#group_by" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>--groupBy</code>  <br />
+<strong>description:</strong>
+group parameter e.g. for subset splitting  <br />
+<strong>default:</strong> <code>text</code>    </p>
+<h4 id="mode"><code>mode</code><a class="headerlink" href="#mode" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>-m,--mode</code>  <br />
+<strong>description:</strong>
+mode, e.g. file type    </p>
+<h4 id="update"><code>update</code><a class="headerlink" href="#update" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> boolean  <br />
+<strong>cmdFlags:</strong> <code>-u,--update</code>  <br />
+<strong>description:</strong>
+update existing records - might be deprecated; only used for publications  <br />
+<strong>default:</strong> <code>False</code>    </p>
+<h4 id="force"><code>force</code><a class="headerlink" href="#force" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> boolean  <br />
+<strong>cmdFlags:</strong> <code>--force</code>  <br />
+<strong>description:</strong>
+force mode, e.g. for update or insert (cmd line)  <br />
+<strong>default:</strong> <code>False</code>    </p>
+<h4 id="inputfile"><code>inputfile</code><a class="headerlink" href="#inputfile" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>-i,--inputfile</code>  <br />
+<strong>description:</strong>
+a custom file to specify input data, usually tab-delimited with special header    </p>
+<h4 id="gene_interval_tsv"><code>gene_interval_tsv</code><a class="headerlink" href="#gene_interval_tsv" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>pattern:</strong> <code>^[\w\/\.\-]+$</code>  <br />
+<strong>default:</strong> <code>cancer_gene_list.tsv</code>  <br />
+<strong>cmdFlags:</strong> <code>--geneIntervalTsv</code>  <br />
+<strong>description:</strong>
+path to a TSV file containing gene intervals. The file should at least contains: gene_id, gene_symbol, chrom, start, end.    </p>
+<h4 id="outputdir"><code>outputdir</code><a class="headerlink" href="#outputdir" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>--outputdir</code>  <br />
+<strong>description:</strong>
+output directory where supported (cmd line)    </p>
+<h4 id="outputfile"><code>outputfile</code><a class="headerlink" href="#outputfile" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>-o,--outputfile</code>  <br />
+<strong>description:</strong>
+output file where supported (cmd line)    </p>
+<h4 id="min_number"><code>min_number</code><a class="headerlink" href="#min_number" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> integer  <br />
+<strong>cmdFlags:</strong> <code>--minNumber</code>  <br />
+<strong>description:</strong>
+minimal number, e.g. for collations, where supported  <br />
+<strong>default:</strong> <code>0</code>    </p>
+<h4 id="delivery_keys"><code>delivery_keys</code><a class="headerlink" href="#delivery_keys" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>  <br />
+<strong>cmdFlags:</strong> <code>--deliveryKeys</code>  <br />
+<strong>description:</strong>
+delivery keys to force only some parameters in custom exporters    </p>
+<h4 id="collation_types"><code>collation_types</code><a class="headerlink" href="#collation_types" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> array  <br />
+<strong>items:</strong><br />
+    - <code>type</code>: <code>string</code>  <br />
+<strong>cmdFlags:</strong> <code>--collationTypes</code>  <br />
+<strong>description:</strong>
+selected collation types, e.g. "EFO"    </p>
+<h4 id="genome_binning"><code>genome_binning</code><a class="headerlink" href="#genome_binning" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>default:</strong> <code>1Mb</code>  <br />
+<strong>cmdFlags:</strong> <code>--genomeBinning</code>  <br />
+<strong>description:</strong>
+one of the predefined genome binning keys - default 1Mb    </p>
+<h4 id="cyto_bands"><code>cyto_bands</code><a class="headerlink" href="#cyto_bands" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>pattern:</strong> <code>^(?:chro?)?([12]?[\dXY])([pq](?:(?:ter)|(?:cen)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?\-?([pq](?:(?:cen)|(?:ter)|(?:[1-4](?:\d(?:\.\d\d*?)?)?)?))?$</code>  <br />
+<strong>db_key:</strong> None  <br />
+<strong>cmdFlags:</strong> <code>--cytoBands</code>  <br />
+<strong>description:</strong>
+cytobands, e.g. 8q21q24.1    </p>
+<h4 id="chro_bases"><code>chro_bases</code><a class="headerlink" href="#chro_bases" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>pattern:</strong> <code>^(chro?)?([12]?[\dXY])\:(\d+?)(\-(\d+?))?$</code>  <br />
+<strong>db_key:</strong> None  <br />
+<strong>cmdFlags:</strong> <code>--chroBases</code>  <br />
+<strong>description:</strong>
+only for the cytoband converter ... e.g. 8:0-120000000    </p>
+<h4 id="city"><code>city</code><a class="headerlink" href="#city" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>--city</code>  <br />
+<strong>description:</strong>
+only for the geolocations...    </p>
+<h4 id="country"><code>country</code><a class="headerlink" href="#country" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>--country</code>  <br />
+<strong>description:</strong>
+only for the geolocations...    </p>
+<h4 id="iso3166alpha3"><code>iso3166alpha3</code><a class="headerlink" href="#iso3166alpha3" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>--iso3166alpha3</code>  <br />
+<strong>description:</strong>
+only for the geolocations...    </p>
+<h4 id="iso3166alpha2"><code>iso3166alpha2</code><a class="headerlink" href="#iso3166alpha2" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>--iso3166alpha2</code>  <br />
+<strong>description:</strong>
+only for the geolocations...    </p>
+<h4 id="geo_latitude"><code>geo_latitude</code><a class="headerlink" href="#geo_latitude" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> number  <br />
+<strong>cmdFlags:</strong> <code>--geoLatitude</code>  <br />
+<strong>description:</strong>
+only for the geolocations...    </p>
+<h4 id="geo_longitude"><code>geo_longitude</code><a class="headerlink" href="#geo_longitude" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> number  <br />
+<strong>cmdFlags:</strong> <code>--geoLongitude</code>  <br />
+<strong>description:</strong>
+only for the geolocations...    </p>
+<h4 id="geo_distance"><code>geo_distance</code><a class="headerlink" href="#geo_distance" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> integer  <br />
+<strong>cmdFlags:</strong> <code>--geoDistance</code>  <br />
+<strong>default:</strong> <code>2000</code>  <br />
+<strong>description:</strong>
+distance from long, lat point in geolocation queries    </p>
+<h4 id="plot_pars"><code>plot_pars</code><a class="headerlink" href="#plot_pars" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>forceNoSplit:</strong> True  <br />
+<strong>cmdFlags:</strong> <code>--plotPars</code>  <br />
+<strong>description:</strong>
+plot parameters in form <code>par=value</code> concatenated by <code>::</code>    </p>
+<h4 id="plot_type"><code>plot_type</code><a class="headerlink" href="#plot_type" title="Permanent link">&para;</a></h4>
+<p><strong>type:</strong> string  <br />
+<strong>cmdFlags:</strong> <code>--plotType</code>  <br />
+<strong>description:</strong>
+plot type (histoplot, samplesplot, arrayplot - more?)  <br />
+<strong>default:</strong> <code>histoplot</code>    </p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/progenetix" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.tabs.link", "search.highlight", "search.share", "navigation.expand"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

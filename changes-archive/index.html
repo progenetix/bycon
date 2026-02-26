@@ -1,0 +1,3100 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the bycon GA4GH Beacon framework">
+      
+      
+        <meta name="author" content="Michael Baudis">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../img/site-logo-topright.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+    
+    
+      
+        <title>Changes Archive - bycon Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../css/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pre-bycon-re-fusion-of-byconaut" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="bycon Documentation" class="md-header__button md-logo" aria-label="bycon Documentation" data-md-component="logo">
+      
+  <img src="../img/site-logo-topright.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            bycon Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Changes Archive
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/progenetix/bycon" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bycon
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="bycon Documentation" class="md-nav__button md-logo" aria-label="bycon Documentation" data-md-component="logo">
+      
+  <img src="../img/site-logo-topright.png" alt="logo">
+
+    </a>
+    bycon Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/progenetix/bycon" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bycon
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recent Changes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup & Maintainance
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Setup & Maintainance
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../importers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Importing Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../housekeepers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Housekeeping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beacon API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Beacon API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../API-beacon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beacon API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../API-services/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../API-parameters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Parameters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beaconplus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Front End
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Repositories
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code Repositories
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/progenetix/bycon" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bycon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/progenetix/progenetix-web" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Progenetix Front End
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    More Info
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    More Info
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://progenetix.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Progenetix Site
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://baudisgroup.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    baudisgroup@UZH
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://docs.genomebeacons.org" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beacon Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-bycon-re-fusion-of-byconaut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre bycon (re-)fusion of byconaut
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre bycon (re-)fusion of byconaut">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2024-09-12-v192" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-09-12 (v.1.9.2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-08-13-v191" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-08-13 (v.1.9.1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-08-07-v190" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-08-07 (v.1.9.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-07-30-v189" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-07-30 (v.1.8.9)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-07-17-v188" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-07-17 (v.1.8.8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-07-10-v187" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-07-10 (v.1.8.7)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-07-08-v186" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-07-08 (v.1.8.6)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-06-24-v185" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-06-24 (v.1.8.5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-06-19-v184" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-06-19 (v.1.8.4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-06-11-v183" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-06-11 (v.1.8.3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-06-06-v182" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-06-06 (v.1.8.2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-05-27-v181" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-05-27 (v.1.8.1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-05-05-v180" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-05-05 (v1.8.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-05-03-v172" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-05-03 (v1.7.2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-04-25-v171" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-04-25 (v1.7.1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-04-16-v170" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-04-16 (v1.7.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-04-03-v165" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-04-03 (v1.6.5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-03-25-v164" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-03-25 (v1.6.4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-03-07-v163" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-03-07 (v1.6.3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-03-07-v162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-03-07 (v1.6.2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-03-06-v161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-03-06 (v1.6.1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-03-04-v160" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-03-04 (v1.6.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-02-24-v152" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-02-24 (v1.5.2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-02-21-v151" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-02-21 (v1.5.1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-02-20-v150" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-02-20 (v1.5.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-02-07-v142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-02-07 (v1.4.2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-02-02-v141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-02-02 (v1.4.1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-01-18-v140" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-01-18 (v1.4.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-01-10-v139" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-01-10 (v1.3.9)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2024-01-09-v138" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024-01-09 (v1.3.8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-12-18-v137" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-12-18 (v1.3.7)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-11-20-v136" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-11-20 (v1.3.6)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-11-17-v135" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-11-17 (v1.3.5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-10-31-v134" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-10-31 (v1.3.4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-10-25-v133" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-10-25 (v1.3.3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-10-20-v132" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-10-20 (v1.3.2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-10-20-v131" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-10-20 (v1.3.1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-10-12-v130" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-10-12 (v1.3.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-08-30-v122" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-08-30 (v1.2.2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-08-25-v121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-08-25 (v1.2.1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-08-22-v120" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-08-22 (v1.2.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-08-21-v117" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-08-21 (v1.1.7)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-08-21-v117_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-08-21 (v1.1.7)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-08-16-v116" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-08-16 (v1.1.6)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-08-16-v114-v115" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-08-16 (v1.1.4 =&gt; v1.1.5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-08-11-v112-113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-08-11 (v1.1.2 -&gt; 1.1.3)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-08-10-v111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-08-10 (v1.1.1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-08-09-v110" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-08-09 (v1.1.0)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-07-26-v1072" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-07-26 (v1.0.72)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-07-25-v1071" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-07-25 (v1.0.71)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-07-24-v1070" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-07-24 (v1.0.70)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-07-24-v1069" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-07-24 (v1.0.69)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-07-23-v1068" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-07-23 (v1.0.68)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-07-19-v1067" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-07-19 (v1.0.67)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-07-13-v1066" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-07-13 (v1.0.66)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-07-11-v1065" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-07-11 (v1.0.65)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-07-06-v1064" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-07-06 (v1.0.64)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-07-06-v1063" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-07-06 (v1.0.63)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-07-05-v1062" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-07-05 (v1.0.62)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-07-04-v1061" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-07-04 (v1.0.61)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-06-30-v1059" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-06-30 (v1.0.59)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-06-28-v1058" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-06-28 (v1.0.58)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-06-26-v1057" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-06-26 (v1.0.57)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-06-21-v1056" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-06-21 (v1.0.56)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-06-21-v1055-removal-of-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-06-21 (v1.0.55): Removal of /services
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-06-21-v1054" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-06-21 (v1.0.54)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-06-13-v1053" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-06-13 (v1.0.53)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-06-12-v1052" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-06-12 (v1.0.52)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-06-06-byconaut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-06-06 (byconaut)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-06-05-v1051" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-06-05 (v1.0.51)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-06-02-v1050" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-06-02 (v1.0.50)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-05-31-v1049" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-05-31 (v1.0.49)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-05-31-v1048" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-05-31 (v1.0.48)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-05-26-v1047" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-05-26 (v1.0.47)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-05-25-v1046" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-05-25 (v1.0.46)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-05-24-v1045" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-05-24 (v1.0.45)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-05-22-v1044" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-05-22 (v1.0.44)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-05-17-v1043" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-05-17 (v1.0.43)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-05-12-v1041" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-05-12 (v1.0.41)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-05-09-v1040" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-05-09 (v1.0.40)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-05-03-v1038" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-05-03 (v1.0.38)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-05-01-v1037" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-05-01 (v1.0.37)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-04-27-v1036" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-04-27 (v1.0.36)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-04-27-v1035" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-04-27 (v1.0.35)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-04-25-v1035" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-04-25 (v1.0.35)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-04-20-v1034" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-04-20 (v1.0.34)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-04-17-v1033" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-04-17 (v1.0.33)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-04-14-v1032" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-04-14 (v1.0.32)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-04-14-v1030" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-04-14 (v1.0.30)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-04-12-v1029" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-04-12 (v1.0.29)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-04-11-v1028" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-04-11 (v1.0.28)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-03-31-v1027" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-03-31 (v1.0.27)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-03-31-v1026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-03-31 (v1.0.26)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-03-30-v1025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-03-30 (v1.0.25)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-03-27-v1024" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-03-27 (v1.0.24)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-03-02-v1022" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-03-02 (v1.0.22)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-02-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-02-05
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2023-01-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2023-01-15
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="changes-archive">Changes Archive<a class="headerlink" href="#changes-archive" title="Permanent link">&para;</a></h1>
+<h2 id="pre-bycon-re-fusion-of-byconaut">Pre <code>bycon</code> (re-)fusion of <code>byconaut</code><a class="headerlink" href="#pre-bycon-re-fusion-of-byconaut" title="Permanent link">&para;</a></h2>
+<h3 id="2024-09-12-v192">2024-09-12 (v.1.9.2)<a class="headerlink" href="#2024-09-12-v192" title="Permanent link">&para;</a></h3>
+<ul>
+<li>mostly <code>byconaut</code> additions (housekeeping scripts etc. and map plot fix)</li>
+</ul>
+<h3 id="2024-08-13-v191">2024-08-13 (v.1.9.1)<a class="headerlink" href="#2024-08-13-v191" title="Permanent link">&para;</a></h3>
+<ul>
+<li>modifications to the VRS Adjacency based format for fusions<ul>
+<li>Example <a href="https://progenetix.org/beacon/biosamples/pgxbs-kftvgifa/g_variants?includeHandovers=false">progenetix.org/beacon/biosamples/pgxbs-kftvgifa/g_variants</a></li>
+</ul>
+</li>
+<li>modifications to the <code>ISCNdefuser</code> script in <code>byconaut</code> for testing fusions</li>
+</ul>
+<h3 id="2024-08-07-v190">2024-08-07 (v.1.9.0)<a class="headerlink" href="#2024-08-07-v190" title="Permanent link">&para;</a></h3>
+<ul>
+<li>adding the new <code>Adjunction</code> variant format based on VRS v2.0pre<ul>
+<li>query method <code>variantFusionRequest</code> (using <code>mate_...</code> parameters etc.)</li>
+</ul>
+</li>
+<li>update of the <code>byconaut</code> variantsImporter etc.</li>
+<li>general refactoring of datatable import for fields containing objects<ul>
+<li>now allows list of ordered parameters for the concatenated values =&gt; as well
+  as type definitions</li>
+<li>for details please look at <code>datatable_mappings.yaml</code></li>
+</ul>
+</li>
+<li>rewrite of the <code>RefactoredValues</code> class in <code>bycon_helpers</code></li>
+</ul>
+<h3 id="2024-07-30-v189">2024-07-30 (v.1.8.9)<a class="headerlink" href="#2024-07-30-v189" title="Permanent link">&para;</a></h3>
+<ul>
+<li>rewrite of query stack as <code>ByconDatasetResults</code> class<ul>
+<li>including fix of <code>analyses</code> reporting: Now no aggregation towards biosamples
+  anymore</li>
+<li>no "non-aggregate" retrieval methods yet; might be added later</li>
+</ul>
+</li>
+<li>change of variant id query; now not in separate query type</li>
+<li>multi-variant query responses are now aggregated towards response entity (e.g.
+  all variants have to occurr in same individual  or - usually - biosample)</li>
+<li>TODO: check multi-variant queries for multi-analyses responses ...</li>
+</ul>
+<h3 id="2024-07-17-v188">2024-07-17 (v.1.8.8)<a class="headerlink" href="#2024-07-17-v188" title="Permanent link">&para;</a></h3>
+<ul>
+<li>We removed of the server URL rewrites to services for e.g. <code>output=table</code>
+pragmas. One has to use the specific endpoints (that have existed since Ocober 2023)
+and entities =&gt; e.g.:<ul>
+<li>old: <code>https://progenetix.org/beacon/individuals/?filters=pgx:cohort-oneKgenomes&amp;datasetIds=progenetix&amp;output=table</code></li>
+<li>now: <code>https://progenetix.org/services/sampletable/?datasetIds=progenetix&amp;filters=pgx:cohort-oneKgenomes&amp;response_entity_path_id=individuals</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="2024-07-10-v187">2024-07-10 (v.1.8.7)<a class="headerlink" href="#2024-07-10-v187" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fixed wrong <code>meta.returned_granularity</code></li>
+<li>changed the <a href="https://progenetix.org/beacon/map/"><code>map</code> schema</a> in line with todays's discussions an
+  <a href="https://github.com/ga4gh-beacon/beacon-v2/pull/134">pull request #134</a></li>
+<li>moved the post-processing of exported variants list to a new <code>VariantsResponse</code>
+  class and adjusted some of the optional parameters by editing the <code>ByconVariant().vrsVariant()</code>
+  class/method</li>
+</ul>
+<h3 id="2024-07-08-v186">2024-07-08 (v.1.8.6)<a class="headerlink" href="#2024-07-08-v186" title="Permanent link">&para;</a></h3>
+<ul>
+<li>more work on cleaning up the table formats and <code>byconaut</code> tools</li>
+<li>fix of <code>response_entity_path_id=analyses</code> for <code>services/sampletables</code></li>
+<li>some Progenetix data content cleanup (e.g. TNM and stage removal from <code>info.tnm</code>)</li>
+<li>cleaner standard schema definitions for export/documentation (<code>genomicVariations</code>
+  will need more work...)</li>
+</ul>
+<h3 id="2024-06-24-v185">2024-06-24 (v.1.8.5)<a class="headerlink" href="#2024-06-24-v185" title="Permanent link">&para;</a></h3>
+<ul>
+<li>bug fix: <code>variantMinSize</code> wasn't evaluated if also <code>variantMaxSize</code> was given</li>
+<li><code>byconaut</code>: change in datastructure of status maps and frequencies<ul>
+<li>we have abandoned the "max value ..." concepts which weren't used anyway
+  and switched to  bin coverage and frequency values for high level changes
+  additionally to the all CNV values</li>
+<li>this allows now a simple overplotting of high level gains and losses over
+  the low level/combined CNV histograms</li>
+</ul>
+</li>
+</ul>
+<h3 id="2024-06-19-v184">2024-06-19 (v.1.8.4)<a class="headerlink" href="#2024-06-19-v184" title="Permanent link">&para;</a></h3>
+<ul>
+<li>changed the values for individual.sex from PATO to EFO (see the <a href="https://docs.progenetix.org/changelog/#2024-06-18-switching-ontology-use-for-individualsex">Progenetix data notes</a>)</li>
+<li>changed the default for <code>includeResultsetResponses</code> from <code>ALL</code> to <code>HIT</code> =&gt; in
+  line w/ the Beacon standard definition<ul>
+<li>now empty resultsets won't appear in the list</li>
+<li>the Progenetix / Beaconplus fron-ends call an <code>ALL</code> value...</li>
+</ul>
+</li>
+</ul>
+<h3 id="2024-06-11-v183">2024-06-11 (v.1.8.3)<a class="headerlink" href="#2024-06-11-v183" title="Permanent link">&para;</a></h3>
+<ul>
+<li>restructuring of the whole entity / path ... interpolation - now 
+  <code>set_entities()</code> and <code>initialize_bycon_service()</code> are part of <code>bycon</code>
+  <code>__init__.py</code></li>
+<li>now evaluates the <code>includeResultsetResponses</code> parameters (default: <code>ALL</code>)
+  so that e.g. only <code>HIT</code> responses can be returned in a network context<ul>
+<li><code>__acknowledge_HIT</code> removes all <code>exists: false</code> resultsets</li>
+<li><code>__acknowledge_MISS</code> removes all <code>exists: true</code> resultsets</li>
+</ul>
+</li>
+<li>bug fix: removal of the accidential filtering_terms scopes
+  (service entities)</li>
+</ul>
+<h3 id="2024-06-06-v182">2024-06-06 (v.1.8.2)<a class="headerlink" href="#2024-06-06-v182" title="Permanent link">&para;</a></h3>
+<ul>
+<li>removed server side pagination; this should be implemented by clients based
+  on the numbers from the response summary</li>
+<li>FIX: pagination did not work correctly when requesting
+  pavges &gt; 1 using a handover id (due to a "double pagination" at query and response preparation times)</li>
+</ul>
+<h3 id="2024-05-27-v181">2024-05-27 (v.1.8.1)<a class="headerlink" href="#2024-05-27-v181" title="Permanent link">&para;</a></h3>
+<ul>
+<li>re-organized the <code>local</code> config location</li>
+<li>fixed the correct entity use for non-standard (services...) in test mode</li>
+<li>changed behaviour: results are now shuffled before storing which leads to different
+  result page contents for the same query when applying pagination (<em>i.e.</em> not always
+  the same first 100 etc. samples are returned)</li>
+<li>more fixes for geographic map output after recent code rewrite</li>
+</ul>
+<h3 id="2024-05-05-v180">2024-05-05 (v1.8.0)<a class="headerlink" href="#2024-05-05-v180" title="Permanent link">&para;</a></h3>
+<p>With this update the <code>byc</code> collection object has been abandoned &amp; removed. Parameters
+and definitions are now predefined in the global parameters in <code>/bycon/config.py</code>
+and (similar to before) populated from external definition files or (for <code>BYC_PARS</code> etc.)
+from processed commansd line =&gt; URL or POST parameters. These changes have been propagated
+through both <code>bycon</code> and <code>byconaut</code>.</p>
+<h3 id="2024-05-03-v172">2024-05-03 (v1.7.2)<a class="headerlink" href="#2024-05-03-v172" title="Permanent link">&para;</a></h3>
+<p>This update moves most definitions and pre-processed parameters from the <code>byc</code>
+object to the global <code>BYC</code> object and eliminates (much of) the "passing <code>byc</code> around"
+necessity. Still needs some additional cleanups.</p>
+<h3 id="2024-04-25-v171">2024-04-25 (v1.7.1)<a class="headerlink" href="#2024-04-25-v171" title="Permanent link">&para;</a></h3>
+<ul>
+<li>bug fix (typo in new <code>info.var_length</code> calculation)</li>
+</ul>
+<h3 id="2024-04-16-v170">2024-04-16 (v1.7.0)<a class="headerlink" href="#2024-04-16-v170" title="Permanent link">&para;</a></h3>
+<p>This version provides a larger update to the multi-variant query concept. We now
+provide:</p>
+<ul>
+<li>a proper version for using combined <code>variantQueryDigests</code>:<ul>
+<li><a href="http://progenetix.test/beacon/datasets/progenetix/biosamples?filters=NCIT:C3058&amp;variant_query_digests=9:21500001-21975098--21967753-24000000:DEL,17:6000000-7687480--7668422-8000000:DEL">/beacon/datasets/progenetix/biosamples?filters=NCIT:C3058&amp;variantQueryDigests=9:21500001-21975098--21967753-24000000:DEL,17:6000000-7687480--7668422-8000000:DEL</a>
+  will e.g. process 2 bracket requests (for small CDKN2A and TP53 deletions)
+  and intersect the samples having both these changes; the same call works,
+  obviously =&gt; also for services: <a href="http://progenetix.test/services/sampleplots?datasetIds=progenetix&amp;filters=NCIT:C3058&amp;variant_query_digests=9:21500001-21975098--21967753-24000000:DEL,17:6000000-7687480--7668422-8000000:DEL">/services/sampleplots?datasetIds=progenetix&amp;filters=NCIT:C3058&amp;variant_query_digests=9:21500001-21975098--21967753-24000000:DEL,17:6000000-7687480--7668422-8000000:DEL</a></li>
+</ul>
+</li>
+<li>a new (probably to be renamed <code>variantMultiPars</code> parameter which only works for
+  POST requests; <em>i.e.</em> each list entry has to be a proper variant query
+  <div class="highlight"><pre><span></span><code>  &quot;query&quot;: {
+      &quot;requestParameters&quot;: {
+          &quot;variantMultiPars&quot;: [
+              {
+                  &quot;assemblyId&quot;: &quot;GRCh38&quot;,
+                  &quot;referenceName&quot;: &quot;refseq:NC_000009.12&quot;,
+                  &quot;start&quot;: [21500001 =&gt; 21975098],
+                  &quot;end&quot;: [21967753 =&gt; 22500000] =&gt; 
+                  &quot;variantType&quot;: &quot;DEL&quot;
+              },
+              {
+                  &quot;assemblyId&quot;: &quot;GRCh38&quot;,
+                  &quot;referenceName&quot;: &quot;refseq:NC_000017.11&quot;,
+                  &quot;start&quot;: [6000000 =&gt; 7687480],
+                  &quot;end&quot;: [7668422 =&gt; 8000000] =&gt; 
+                  &quot;variantType&quot;: &quot;DEL&quot;
+              }
+          ]
+      },
+      &quot;filters&quot;: [{&quot;id&quot;: &quot;NCIT:C3058&quot;}]
+  }
+</code></pre></div></li>
+</ul>
+<p>Also <code>bycon</code> now supports the default <code>/beacon/datasets/{id}/g_variants</code> etc. access
+  pattern for single dataset data retrieval (the use of the <code>datasetIds</code> parameter is
+  still not fully standard supported though it had been documented in the framework
+   ... see <a href="https://github.com/ga4gh-beacon/beacon-v2/issues/123#issuecomment-2059711886">Github issue #123</a>).</p>
+<h3 id="2024-04-03-v165">2024-04-03 (v1.6.5)<a class="headerlink" href="#2024-04-03-v165" title="Permanent link">&para;</a></h3>
+<h4 id="multi-variant-matches-first-pass">Multi-variant matches first pass<a class="headerlink" href="#multi-variant-matches-first-pass" title="Permanent link">&para;</a></h4>
+<p>We now implement an experimental version of multi-variant matching =&gt; to retrieve
+samples which show co-occurrence of 2 or more variants. This so far is limited to
+a few parameters:</p>
+<ul>
+<li>NEW: <code>variantQueryDigests</code> in the form of <code>9:9000001-21975098--21967753-24000000:DEL</code><ul>
+<li>several of those can be comma-concatenated</li>
+<li>probably not final name or format</li>
+<li>only bracket matches &amp; ranges working (but will change ...)</li>
+<li>different variant types can be used</li>
+</ul>
+</li>
+<li><code>geneId</code> has been morphed to a list parameter (though keeping the standard name)<ul>
+<li>usual comma-concatenation etc.</li>
+<li>here only a global <code>variantType</code> can be provided</li>
+</ul>
+</li>
+<li>future versions to implement mixed matches etc. (e.g. sequence variant &amp; CNV)</li>
+</ul>
+<h4 id="other">Other ...<a class="headerlink" href="#other" title="Permanent link">&para;</a></h4>
+<ul>
+<li>fixed paginated handovers missing the <code>info.content_id</code> parameter which is used
+  by the progenetix-web etc. front ends</li>
+<li>changed the <code>cytoBands</code> argument to <code>type: array</code> =&gt; to allow definition of multiple
+  cytogenetic regions =&gt; e.g. to indicate fusions or bracket requests<ul>
+<li>this might be a temporary solution for testing purposes and e.g. replaced
+  by a future parsing of simple statements like <code>t(8;14)(q24;q32)</code></li>
+</ul>
+</li>
+<li>moved some cytoband functionality to the main <code>bycon</code> package =&gt; from <code>byconaut</code>,
+  to allow processing of cytoband requests in the main Beacon service</li>
+<li><code>byconaut</code> was restructured for executables =&gt; with <code>housekeepers</code> and <code>importers</code>
+  directories</li>
+</ul>
+<h3 id="2024-03-25-v164">2024-03-25 (v1.6.4)<a class="headerlink" href="#2024-03-25-v164" title="Permanent link">&para;</a></h3>
+<ul>
+<li>added <code>scopes</code> to <code>beacon/filtering_terms/</code><ul>
+<li>see <a href="https://github.com/ga4gh-beacon/beacon-v2/pull/118">github.com/ga4gh-beacon/beacon-v2/pull/118</a></li>
+</ul>
+</li>
+<li>fixed bug where the default splitting of input parameters by comma led to over-splitting
+  of the "embedded list" values in <code>plotPars</code> (e.g. using <code>plotPars=plotGeneSymbols=MYC,T,TP53</code>
+  would lead to <code>plotPars=plotGeneSymbols=MYC::T::TP53</code> ... and later errors)<ul>
+<li>now "non-list" strings w/ internal <code>,</code> are just re-joined &amp; a warning is created</li>
+</ul>
+</li>
+</ul>
+<h3 id="2024-03-07-v163">2024-03-07 (v1.6.3)<a class="headerlink" href="#2024-03-07-v163" title="Permanent link">&para;</a></h3>
+<ul>
+<li>configuration changes:<ul>
+<li><code>beacon_defaults</code> file changed to <code>entity_defaults</code> since only entities
+  defined in it</li>
+<li>paths are now defined within the entity definitions =&gt; no separate aliases etc.</li>
+<li>local overrides for the Beacon entity defaults now in <code>local/instance_definitions.yaml</code></li>
+<li>for byconaut a separate <code>services_entity_defaults</code> file provides the additional
+  services (e.g. <code>sampleplots</code> ... pseudo-entities)</li>
+</ul>
+</li>
+</ul>
+<h3 id="2024-03-07-v162">2024-03-07 (v1.6.2)<a class="headerlink" href="#2024-03-07-v162" title="Permanent link">&para;</a></h3>
+<ul>
+<li>adding a <code>__collections_response_remap_cohorts(self =&gt; colls=[])</code> function
+  to reformat the collections response for cohorts from the collations format<ul>
+<li>TODO: define cohorts as separate entities which are read in during collations
+  generation =&gt; with their additional parameters etc.</li>
+</ul>
+</li>
+<li>fixed the openAPI endpoints for collation responses (datasets &amp; cohorts); are
+  <a href="https://github.com/ga4gh-beacon/beacon-v2/issues/116">incorrect in current Beacon spec.</a></li>
+<li>bug fix <code>byconaut</code>: matrix export was broken since 1.6.1</li>
+<li>exception capture for wrong form values: string values of "None" =&gt; "none" =&gt; "Null",
+  "null" from GET requests are now converted to logical <code>None</code> (i.e. removed)</li>
+</ul>
+<h3 id="2024-03-06-v161">2024-03-06 (v1.6.1)<a class="headerlink" href="#2024-03-06-v161" title="Permanent link">&para;</a></h3>
+<ul>
+<li>bug fix: individuals &amp; phenopackets endpoints were broken in 1.6.0 due to missed
+  clean up in query code</li>
+<li>bug fix <code>byconaut</code>: vcf &amp; pgsxseg exports were broken in 1.6.0 due to incomplete
+  clean-up of internal variant mapping</li>
+<li>bug fix <code>byconaut</code>: <code>/geolocations</code> queries were broken due to needed setting of
+  authorization / granularity =&gt; which was handled by <code>run_beacon_init_stack</code> which
+  however wasn't used by this service</li>
+<li>global change: removal of <code>run_beacon_init_stack</code> and inclusion of its
+  function calls in the ubiquitous <code>initialize_bycon_service</code></li>
+</ul>
+<h3 id="2024-03-04-v160">2024-03-04 (v1.6.0)<a class="headerlink" href="#2024-03-04-v160" title="Permanent link">&para;</a></h3>
+<ul>
+<li>simplification of internal parameter processing</li>
+<li><code>bycon</code> / <code>byconaut</code> - new method "variantsbedfile"<ul>
+<li>takes over for the previous bedfile/UCSC variants handover generation (removed
+  from <code>handover_generation</code>)</li>
+<li>defaults to bedfile download from variant query</li>
+<li><code>output=ucsclink</code> creates the UCSC link with added bedfile payload</li>
+</ul>
+</li>
+<li><code>byconaut</code> - refactoring of <code>frequencymapsCreator.py</code> to use the standard collation
+  bundle generation instead of custom queries </li>
+<li><code>byconaut</code> - change of collation retrieval to work now with <code>collationTypes</code>
+  parameter<ul>
+<li>this allows to e.g. get all clustered CNV plots for a classification tree:<ul>
+<li><code>/services/collationplots/?collationTypes=NCIT&amp;minNumber=200</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>bug fix: broken server address in handovers</li>
+<li>bug fix: <code>id</code> specific query for collations was broken (delivered all)</li>
+<li>bug fix: mapping of basic chromosome ids (<code>9</code>) to refseqs was broken</li>
+</ul>
+<h3 id="2024-02-24-v152">2024-02-24 (v1.5.2)<a class="headerlink" href="#2024-02-24-v152" title="Permanent link">&para;</a></h3>
+<ul>
+<li>new <code>instance_definitions.yaml</code> config document in <code>local</code><ul>
+<li>this allows to override Beacon instance parameters based on
+  the URL the service is running under =&gt; enabling multiple Beacon
+  instances per server</li>
+</ul>
+</li>
+<li>new <code>analysis_operation</code> in <code>analyses</code> (<em>i.e.</em> "pgxAnalysis" in Progenetix
+  database model) allows now the filtering of analyses based on the type of
+  genomic profiling performed with its (so far) values:<ul>
+<li><code>"analysis_operation.id":"EDAM:operation_3961",
+  "analysis_operation.label":"Copy number variation detection"</code></li>
+<li><code>"analysis_operation.id":"EDAM:operation_3227",
+  "analysis_operation.label":"Variant Calling"</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="2024-02-21-v151">2024-02-21 (v1.5.1)<a class="headerlink" href="#2024-02-21-v151" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>BYC_PARS</code> now as a global parameter =&gt; not passed around in methods (formerly
+  <code>byc["form_data"]</code>)</li>
+<li>hot fix: added "protected" status for <code>external_references</code> in general empty
+  field clean-up since the object is required by the front-end (even if empty list)</li>
+</ul>
+<h3 id="2024-02-20-v150">2024-02-20 (v1.5.0)<a class="headerlink" href="#2024-02-20-v150" title="Permanent link">&para;</a></h3>
+<ul>
+<li>refactoring global configs into <code>bycon/config.py</code> to slowly get rid of some of
+  the <code>byc</code> -&gt; ... imports  (e.g. global DB parameters =&gt; collecting warnings...)</li>
+<li>removal of <code>service_config</code> parameter &amp; generator code from <code>bycon</code> =&gt; nof handled
+  explicitely in the different byconaut services</li>
+<li>fixed <code>geneVariantRequest</code> to be selected as type when a <code>geneId</code> parameter is
+  provided</li>
+<li>fixed handovers for non-default datasets by adding the <code>datasetIds</code> parameter
+  to the handover<ul>
+<li>bug was based on older design retrieving the dataset id directly from the
+  handover in the temp storage ...</li>
+</ul>
+</li>
+<li>moved (partially so far) <code>external_references</code> to <code>references</code> in biosamples<ul>
+<li>reference objects are now standard <code>id</code> =&gt; <code>label</code> term objects</li>
+<li><code>references</code> is an object =&gt; i.e. the items are keyed <code>{"pubmed": {"id": "pubmed:1234567" =&gt; ...</code></li>
+<li>regeneration of the reference structure from Beacon/Phenopackets is done at export time</li>
+</ul>
+</li>
+<li><code>byconaut</code> with new <code>/services/samplemap/</code> endpoint for plotting geolocations
+  of sample data after standard Beacon query</li>
+<li><code>filter_definitions</code><ul>
+<li>fix for arrayexpress series processing (now <code>AEseries</code>)</li>
+<li>changed <code>collatiionType</code> <code>pubmed</code> =&gt; <code>pubmed</code></li>
+</ul>
+</li>
+<li>fixed <code>uploader</code> fail due to missing import</li>
+</ul>
+<h3 id="2024-02-07-v142">2024-02-07 (v1.4.2)<a class="headerlink" href="#2024-02-07-v142" title="Permanent link">&para;</a></h3>
+<ul>
+<li>more consolidation of argument/cgi parsing libraries</li>
+<li>filter flag parameters now properly defined in <code>argument_definitions.yaml</code></li>
+<li>use of a common <code>db_config</code> object for database configuration parameters</li>
+<li>piecemeal move of placeholder parameters from <code>config.yaml</code> (either
+  through removal &amp; fallbacks in methods =&gt; or through definition in
+  <code>argument_definitions</code>)</li>
+<li>working on error responses...</li>
+<li>removed generic pre-processing methods for error &amp; general responses</li>
+<li>fixed a bug which allowed non-matching filters to pass</li>
+<li>fixed examples in <code>tests</code></li>
+<li>fixed <code>POST</code> processing (wrong <code>filters</code> nesting as in examples ...)</li>
+<li>fixed the OpenAPI "endpoints" info for the entry types<ul>
+<li>The <code>openAPIEndpointsDefinition</code> parameter in <a href="http://progenetix.org/beacon/map/">progenetix.org/beacon/map/</a>
+  should now point to working definitions per entity =&gt; e.g.
+  <a href="https://progenetix.org/services/endpoints/biosamples">progenetix.org/services/endpoints/biosamples</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="2024-02-02-v141">2024-02-02 (v1.4.1)<a class="headerlink" href="#2024-02-02-v141" title="Permanent link">&para;</a></h3>
+<ul>
+<li>new <code>ChroNames</code> class for accessing chromosome and refseq ID mappings (still utilising
+  <code>byc["refseq_chromosomes"]</code> as input =&gt; read during init from <code>rsrc/.../refseq_chromosomes.yaml</code>)</li>
+<li><code>byconaut</code>: Added a new <code>plotType=histosparklines</code> plotting option. It basically modifies
+  <code>plot_defaults</code> parameters for minimal histoplots (no border =&gt; no background =&gt; small
+  and narrow) =&gt; e.g. for use in mouse-overs or in tables<ul>
+<li>one can still override those parameters =&gt; e.g. with <code>&amp;plotPars=plotDendrogramWidth=50::plotAreaHeight=32</code>
+<img alt="" src="https://progenetix.org/services/collationplots?filters=pgx:icdom-85003,pgx:icdom-81703,pgx:icdom-80703,pgx:icdom-87003&amp;plotType=histosparklines" />
+<img alt="" src="https://progenetix.org/services/collationplots?filters=pgx:icdom-85003,pgx:icdom-81703,pgx:icdom-80703,pgx:icdom-87003&amp;plotType=histosparklines&amp;plotPars=plotDendrogramWidth=50::plotAreaHeight=32::plotAreaOpacity=0.5" /></li>
+</ul>
+</li>
+<li><code>byconaut</code>: added option to use sequence id values for plotPars.plot_chros =&gt; e.g. <code>plotPars=plot_width=980::plotChros=NC_000023.11</code></li>
+<li>fix: a <code>g_variants</code> endpoint w/o any parameter led to a query error</li>
+<li>removal of some <code>byconaut</code> code remnants</li>
+<li>some internal reshuffling; e.g. move of export/print helpers to from <code>parameter_parsing</code>
+  to <code>beacon_responses</code> and <code>bycon_helpers</code></li>
+</ul>
+<h3 id="2024-01-18-v140">2024-01-18 (v1.4.0)<a class="headerlink" href="#2024-01-18-v140" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fix of <code>plotType</code> parameter as separate one (used in byconaut)</li>
+<li>fix of wrong parameter mapping for <code>geo:GSM....</code> filters<ul>
+<li>filter definition still pointed to <code>external_references.id</code> instead of
+  <code>analysis_info.experiment_id</code></li>
+</ul>
+</li>
+<li><code>byconaut</code>: move to general use of <code>byc["form_data"]</code> for arguments (<em>i.e.</em>
+  requiring the command line arguments to have been parsed into this object)</li>
+<li>fixed the <code>byconaut</code> <code>cytomapper</code> service by adding <code>cyto_bands</code> and <code>chro_bases</code>
+  to the list of <code>variant_pars</code></li>
+</ul>
+<h3 id="2024-01-10-v139">2024-01-10 (v1.3.9)<a class="headerlink" href="#2024-01-10-v139" title="Permanent link">&para;</a></h3>
+<p>Bugfix release. Some default values provided in <code>argument_definitions.yaml</code>
+file were overriding pre-processed values =&gt; leading to e.g. to an
+endless loop in the handover generation.</p>
+<h3 id="2024-01-09-v138">2024-01-09 (v1.3.8)<a class="headerlink" href="#2024-01-09-v138" title="Permanent link">&para;</a></h3>
+<ul>
+<li>argument parameter redesign<ul>
+<li>definition of all parameters/arguments (web &amp; local) in <code>argument_definitions.yaml</code></li>
+<li>parameters not defined there will not be processed anymore (however =&gt; there are some
+  placeholders like e.g. <code>mode</code> or <code>key</code> which are not utilized by standard methods
+  and can be co-opted for custom inputs)</li>
+<li>plot parameters are provided as a single string to <code>plotPars</code> =&gt; with individual
+  parameter pairs concatenated by <code>::</code><ul>
+<li>in GET: <code>plotPars=plot_chros=8,9,17::labels=8:120000000-123000000:Some+Interesting+Region::plot_gene_symbols=MYCN,TP53,MTAP,CDKN2A,MYC,ERBB2::plot_width=800</code></li>
+<li>in CMD: <code>--plotPars "plot_chros=8,9,17::labels=8:120000000-123000000:Some Interesting Region::plot_gene_symbols=MYCN,TP53,MTAP,CDKN2A,MYC,ERBB2::plot_width=800"</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>modification of the <code>prdbug</code> helper</li>
+</ul>
+<h3 id="2023-12-18-v137">2023-12-18 (v1.3.7)<a class="headerlink" href="#2023-12-18-v137" title="Permanent link">&para;</a></h3>
+<ul>
+<li>added handling for user specific granularity permissions<ul>
+<li>so far <code>user_name</code> is just taken from a form parameter and then stored
+  as <code>byc</code> root parameter (through <code>set_user_name</code>)</li>
+<li>local processing (<code>env</code>) sets this to <code>local</code> (and has a default <code>record</code>)
+  granularity</li>
+<li>dataset specific =&gt; user specific maximum granularities can be set in
+  <code>authorizations.yaml</code> which can be extended / overwritten from settings in
+  <code>local/authorizations.yaml</code> (similar to <code>beacon_defaults.yaml</code> etc.)</li>
+<li>future updates are planned to handle proper interpretation of <code>user_name</code>
+  and proof of authorization...</li>
+</ul>
+</li>
+<li>configuration: the basic parameters from <code>config.yaml</code> are now stored as <code>byc</code>
+  root parameters and not kept in a mix of root &amp; <code>config</code></li>
+</ul>
+<h3 id="2023-11-20-v136">2023-11-20 (v1.3.6)<a class="headerlink" href="#2023-11-20-v136" title="Permanent link">&para;</a></h3>
+<ul>
+<li>modified <code>BeaconDataResponse</code> to keep the <code>resultSetsResponse</code> structure while
+  remobving the <code>results</code> from each set =&gt; to allow resuult set specific handover 
+  delivery (labeled as <strong>CUSTOM</strong>)</li>
+<li>moved all cytoband library code into <code>byconaut</code> (<strong>FUTURE</strong> considerations for
+  this in case Beacon supports cytobands ...)</li>
+<li><code>byconaut</code> plots now directly use the database saamples format for plotting variants,
+  w/o going through the canonical variant creation (this incurred a <strong>huge</strong> penalty)</li>
+<li>reminder that <code>byconaut</code> plots use the <code>plotType</code> parameter instead of <code>output</code></li>
+<li><code>byconaut</code> now has a color code mapping for the different (EFO =&gt; DUP/DEL ...) variant
+  types; this allows to assign custom <code>plot_dup_color</code> etc. parameters while keeping
+  the available variant types (<code>variant_state.id</code>) separated (see <code>byconaut -&gt; local.plot_defaults</code>)</li>
+</ul>
+<h3 id="2023-11-17-v135">2023-11-17 (v1.3.5)<a class="headerlink" href="#2023-11-17-v135" title="Permanent link">&para;</a></h3>
+<ul>
+<li>more removal of non-standard components into <code>byconaut</code> =&gt; e.g. for file generation
+  such as <code>.pgxseg</code></li>
+<li>adding experimental <code>target</code> field to items in <code>filtering_terms</code> response</li>
+<li>adding <code>aminoacidChange</code> and <code>genomicAlleleShortForm</code> to request parameters
+  (this was a bug fix - they were already activated but not in the <code>.json</code> version)</li>
+</ul>
+<h3 id="2023-10-31-v134">2023-10-31 (v1.3.4)<a class="headerlink" href="#2023-10-31-v134" title="Permanent link">&para;</a></h3>
+<p>This update is mostly addressing the further removal of methods specific for
+"beyond Beacon" functionality (e.g. variant binning and calculations for CNVs =&gt; plotting ...).</p>
+<h3 id="2023-10-25-v133">2023-10-25 (v1.3.3)<a class="headerlink" href="#2023-10-25-v133" title="Permanent link">&para;</a></h3>
+<p>Most of the "special outputs" code has been moved to byconaut -&gt; services.
+For legacy reasons (e.g. use by pgxRpi) the webserver configuration needed some
+rewrites ... They only apply for the Progenetix use case and are not needed if
+sticking to the Beacon formats or if following the use of the new apps like
+<code>services/vcfvariants</code>). Our (temporary) mappings are:</p>
+<div class="highlight"><pre><span></span><code>RewriteEngine On
+
+# The following rules are for backward compatibilitty with pgxRpi before Oct 2023
+
+RewriteCond %{QUERY_STRING} ^(.*?output=\w*?table.*?)$
+RewriteRule &quot;^/beacon/biosamples.*?$&quot; /cgi-bin/bycon/services/sampletable.py?%1&amp;responseEntityId=biosample [PT]
+
+RewriteCond %{QUERY_STRING} ^(.*?output=\w*?table.*?)$
+RewriteRule &quot;^/beacon/individuals.*?$&quot; /cgi-bin/bycon/services/sampletable.py?%1&amp;responseEntityId=individual [PT]
+
+RewriteCond %{QUERY_STRING} ^(.*?output=\w*?table.*?)$
+RewriteRule &quot;^/beacon/individuals.*?$&quot; /cgi-bin/bycon/services/sampletable.py?%1&amp;responseEntityId=individual [PT]
+
+RewriteCond %{QUERY_STRING} ^(.*?output=\w*?matrix.*?)$
+RewriteRule &quot;^/beacon/analyses.*?$&quot; /cgi-bin/bycon/services/samplematrix.py?%1&amp;responseEntityId=analysis [PT]
+
+RewriteCond %{QUERY_STRING} ^(.*?output=vcf.*?)$
+RewriteRule &quot;^/beacon/biosamples/([^/]+?)/g_variants.*?$&quot; /cgi-bin/bycon/services/vcfvariants.py?%1&amp;biosampleIds=$1 [PT]
+
+RewriteCond %{QUERY_STRING} ^(.*?output=pgxseg.*?)$
+RewriteRule &quot;^/beacon/biosamples/([^/]+?)/g_variants.*?$&quot; /cgi-bin/bycon/services/pgxsegvariants.py?%1&amp;biosampleIds=$1 [PT]
+</code></pre></div>
+<h3 id="2023-10-20-v132">2023-10-20 (v1.3.2)<a class="headerlink" href="#2023-10-20-v132" title="Permanent link">&para;</a></h3>
+<p>This version removes the complete <code>bycon_plot</code> code (<em>i.e.</em> moves it to <code>byconaut</code>).
+It still needs the further disentangling of the other alternative response options
+(<code>.pgxseg</code> =&gt; <code>.pgxmatrix</code> ...) from the resultsets generation; this soon will follow
+blueprint of the plot code removal.</p>
+<p><strong>CAVE</strong> Now all plotting options have been shifted to the <code>/services/collationplots</code>
+and <code>/services/sampleplots</code> entry points.</p>
+<h3 id="2023-10-20-v131">2023-10-20 (v1.3.1)<a class="headerlink" href="#2023-10-20-v131" title="Permanent link">&para;</a></h3>
+<p>This version provides another step in moving "non-standard" Beacon responses tp
+the <code>byconeer</code> project. </p>
+<ul>
+<li>creatiing a <code>.../services/sampleplots/</code> entry point which will be used to handle
+  the sample (strips/clustered; histoplots from search results ...) web plotting
+  instead of adding the <code>output=histoplot</code> etyc. option to standard Beacon queries<ul>
+<li>plot types can now be specified through <code>plotType=samplesplot</code> etc.</li>
+</ul>
+</li>
+<li>some class (<code>ByconResultSets</code>) restructuring to allow plot outputs (this will be
+  changed further =&gt; probably moving the whole plot ... classes and methods to <code>byconeer</code>)</li>
+</ul>
+<h3 id="2023-10-12-v130">2023-10-12 (v1.3.0)<a class="headerlink" href="#2023-10-12-v130" title="Permanent link">&para;</a></h3>
+<p>This is an extensive internal code update which</p>
+<ul>
+<li>moves service response generation to byconaut (implemented as <code>ByconServiceResponse</code>
+class w/ its methods)</li>
+<li>removes many of the methods from <code>service_utils</code> since they have been implemented
+in the beacon or services response classes and (mostly) limits the library to
+general/initialization methods (still more to clean...)</li>
+<li>fixes some inconsistencies (e.g. snake vs. camel cases in paths where sometimes
+non-standard versions were documented - now using the Beacon v2 defaults such as
+<code>beacon/filtering_terms/</code> instead of <code>beacon/filteringTerms/</code>)</li>
+<li>similar for geo queries (e.g. <code>geoLatitude</code> as query parameter instead of <code>geolatitude</code>)
+ though this is "BeaconPlus" anyway</li>
+</ul>
+<p><strong>CAVE</strong>: These changes also affect the front-ends (<code>progenetix-web</code> =&gt; <code>beaconplus-web</code> etc.)
+which need to be recompiled from the latest versions</p>
+<h3 id="2023-08-30-v122">2023-08-30 (v1.2.2)<a class="headerlink" href="#2023-08-30-v122" title="Permanent link">&para;</a></h3>
+<ul>
+<li>some defaults cleaning (e.g. removal of non-standard paths from built in <code>beacon_defaults</code>)</li>
+</ul>
+<h3 id="2023-08-25-v121">2023-08-25 (v1.2.1)<a class="headerlink" href="#2023-08-25-v121" title="Permanent link">&para;</a></h3>
+<ul>
+<li>clean-up of info response m(all entryType schemas shown now)</li>
+<li>modification of entity_defaults format</li>
+<li>use of <code>beaconCollectionsResponse</code> for services &amp; deprecation of <code>ProgenetixServiceResponse</code></li>
+<li><code>mongo_test_mode_query</code> (needs to be propagated more...)</li>
+<li><code>beaconplus</code> domains support</li>
+</ul>
+<h3 id="2023-08-22-v120">2023-08-22 (v1.2.0)<a class="headerlink" href="#2023-08-22-v120" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fix of <code>filterLogic</code> parameter for forced global <code>$or</code></li>
+<li>more reshuffling of defaults and config parameters<ul>
+<li>merged <code>beacon_mappings</code> intop <code>beacon_defaults</code></li>
+<li>moved <code>config.yaml</code> to <code>bycon/config/</code></li>
+<li>splitting of the <code>beacon_defaults</code> parameters into standard parameters =&gt; e.g.
+  for the main entry types =&gt; into the <code>beacon_defaults.yaml</code> file in
+  <code>bycon/config/</code> =&gt; and custom parameters (e.g. Progenetix' <code>phenopackets</code> entry
+  type definition or some aliases) into the <code>/local/</code> location</li>
+</ul>
+</li>
+<li>streamlining of <code>__init__.py</code> and <code>read_specs.py</code> w/ respect to those changes</li>
+<li>concurrent <code>byconaut</code> update</li>
+</ul>
+<h3 id="2023-08-21-v117">2023-08-21 (v1.1.7)<a class="headerlink" href="#2023-08-21-v117" title="Permanent link">&para;</a></h3>
+<p>This update continues with the disentangling of "package inherent" defaults and
+definitions and "local" ones. Partcullarly:</p>
+<ul>
+<li>standard Beacon entity definitions arte now part of the package configuration,
+  <em>i.e.</em> <code>bycon/config/beacon_defaults.yaml</code> has now the entities =&gt; and additional
+  entities are then provided from <code>bycon/local/beacon_defaults.yaml</code> (which is copied
+  from the project root <code>/local/beacon_defaults.yaml</code>) during <code>updev.sh</code>)<ul>
+<li>examples are the Progenetix specific data in the <code>info</code> entity or the non-standard
+  <code>phenopackets</code> entry type</li>
+</ul>
+</li>
+<li>similar for <code>dataset_definitions</code> ...</li>
+</ul>
+<h3 id="2023-08-21-v117_1">2023-08-21 (v1.1.7)<a class="headerlink" href="#2023-08-21-v117_1" title="Permanent link">&para;</a></h3>
+<p>This update continues with the disentangling of "package inherent" defaults and
+definitions and "local" ones. Partcullarly:</p>
+<ul>
+<li>standard Beacon entity definitions arte now part of the package configuration,
+  <em>i.e.</em> <code>bycon/config/beacon_defaults.yaml</code> has now the entities =&gt; and additional
+  entities are then provided from <code>bycon/local/beacon_defaults.yaml</code> (which is copied
+  from the project root <code>/local/beacon_defaults.yaml</code>) during <code>updev.sh</code>)<ul>
+<li>examples are the Progenetix specific data in the <code>info</code> entity or the non-standard
+  <code>phenopackets</code> entry type</li>
+</ul>
+</li>
+<li>similar for <code>dataset_definitions</code> ...</li>
+</ul>
+<h3 id="2023-08-16-v116">2023-08-16 (v1.1.6)<a class="headerlink" href="#2023-08-16-v116" title="Permanent link">&para;</a></h3>
+<ul>
+<li>bugfix release for service items</li>
+</ul>
+<h3 id="2023-08-16-v114-v115">2023-08-16 (v1.1.4 =&gt; v1.1.5)<a class="headerlink" href="#2023-08-16-v114-v115" title="Permanent link">&para;</a></h3>
+<ul>
+<li>some changes to defaults &amp; mappings parsing<ul>
+<li>merging content of "beacon_defaults" &amp; "service_defaults" (if existing) files
+  during init into "beacon_defaults"</li>
+<li><strong>new requirement</strong>: <code>deepmerge</code> (removed <code>pydeepmerge)</code>)</li>
+</ul>
+</li>
+<li>some reshuffling/fixes of entry type defaults</li>
+<li>refined <code>GeoLocation</code> schema - now in model...common and referenced there</li>
+<li>v1.1.5 was a bugfix immediately after the update ...</li>
+</ul>
+<h3 id="2023-08-11-v112-113">2023-08-11 (v1.1.2 -&gt; 1.1.3)<a class="headerlink" href="#2023-08-11-v112-113" title="Permanent link">&para;</a></h3>
+<ul>
+<li>move the new <code>histoheatplot</code> method code to use ImageDraw instead of SVG raw
+  for the heat strips (<em>i.e.</em> base64 encoded individual PNG strips)<ul>
+<li>e.g. reduces size of 9.3MB example to 188kB</li>
+</ul>
+</li>
+<li>1.1.3 fixes a combination query bug</li>
+</ul>
+<h3 id="2023-08-10-v111">2023-08-10 (v1.1.1)<a class="headerlink" href="#2023-08-10-v111" title="Permanent link">&para;</a></h3>
+<ul>
+<li>services: new frequency plot type <code>histoheatplot</code>:<ul>
+<li>also some new related parameters =&gt; e.g. <code>plotHeatIntensity</code></li>
+<li><a href="http://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&amp;filters=NCIT:C,!NCIT:C3247,!NCIT:C3510&amp;filterPrecision=start&amp;collationTypes=NCIT&amp;output=histoheatplot&amp;plotAreaHeight=20&amp;plotRegionGapWidth=&amp;plotChros=3,17&amp;plotHeatIntensity=1.5&amp;plotGeneSymbols=TP53,BCL6&amp;plotDendrogramStroke=2">/services/intervalFrequencies/?datasetIds=progenetix&amp;filters=NCIT:C,!NCIT:C3247,!NCIT:C3510&amp;filterPrecision=start&amp;collationTypes=NCIT&amp;output=histoheatplot&amp;plotAreaHeight=20&amp;plotRegionGapWidth=&amp;plotChros=3,17&amp;plotHeatIntensity=1.5&amp;plotGeneSymbols=TP53,BCL6&amp;plotDendrogramStroke=2</a></li>
+</ul>
+</li>
+<li><code>intervalFrequencies</code> now supports start-anchored greedy term matches as well
+  as exclusion of individual terms through <code>!</code> prefix (as for normal filter searches)</li>
+</ul>
+<h3 id="2023-08-09-v110">2023-08-09 (v1.1.0)<a class="headerlink" href="#2023-08-09-v110" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fixed gene position queries (had hardcoded <code>progenetix</code> database ...)</li>
+<li>general overhaul of query generation<ul>
+<li><code>class ByconQuery</code></li>
+<li>called directly in <code>query_execution</code></li>
+<li>removed some variant query types (e.g. "type only")</li>
+<li>better handling of <code>id</code> type queries (including the retrieval of the associated
+  variants)</li>
+<li>move to collection of query objects per entity instead of collection (is
+  mostly a logical change for general use of entities instead of the database
+  impolementation as target - that is resolved at the query execution)</li>
+<li>TODO: probably will move from the dynamic variant query type detection
+  to a stacked "test one after the other with hard-coded parameter checks"
+  just for sanity reasons - but right now see above</li>
+<li>TODO: variant requests and request type detection still not part of class</li>
+<li>TODO: geo queries into class ...</li>
+</ul>
+</li>
+<li>there is now a <code>force_empty_plot</code> (forceEmptyPlot) parameter so that sample
+  queries w/o any CNV (e.g. from cancercelllines.org samples) generate an empty
+  strip =&gt; to add non-CNV as labels</li>
+<li>fixed error in <code>interval_utils</code> (renamed config key...)</li>
+<li>fixed associated <code>byconaut</code> errors</li>
+</ul>
+<h3 id="2023-07-26-v1072">2023-07-26 (v1.0.72)<a class="headerlink" href="#2023-07-26-v1072" title="Permanent link">&para;</a></h3>
+<ul>
+<li>cleaning of handovers<ul>
+<li>no "all variants from matched biosamples" ... anymore due to performance
+  problems</li>
+<li>now variant storage and handovers only for matched variants - <em>i.e.</em> if
+  there was a variant query - <em>or</em> if a sample =&gt; individual ... had been requested
+  by path id</li>
+</ul>
+</li>
+<li>CNV VCF fix</li>
+<li>some general handover creation cosmetics</li>
+<li>VRS schema components moved</li>
+</ul>
+<h3 id="2023-07-25-v1071">2023-07-25 (v1.0.71)<a class="headerlink" href="#2023-07-25-v1071" title="Permanent link">&para;</a></h3>
+<ul>
+<li>finished the <code>ByconVariant</code> <code>vrsVariant</code> method and implemented this as the format
+  for the Beacon variant response</li>
+<li>added sorting to <code>.pgxseg</code> files</li>
+<li>added compact <code>VRSallele</code> and <code>VRScopyNumberChange</code> schemas &amp; using them in
+  <code>ByconVariant().vrsVariant(v)</code></li>
+</ul>
+<h4 id="byconaut"><code>byconaut</code><a class="headerlink" href="#byconaut" title="Permanent link">&para;</a></h4>
+<ul>
+<li>moved <code>geoloc_utils</code> to <code>byconaut/services/lib</code></li>
+<li>improved index generation for <code>2dsphere</code> indexes</li>
+<li>moved <code>geolocs</code> to <code>_byconServicesDB</code> and adjusted code accordingly</li>
+<li>fixed <code>frequencyMapsGenerator</code> for the new database</li>
+</ul>
+<h3 id="2023-07-24-v1070">2023-07-24 (v1.0.70)<a class="headerlink" href="#2023-07-24-v1070" title="Permanent link">&para;</a></h3>
+<ul>
+<li>refactored the VCF export into <code>exportfile_generation</code></li>
+<li>minor pagination code cleanup</li>
+</ul>
+<h3 id="2023-07-24-v1069">2023-07-24 (v1.0.69)<a class="headerlink" href="#2023-07-24-v1069" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fixed datatable &amp; pgxseg download error (introduced w. 1.0.68)<ul>
+<li>thanks to <a class="gh-link gh-mention" href="https://github.com/ClmtHua" title="GitHub User: @ClmtHua">@ClmtHua</a> in <a href="https://github.com/progenetix/bycon/issues/20">#20</a></li>
+</ul>
+</li>
+<li>internal change of more consistant use of <code>genomicVariant</code> for variant entity,
+  schema</li>
+</ul>
+<h3 id="2023-07-23-v1068">2023-07-23 (v1.0.68)<a class="headerlink" href="#2023-07-23-v1068" title="Permanent link">&para;</a></h3>
+<ul>
+<li>first production version of <code>ByconVariant</code> class and consecutive retirement of
+  <code>...vrsify</code> functions</li>
+<li>new defaults in <code>variant_type_definitions</code> per EFO type:<ul>
+<li><code>dupdel_state_id</code></li>
+<li><code>snv_state_id</code></li>
+<li><code>VCF_symbolic_allele</code></li>
+</ul>
+</li>
+<li>fixed wrong parameter mapping of <code>alternate_bases</code> (introduced ... when?)</li>
+<li>docs: split changes &amp; to dos...</li>
+</ul>
+<h3 id="2023-07-19-v1067">2023-07-19 (v1.0.67)<a class="headerlink" href="#2023-07-19-v1067" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fix <code>.pgxseg</code> file loader bug (thanks Huan Zhang!)</li>
+<li>starting <code>variant_mapping.py</code> for a consolidated <code>ByconVariant</code> class</li>
+</ul>
+<h3 id="2023-07-13-v1066">2023-07-13 (v1.0.66)<a class="headerlink" href="#2023-07-13-v1066" title="Permanent link">&para;</a></h3>
+<ul>
+<li>modified <code>return_filtering_terms_response</code> to parse over the collations from
+  different datasets<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> check &amp; streamline</li>
+</ul>
+</li>
+<li>modified <code>retrieve_gene_id_coordinates</code> (some error catching)</li>
+<li>introduced <code>housekeeping_db: _byconHousekeepingDB</code> for <code>querybuffer</code> and <code>beaconinfo</code><ul>
+<li>accordingly changed <code>byconaut</code> =&gt; e.g. housekeeping -&gt; <code>beacon_info_coll</code> </li>
+</ul>
+</li>
+<li>changed <code>services_db: _byconServicesDB</code> for <code>genes</code></li>
+</ul>
+<h3 id="2023-07-11-v1065">2023-07-11 (v1.0.65)<a class="headerlink" href="#2023-07-11-v1065" title="Permanent link">&para;</a></h3>
+<ul>
+<li>streamlining of schema file parsing<ul>
+<li>the schema file root is now hard coded to <code>path.join( pkg_path =&gt; "schemas" )</code></li>
+<li>schemas are identified by their <strong>unique</strong> name (<code>beaconMap.json</code>)
+  or patent dir / default combination (<code>.../biosamples/defaultSchema.json</code>)</li>
+<li>... which means those have to be unique</li>
+<li>this removes all the schema path definitions from <code>config.yaml</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-07-06-v1064">2023-07-06 (v1.0.64)<a class="headerlink" href="#2023-07-06-v1064" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fixing camelCase / snake_case errors for <code>filteringTerms</code> &amp; <code>genomicVariations</code>
+  entry types (I hope; those came up in 1.0.62 after streamlining config parsing...)</li>
+</ul>
+<h3 id="2023-07-06-v1063">2023-07-06 (v1.0.63)<a class="headerlink" href="#2023-07-06-v1063" title="Permanent link">&para;</a></h3>
+<ul>
+<li>cleaning up the install.py script</li>
+<li>fix in byconaut for local preferences when executing from local repo (where
+  this lead to an empty stats database -&gt; beacon errors...)</li>
+</ul>
+<h3 id="2023-07-05-v1062">2023-07-05 (v1.0.62)<a class="headerlink" href="#2023-07-05-v1062" title="Permanent link">&para;</a></h3>
+<ul>
+<li>bug fix sample plots</li>
+<li>internal function re-organization (<code>initialize_bycon_queries</code> deprecated &amp; replaced
+  by <code>parse_filters</code> &amp; <code>parse_variants</code>)</li>
+<li>also addition to the HTTP_HOST config in byconaut</li>
+</ul>
+<h3 id="2023-07-04-v1061">2023-07-04 (v1.0.61)<a class="headerlink" href="#2023-07-04-v1061" title="Permanent link">&para;</a></h3>
+<ul>
+<li>adding <code>BYCON_MONGO_HOST</code> environment variable to enable other MongoDB host than
+  <code>localhost</code> (which remains fallback/default) - thanks <a class="gh-link gh-mention" href="https://github.com/fliem" title="GitHub User: @fliem">@fliem</a> for <a href="https://github.com/progenetix/bycon/pull/17">#17</a></li>
+<li>added <code>--noo-sudo</code> to install.py - thanks <a class="gh-link gh-mention" href="https://github.com/fliem" title="GitHub User: @fliem">@fliem</a> for <a href="https://github.com/progenetix/bycon/pull/19">#19</a></li>
+<li>more tweaking of configuration reading</li>
+</ul>
+<h3 id="2023-06-30-v1059">2023-06-30 (v1.0.59)<a class="headerlink" href="#2023-06-30-v1059" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fixed new bug in variant parameter parsing</li>
+<li>fixed wrong parsing of command line list arguments (e.g. <code>--filters</code>)</li>
+<li><code>install.py</code> now adds the <code>/local</code> configurations to the <code>/bycon/beaconServer/local/</code>
+  directory<ul>
+<li>execution of command line beacon has access to them (not only apps in the server)</li>
+<li>files are removed by <code>/updev.sh</code> before packaghe build</li>
+</ul>
+</li>
+<li>added some command line examples to <a href="/installation/"><code>installation.md</code></a></li>
+</ul>
+<h3 id="2023-06-28-v1058">2023-06-28 (v1.0.58)<a class="headerlink" href="#2023-06-28-v1058" title="Permanent link">&para;</a></h3>
+<ul>
+<li>extensive renaming/-shuffling =&gt; e.g.:<ul>
+<li><code>refseq_chromosomes</code> now in <code>rsrc/genomes/grch38</code> (only grch38 so far but this
+  is all we currently use...)<ul>
+<li>also <code>parse_refseq_file</code> and <code>__get_genome_rsrc_path</code> functions</li>
+</ul>
+</li>
+<li><code>variant_request_definitions</code> and <code>variant_type_definitions</code> config files from
+  <code>variant_definitions</code> (separating the query config from the type mappings)</li>
+<li><code>cytoband_utils</code> =&gt; <code>genome_utils</code></li>
+<li><code>set_genome_rsrc_path</code> wrapper for cytoband and interval functions</li>
+</ul>
+</li>
+<li>fix for file uploader issues<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> TODO: documentation on website &amp; lazy loading (e.g. interpolating
+  <code>sample</code> to <code>biosample_id</code>; maybe just use column order ...)</li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-06-26-v1057">2023-06-26 (v1.0.57)<a class="headerlink" href="#2023-06-26-v1057" title="Permanent link">&para;</a></h3>
+<ul>
+<li>more disentangling of configuration between <code>byconaut/services</code> and <code>/bycon</code></li>
+</ul>
+<h3 id="2023-06-21-v1056">2023-06-21 (v1.0.56)<a class="headerlink" href="#2023-06-21-v1056" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>info_db</code> =&gt; <code>services_db</code> parameter renaming</li>
+<li>fix of missing interpolation of query parameters into the response metadata</li>
+</ul>
+<h3 id="2023-06-21-v1055-removal-of-services">2023-06-21 (v1.0.55): Removal of <code>/services</code><a class="headerlink" href="#2023-06-21-v1055-removal-of-services" title="Permanent link">&para;</a></h3>
+<ul>
+<li>removed the <code>/services</code> part from the bycon package - it is now maintained
+  in <a href="https://github.com/progenetix/byconaut/"><code>byconaut</code></a> with the local location being defined in <code>install.yaml</code></li>
+<li>fixed some <a href="http://bycon.progenetix.org/tests/">tests</a></li>
+</ul>
+<h3 id="2023-06-21-v1054">2023-06-21 (v1.0.54)<a class="headerlink" href="#2023-06-21-v1054" title="Permanent link">&para;</a></h3>
+<ul>
+<li>adding <code>normalize_pgx_variant</code></li>
+</ul>
+<h3 id="2023-06-13-v1053">2023-06-13 (v1.0.53)<a class="headerlink" href="#2023-06-13-v1053" title="Permanent link">&para;</a></h3>
+<ul>
+<li>now probe plotting as implemented with auto-path detection based on callset
+  values</li>
+<li><code>analysis_info: { experiment_id: 'geo:GSM498847' =&gt; series_id: 'geo:GSE19949' }</code> leads to <code>{server_callsets_dir_loc}/GSE19949/GSM498847/{probefile_name}</code></li>
+<li>example: <a href="https://progenetix.org/beacon/biosamples/pgxbs-kftvkafc/?datasetIds=progenetix&amp;output=samplesplot&amp;plot_chros=3,5,6,14">progenetix.org/beacon/biosamples/pgxbs-kftvkafc/?output=samplesplot&amp;plot_chros=3,5,6,14</a></li>
+</ul>
+<h3 id="2023-06-12-v1052">2023-06-12 (v1.0.52)<a class="headerlink" href="#2023-06-12-v1052" title="Permanent link">&para;</a></h3>
+<ul>
+<li>modified <code>handover_definitions</code> to follow the specification:</li>
+<li><code>handoverType</code> now as in spec =&gt; also using public identifier where possible
+    (so far <code>"id": "EDAM:3016" =&gt; "label": "VCF"</code> for all VCF h-&gt;0)</li>
+<li>since now different handovers can have the same <code>handoverType.id</code> this required
+    the addition of an <code>info.contentId</code> value for the frontend to disambiguate</li>
+<li>starting the work on the <code>arrayplot</code> (?) plot type =&gt; including a new method
+  for getting probe file paths (not yet activated)</li>
+<li>several field changes in biosamples =&gt; to align w/ main Beacon v2 default schema:</li>
+<li><code>sampledTissue</code> =&gt; <code>sampleOriginDetail</code></li>
+<li><code>description</code> =&gt; <code>notes</code></li>
+<li><code>timeOfCollection.age</code> =&gt; <code>collectionMoment</code></li>
+</ul>
+<h3 id="2023-06-06-byconaut">2023-06-06 (byconaut)<a class="headerlink" href="#2023-06-06-byconaut" title="Permanent link">&para;</a></h3>
+<ul>
+<li>moved MongoDB index generation to <code>housekeeping.py</code></li>
+<li>started to organize actions in <code>housekeeping.py</code> w/ user prompts</li>
+</ul>
+<h3 id="2023-06-05-v1051">2023-06-05 (v1.0.51)<a class="headerlink" href="#2023-06-05-v1051" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fixed pgxseg file reader (broken reference_name ... parsing after recent chromosome fix)</li>
+<li>removed some publication libraries/schemas only used in byconaut</li>
+</ul>
+<h3 id="2023-06-02-v1050">2023-06-02 (v1.0.50)<a class="headerlink" href="#2023-06-02-v1050" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fixed missing chromosomes in <code>.pgxseg</code> exports</li>
+<li>age search now with 2 values possible (e.g. to set a range)</li>
+</ul>
+<h3 id="2023-05-31-v1049">2023-05-31 (v1.0.49)<a class="headerlink" href="#2023-05-31-v1049" title="Permanent link">&para;</a></h3>
+<ul>
+<li>added <code>days_from_iso8601duration</code> method</li>
+<li>added in individuals <code>index_disease.onset.age_days</code> field<ul>
+<li>populated using the new method w/ a byconaut "housekeeping" script</li>
+</ul>
+</li>
+<li>added a first <code>alphanumeric</code> filter type &amp; parsing</li>
+<li>this enables now an age filter query =&gt; e.g. <code>filters=age:&lt;=P35Y2D</code></li>
+</ul>
+<h3 id="2023-05-31-v1048">2023-05-31 (v1.0.48)<a class="headerlink" href="#2023-05-31-v1048" title="Permanent link">&para;</a></h3>
+<ul>
+<li>addresses VCF export bugs <a href="https://github.com/progenetix/bycon/issues/14">#14</a>,
+  <a href="https://github.com/progenetix/bycon/issues/15">#15</a> and
+  <a href="https://github.com/progenetix/bycon/issues/16">#16</a> (thanks <a href="https://github.com/d-salgado">David</a>!)</li>
+<li>fixes some <code>null</code> value complaints from the Beacon verifier (thanks <a href="https://github.com/redmitry">Dmitry</a>!)</li>
+</ul>
+<h3 id="2023-05-26-v1047">2023-05-26 (v1.0.47)<a class="headerlink" href="#2023-05-26-v1047" title="Permanent link">&para;</a></h3>
+<ul>
+<li>changed handover id format from <code>pgx:handover:biosamples</code> to CURIE-compatible
+  <code>pgx:HO.biosamples</code> etc. style (see Beacon <a href="https://github.com/ga4gh-beacon/beacon-v2/issues/83">#83</a>)</li>
+</ul>
+<h3 id="2023-05-25-v1046">2023-05-25 (v1.0.46)<a class="headerlink" href="#2023-05-25-v1046" title="Permanent link">&para;</a></h3>
+<ul>
+<li>changed the internal schema for genomic variants<ul>
+<li>simplification =&gt; e.g. using everywhere <code>variantState</code> and flattening
+  of the <code>location</code> object</li>
+<li>adding <code>MT</code> chromosome support (though not necessarily for searches etc.)</li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-05-24-v1045">2023-05-24 (v1.0.45)<a class="headerlink" href="#2023-05-24-v1045" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>instantiate_schema</code> has been rewritten; this lead to a number of code adjustments
+  (e.g. usually starting w/ the schemas themselves =&gt; <em>not</em> w/ <code>properties</code> when
+  instantiating) and bug fixes (mostly capturing errors from default "none" values)</li>
+</ul>
+<h3 id="2023-05-22-v1044">2023-05-22 (v1.0.44)<a class="headerlink" href="#2023-05-22-v1044" title="Permanent link">&para;</a></h3>
+<ul>
+<li>code clean-up</li>
+<li>removal of unnecessary "return" staements</li>
+<li>re-structuring of <code>argument_definitions.yaml</code> in preparation for common
+    parsing of input values</li>
+</ul>
+<h3 id="2023-05-17-v1043">2023-05-17 (v1.0.43)<a class="headerlink" href="#2023-05-17-v1043" title="Permanent link">&para;</a></h3>
+<ul>
+<li>rewrite of <code>.pgxseg</code> processing into <code>ByconBundler</code> class<ul>
+<li>includes <code>callsets_variants_bundles</code> and <code>callsets_frequencies_bundles</code> for plot object generation</li>
+</ul>
+</li>
+<li>plot labels fix for labels starting at the <code>0</code> base</li>
+</ul>
+<h3 id="2023-05-12-v1041">2023-05-12 (v1.0.41)<a class="headerlink" href="#2023-05-12-v1041" title="Permanent link">&para;</a></h3>
+<ul>
+<li>complete refactoring of plot code as <code>ByconPlot</code> class</li>
+<li>renamed library <code>bycon_plot.py</code></li>
+</ul>
+<h3 id="2023-05-09-v1040">2023-05-09 (v1.0.40)<a class="headerlink" href="#2023-05-09-v1040" title="Permanent link">&para;</a></h3>
+<ul>
+<li>new <code>services/samplesPlotter</code> entry point<ul>
+<li>currently specific for file uploads (handling of DB calls see below)</li>
+</ul>
+</li>
+<li>completed the integration of the new <code>bycon</code>  plotting </li>
+<li>new <code>plotCytoregionLabels</code> plot labeling parameter<ul>
+<li><a href="http://progenetix.org/beacon/biosamples/?plotGroupBy=icdot&amp;filters=pgx:icdom-95003&amp;plotCytoregionLabels=8q,9p11p12&amp;plotGeneSymbols=MYCN&amp;output=histoplot&amp;limit=500">/beacon/biosamples/?plotGroupBy=icdot&amp;filters=pgx:icdom-95003&amp;plotCytoregionLabels=8q,9p11p12&amp;plotGeneSymbols=MYCN&amp;output=histoplot&amp;limit=500</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-05-03-v1038">2023-05-03 (v1.0.38)<a class="headerlink" href="#2023-05-03-v1038" title="Permanent link">&para;</a></h3>
+<ul>
+<li>added method to subset samples for multi-histogram generation using the <code>groupBy</code>
+  parameter for matching of <code>filter_definitions</code> classes<ul>
+<li><a href="http://progenetix.org/beacon/biosamples/?groupBy=icdot&amp;filters=pgx:icdom-95003&amp;plotGeneSymbols=MYCN&amp;output=histoplot&amp;limit=100">/beacon/biosamples/?groupBy=icdot&amp;filters=pgx:icdom-95003&amp;plotGeneSymbols=MYCN&amp;output=histoplot&amp;limit=100</a></li>
+</ul>
+</li>
+<li>removal of deprecated <code>cgitb</code> use &amp; replacing it w/ a simple <em>Exception</em>/traceback
+  wrapper</li>
+<li>expansion of the <a href="http://bycon.progenetix.org/plotting/">plotting documentation</a></li>
+<li>move of the plot arguments parsing to <code>parameter_parsing.py</code></li>
+</ul>
+<h3 id="2023-05-01-v1037">2023-05-01 (v1.0.37)<a class="headerlink" href="#2023-05-01-v1037" title="Permanent link">&para;</a></h3>
+<ul>
+<li>more plotting: now histograms and samples - if &gt;3 - get a dendrogram to indicate
+  the clustering results<ul>
+<li>clustering can be suppressed by <code>&amp;plotClusterResults=false</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-04-27-v1036">2023-04-27 (v1.0.36)<a class="headerlink" href="#2023-04-27-v1036" title="Permanent link">&para;</a></h3>
+<ul>
+<li>plotting &amp; clustering of samples<ul>
+<li><a href="http://progenetix.org/beacon/analyses/?filters=pgx:icdom-95003&amp;plot_labelcol_width=0&amp;plot_filter_empty_samples=y&amp;plotGeneSymbols=MYCN&amp;plot_samplestrip_height=1&amp;output=samplesplot&amp;limit=500">/beacon/analyses/?filters=pgx:icdom-95003&amp;plot_labelcol_width=0&amp;plot_filter_empty_samples=y&amp;plotGeneSymbols=MYCN&amp;plot_samplestrip_height=1&amp;output=samplesplot&amp;limit=500</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-04-27-v1035">2023-04-27 (v1.0.35)<a class="headerlink" href="#2023-04-27-v1035" title="Permanent link">&para;</a></h3>
+<ul>
+<li>new <code>custer_utils.py</code> library for cluster matrix generation and clustering<ul class="task-list">
+<li>uses <a href="https://docs.scipy.org/doc/scipy/reference/cluster.html"><code>scipy.cluster</code></a></li>
+<li>first test implementation for frequency maps; auto-clusters if &gt;2 using the
+  concatenated gain and loss frequencies per standard binning</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> tree plotting</li>
+</ul>
+</li>
+<li>plot gene label refinement</li>
+</ul>
+<h3 id="2023-04-25-v1035">2023-04-25 (v1.0.35)<a class="headerlink" href="#2023-04-25-v1035" title="Permanent link">&para;</a></h3>
+<ul>
+<li>more plot_utils goodness - staggered labels<ul>
+<li><a href="http://progenetix.org/services/intervalFrequencies/?plotChros=2,8,9,17&amp;labels=8:120000000-123000000:Some+Interesting+Region&amp;plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&amp;filters=pgx:icdom-85003&amp;output=histoplot">/services/intervalFrequencies/?plotChros=2,8,9,17&amp;labels=8:120000000-123000000:Some+Interesting+Region&amp;plot_gene_symbols=MYCN,REL,TP53,MTAP,CDKN2A,MYC,ERBB2,CDK1&amp;filters=pgx:icdom-85003&amp;output=histoplot</a></li>
+<li><a href="http://progenetix.org/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&amp;referenceName=9&amp;variantType=DEL&amp;start=21500000&amp;start=21975098&amp;end=21967753&amp;end=22500000&amp;filters=NCIT:C3058&amp;output=histoplot&amp;plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6">/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&amp;referenceName=9&amp;variantType=DEL&amp;start=21500000&amp;start=21975098&amp;end=21967753&amp;end=22500000&amp;filters=NCIT:C3058&amp;output=histoplot&amp;plotGeneSymbols=CDKN2A,MTAP,EGFR,BCL6</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-04-20-v1034">2023-04-20 (v1.0.34)<a class="headerlink" href="#2023-04-20-v1034" title="Permanent link">&para;</a></h3>
+<ul>
+<li>new <code>geneSymbols</code> parameter for plot labeling allows to add gene labels to
+  the position of a given gene on a plot<ul>
+<li><a href="/services/intervalFrequencies/?geneSymbols=MYC,ERBB2,CDK1&amp;filters=pgx:icdom-85003&amp;output=histoplot">http://progenetix.org/services/intervalFrequencies/?geneSymbols=MYC,ERBB2,CDK1&amp;filters=pgx:icdom-85003&amp;output=histoplot</a></li>
+<li>TODO: still needs a "no-overlap" shifting method for closely spaced labels (as in the Perl version...)</li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-04-17-v1033">2023-04-17 (v1.0.33)<a class="headerlink" href="#2023-04-17-v1033" title="Permanent link">&para;</a></h3>
+<ul>
+<li>refinement of <code>histoplot</code> options; now as the standard for standard Beacon
+  results by using the <code>&amp;output=histoplot</code> pragma<ul>
+<li><a href="http://progenetix.org/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&amp;referenceName=9&amp;variantType=DEL&amp;start=21500000&amp;start=21975098&amp;end=21967753&amp;end=22500000&amp;filters=NCIT:C3058&amp;output=histoplot">/beacon/biosamples/?datasetIds=examplez,progenetix,cellz&amp;referenceName=9&amp;variantType=DEL&amp;start=21500000&amp;start=21975098&amp;end=21967753&amp;end=22500000&amp;filters=NCIT:C3058&amp;output=histoplot</a></li>
+</ul>
+</li>
+<li>change of <code>histoplot</code> handover (<code>id: 'pgx:handover:histoplot'</code>) to use
+  the plotting option instead of a redirect to the Perl <code>PGX</code> version</li>
+</ul>
+<h3 id="2023-04-14-v1032">2023-04-14 (v1.0.32)<a class="headerlink" href="#2023-04-14-v1032" title="Permanent link">&para;</a></h3>
+<ul>
+<li>basic implementation of plot labels for the collation frequency plots =&gt;  using
+  the <code>plot_region_labels</code> parameter</li>
+<li>switch of the cancercelllines.org UI to use this plotter instead of the Perl
+  based PGX one (only for the pre-computed collations)</li>
+</ul>
+<h3 id="2023-04-14-v1030">2023-04-14 (v1.0.30)<a class="headerlink" href="#2023-04-14-v1030" title="Permanent link">&para;</a></h3>
+<ul>
+<li>added <code>plot_utils.py</code> and <code>plot_defaults.yaml</code>; now there is a first method
+  for plotting histograms<ul>
+<li>so far limited to CNV histograms of many or few whole chromosomes from
+  pre-computed frequencymaps</li>
+<li>no separate sevice so far; can be invoked from the <code>intervalFrequencies</code>
+  service with added <code>&amp;output=histoplots</code> pragma</li>
+<li>so far no marker addition etc.</li>
+<li><a href="http://progenetix.org/services/intervalFrequencies/?filters=pgx:icdom-85003,pgx:icdom-87003,pgx:icdom-81403&amp;plotChros=7,8,9,13,17&amp;plot_title=CNV+Comparison&amp;output=histoplot&amp;size_plotimage_w_px=800&amp;plot_chro_height=18">progenetix.org/services/intervalFrequencies/?filters=pgx:icdom-85003,pgx:icdom-87003,pgx:icdom-81403&amp;plotChros=7,8,9,13,17&amp;plot_title=CNV+Comparison&amp;output=histoplot&amp;size_plotimage_w_px=800&amp;plot_chro_height=18</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-04-12-v1029">2023-04-12 (v1.0.29)<a class="headerlink" href="#2023-04-12-v1029" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fixed broken dataset selection (bug introduced w/ v1.0.28)</li>
+<li>moved dataset parsing to separate library <code>lib/dataset_parsing.py</code></li>
+</ul>
+<h3 id="2023-04-11-v1028">2023-04-11 (v1.0.28)<a class="headerlink" href="#2023-04-11-v1028" title="Permanent link">&para;</a></h3>
+<ul>
+<li>fixed the filter processing where "correctly looking but not existing" filter
+  patterns were pruned from the query instead of being kept &amp; leading to a mismatch</li>
+<li>added 2 types of warnings for such cases:<ul>
+<li>undefined filter pattern</li>
+<li>correct pattern but value not in database</li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-03-31-v1027">2023-03-31 (v1.0.27)<a class="headerlink" href="#2023-03-31-v1027" title="Permanent link">&para;</a></h3>
+<ul>
+<li>FIX: <code>ids</code> service (and therefore identifiers.org resolver) was broken due to custom &amp; degraded config path</li>
+</ul>
+<h3 id="2023-03-31-v1026">2023-03-31 (v1.0.26)<a class="headerlink" href="#2023-03-31-v1026" title="Permanent link">&para;</a></h3>
+<ul>
+<li>removal of VRS classes since VRS is about to switch to EFO</li>
+<li>added <code>EFO:0020073: high-level copy number loss</code> from the upcoming EFO release</li>
+<li>adding <code>examplez</code> dataset definition</li>
+</ul>
+<h3 id="2023-03-30-v1025">2023-03-30 (v1.0.25)<a class="headerlink" href="#2023-03-30-v1025" title="Permanent link">&para;</a></h3>
+<p>Bug fix release:</p>
+<ul>
+<li>fixed <code>output=text</code> errors</li>
+<li>some argument parsing bugs that crept in with last release</li>
+<li>library re-shuffling w/ respect  to <code>byconaut</code></li>
+</ul>
+<h3 id="2023-03-27-v1024">2023-03-27 (v1.0.24)<a class="headerlink" href="#2023-03-27-v1024" title="Permanent link">&para;</a></h3>
+<ul>
+<li>added <code>output=vcf</code> option for variant export &amp; made it default for the 
+<code>phenopackets</code> entity<ul>
+<li>VCF export is basic &amp; hasn't been tested for round trip compatibility</li>
+</ul>
+</li>
+<li>added filter exclusion flag:<ul>
+<li>for POST a Boolean <code>"excluded": true</code></li>
+<li>for GET prefixing a term by an exclamation mark (e.g. <code>!PATO:0020002</code>)</li>
+<li>this is a <strong>BeaconPlus</strong> feature - see <a href="https://github.com/ga4gh-beacon/beacon-v2/issues/63">issue #63</a> in <code>beacon-v2</code> </li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-03-02-v1022">2023-03-02 (v1.0.22)<a class="headerlink" href="#2023-03-02-v1022" title="Permanent link">&para;</a></h3>
+<ul>
+<li>v1.0.22 fixes the <code>testMode=True</code> call</li>
+</ul>
+<h3 id="2023-02-05">2023-02-05<a class="headerlink" href="#2023-02-05" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>bycon</code> now available as Pypi package<ul>
+<li><code>pip install bycon</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-01-15">2023-01-15<a class="headerlink" href="#2023-01-15" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> create bycon documentation subdomain &amp; configure Github pages for it  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/progenetix" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.tabs.link", "search.highlight", "search.share", "navigation.expand"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
