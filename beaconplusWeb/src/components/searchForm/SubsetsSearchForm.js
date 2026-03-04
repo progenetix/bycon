@@ -366,7 +366,7 @@ function useFilteringTerms(watchForm, ct) {
 const handleExampleClicked = (reset, setExample, setUrlQuery) => (example) => {
   setUrlQuery({}, { replace: true })
   setExample(example)
-  console.log("Example clicked", example)
+  // console.log("Example clicked", example)
 
 }
 

@@ -39,10 +39,9 @@ export function SummaryPlots({ resultsAggregation, filterUnknowns }) {
 
 function SummaryPlot({ summary, filterUnknowns }) {
 
-    console.log("==>> Plot for", summary["label"]);
-    let summaryId = summary["id"]
+    let {summaryId, summaryLabel, tracesData, sankeyLabels, sankeyLinks} = SummaryTraces({ summary, filterUnknowns, colNo, includeOthers });
 
-    let {tracesData, sankeyLabels, sankeyLinks} = SummaryTraces({ summary, filterUnknowns, colNo, includeOthers });
+    console.log("==>> Plot for", summaryId, summaryLabel, tracesData);
 
     const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
     const containerRef = useCallback((node) => {
@@ -51,42 +50,49 @@ function SummaryPlot({ summary, filterUnknowns }) {
 
     const outer_w = boundingRect.width
 
-    // console.log("tracesData for", summary["label"], ":", tracesData.length, concepts.length);
+    if (!summaryId) {
+        console.log("undefined summaryId")
+        return <></>;
+    }
 
+    if (!tracesData) {
+        console.log("undefined tracesData")
+        return <></>;
+    }
     if (tracesData.length == 0) {
         return <></>;
     }
 
     if (dashboardPies.includes(summaryId)) {
-        console.log("Rendering SimplePlotlyPie for", summary["label"]);
+        console.log("Rendering SimplePlotlyPie for", summaryLabel);
         return (
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
             <SimplePlotlyPie
-                tracesData={tracesData} outer_w={outer_w} title={summary["label"]}
+                tracesData={tracesData} outer_w={outer_w} title={summaryLabel}
             />
         </div>
         );
     }
 
     if (dashboardSankeys.includes(summaryId)) {
-        console.log("Rendering SankeyPlot for", summary["label"]);
+        console.log("Rendering SankeyPlot for", summaryLabel);
         return (
         <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
             <SankeyPlot
                 sankeyLabels={sankeyLabels}
                 sankeyLinks={sankeyLinks}
                 outer_w={outer_w}
-                title={summary["label"] + " - Sankey Diagram"}
+                title={summaryLabel + " - Sankey Diagram"}
             />
         </div>
         );
     }
 
-    console.log("Rendering StackedPlotlyBar for", summary["label"]);
+    console.log("Rendering StackedPlotlyBar for", summaryLabel);
     return (
     <div ref={containerRef} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", width: "100%", marginBottom: "0px" }}>
         <StackedPlotlyBar
-            tracesData={tracesData} outer_w={outer_w} title={summary["label"]}
+            tracesData={tracesData} outer_w={outer_w} title={summaryLabel}
         />
      </div>
     );

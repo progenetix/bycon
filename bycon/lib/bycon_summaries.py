@@ -23,6 +23,8 @@ class ByconSummaries:
             a_t_s = a_d_s
 
         # WiP: construct terms from aggregators
+        # TODO: aggregators as objects with other properties, e.g.
+        # "`distribution: false`" to limit to counts
         if len(a_t_s) > 0:
             for a in a_t_s:
                 t_a = []
@@ -49,10 +51,10 @@ class ByconSummaries:
                 if len(concepts) == len(t_a):
                     self.summaries.append(
                         {
-                            "id": "::".join(ids),
+                            # "id": "::".join(ids),
                             "concepts": concepts,
-                            "label": " by ".join(labels),
-                            "scope": concepts[0].get("scope", "biosample")
+                            # "label": " by ".join(labels),
+                            # "scope": concepts[0].get("scope", "biosample")
                         }
                     )
 
@@ -89,6 +91,7 @@ class ByconSummaries:
         # one could aggregate all terms in one pipeline, but this is clearer
         self.aggregation_pre_query = query
         for a_v in self.summaries:
+            # prjsonnice(a_v)
             if use_dataset_result:
                 self.__generate_query_from_dataset_result(a_v)
             a_v.update({"distribution": []})
@@ -108,7 +111,7 @@ class ByconSummaries:
 
     def __generate_query_from_dataset_result(self, a_v):
         # TODO: Default scope to response entity?
-        scope = a_v.get("scope", "biosample")
+        scope = a_v.get("concepts", [{"scope": "___none___"}])[0].get("scope", "biosample")
         coll = BYC_DBS.get("collections", {}).get(scope, "___none___")
         # TODO: Fallback query for 0 results?
         if (coll_k := f"{coll}.id") not in self.dataset_result.keys():
@@ -123,11 +126,11 @@ class ByconSummaries:
     def __reshape_dataset_summaries(self):
         """Post-processing of the aggregation results to remove unnecessary keys.
         """
+        for i_a, a_v in enumerate(self.dataset_summaries):
+            for i_c, c_v in enumerate(a_v.get("concepts", [])):
+                c_v.pop("splits", None)
+                c_v.pop("terms", None)
         return
-        # for i_a, a_v in enumerate(self.dataset_summaries):
-        #     for i_c, c_v in enumerate(a_v.get("concepts", [])):
-        #         c_v.pop("splits", None)
-        #         c_v.pop("terms", None)
 
 
     # -------------------------------------------------------------------------#
@@ -145,6 +148,28 @@ class ByconSummaries:
         if not (m_c := BYC_DBS.get("collections", {}).get(scopes[0])):
             return
         data_coll = self.data_client[m_c]
+
+        # WIP: prototyping distinctsCount response #############################
+        # if we don't allow a structure above concepts the response has to be
+        # selected from the minimal one.
+
+        r_type = "distribution"
+        for c in concepts:
+            if not c.get("distribution", True):
+                r_type = "counts"
+
+        if len(concepts) == 1 and r_type == "counts":
+            scope, concept_id = concepts[0].get("property", "___none___.___none___").split('.', 1)
+            query = {"$and": [self.aggregation_pre_query, {concept_id: {"$exists": True}}]}
+            dists_count = len(data_coll.distinct(concept_id, query))
+            value_count = data_coll.count_documents(query)
+            a_v.update({"distincts_count": len(data_coll.distinct(concept_id, query))})
+            a_v.update({"values_count": data_coll.count_documents(query)})
+            a_v.pop("distribution", None)
+            self.dataset_summaries.append(a_v)
+            return
+
+        #### / prototyping distinctsCount response #############################
 
         _id = {}
         for c in concepts:
@@ -175,6 +200,8 @@ class ByconSummaries:
         # prjsonnice(agg_p)
         # prjsonnice(agg_d)
 
+        # sorting on the first of the concepts if the "sorted" flag is set
+        # this allows to use the same flag for both switch-based and regular aggregations
         if concepts[0].get("sorted") is True:
             k = list(agg_d[0]["_id"].keys())[0]
             if type(d := agg_d[0]["_id"].get(k)) is dict:
@@ -214,7 +241,8 @@ class ByconSummaries:
                 "count": a.get("count", 0)
             })
 
-        if len(a_v.get("distribution", [])) > 0:
+        if (d_l := len(a_v.get("distribution", []))) > 0:
+            a_v.update({"distincts_count": d_l})
             self.dataset_summaries.append(a_v)
 
 
@@ -305,7 +333,7 @@ class ByconSummaries:
         # fallback dummy branch - at least one is needed or error
         if len(branches) < 1:
             branches.append({
-                "case": { "$in": [f'${concept_id}', [ "___undefined___" ]] },
+                "case": {"$in": [f'${concept_id}', [ "___undefined___" ]]},
                 "then": {"id": "undefined", "label": "undefined", "order": 1}
             })
 
@@ -384,7 +412,11 @@ class ByconSummaries:
         _id = {
             "$switch": {
                 "branches": branches,
-                "default": {"id": "other", "label": "other", "order": len(split_labs)}
+                "default": {
+                    "id": "other",
+                    "label": "other",
+                    "order": len(split_labs)
+                }
             }
         }
 

@@ -9,8 +9,27 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
     // but should be done per concept (the root level is copied in on the server
     // based on the first dimension's value...)
     let presorted       = summary["sorted"] ? true : false
-    let distribution    = summary["distribution"]
-    let dimension       = summary["concepts"] ? summary["concepts"].length : 1
+    let distribution    = summary.distribution ? summary.distribution : []
+    let concepts        = summary.concepts ? summary.concepts : []
+    let dimension       = concepts.length
+
+    if (dimension < 1 || distribution.length < 1) {
+        console.log(dimension, distribution.length);
+        return {};
+    }
+
+    let conceptIds      = []
+    let conceptLabels   = []
+
+    concepts.forEach(function (c) {
+        let cid     = c.id ? c.id : "undefined";
+        let clab    = c.label ? c.label : cid;
+        conceptIds.push(cid);
+        conceptLabels.push(clab);
+    });
+
+    let summaryId       = conceptIds.join('::')
+    let summaryLabel    = conceptLabels.join(' by ')
 
     // getting all keys and generating the sums for sorting
     // for 1..n dimensions but downstream only 1 or 2 are used so far
@@ -88,7 +107,7 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
         }
         // Early return if only single dimension
         let {tracesData} = SingleTrace({sortedFirsts})
-        return {tracesData};
+        return {summaryId, summaryLabel, tracesData};
     }
 
     // Now only if more than 1 dimension
@@ -132,7 +151,7 @@ export default function SummaryTraces({ summary, filterUnknowns, colNo, includeO
 
     let {sankeyLabels, sankeyLinks} = SankeyLinks({sortedFirsts, sortedSeconds, limitedDistribution});
     let {tracesData} = MultiTraces({sortedFirsts, sortedSeconds, limitedDistribution});
-    return {tracesData, sankeyLabels, sankeyLinks};
+    return {summaryId, summaryLabel, tracesData, sankeyLabels, sankeyLinks};
 
 }
 

@@ -4,8 +4,11 @@ description: >-
   or binning of the results in the returned `distribution`.
 
   Note: `sorted` right now only applies to the first dimension if used in 2D.
+  at aggregation time though clients might apply there own ways to handle this.
 
 defaults:
+  - - id: biosampleDistinctsCount
+  - - id: histologicalDiagnosesCounts
   - - id: selectedHistologicalDiagnoses
     - id: sampleSex
   - - id: selectedCarcinomaDiagnoses
@@ -31,6 +34,20 @@ defaults:
   - - id: followupTime
 
 $defs:
+
+  biosampleCounts:
+    id: biosampleCounts
+    label: Biosample counts
+    scope: biosample
+    distribution: false
+    property: biosample.id
+
+  histologicalDiagnosesCounts:
+    id: histologicalDiagnosesCounts
+    label: Diagnoses counts
+    scope: biosample
+    distribution: false
+    property: biosample.histological_diagnosis.id
 
   selectedHistologicalDiagnoses:
     id: selectedHistologicalDiagnoses

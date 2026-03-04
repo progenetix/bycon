@@ -3,7 +3,7 @@
 
 # We're using versioned pip and python here.
 # CAVE: Installation with `--no-isolation` to enable offline builds
-pip3 uninstall bycon --break-system-packages
+# pip3 uninstall bycon --break-system-packages
 python3 -m build --no-isolation --sdist .
 
 # Temporary installation target; removed at the end
