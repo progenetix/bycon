@@ -24,7 +24,6 @@ from samplemap import samplemap
 from samplematrix import samplematrix
 from sampleplots import sampleplots
 from sampletable import sampletable
-from tester import tester
 from uploader import uploader
 from variantsbedfile import variantsbedfile
 from vcfvariants import vcfvariants

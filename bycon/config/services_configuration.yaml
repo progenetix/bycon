@@ -106,9 +106,6 @@ entryTypes:
       schema: ___BEACON_ROOT___/services/schemas/Publication/
     path_id_value_bycon_parameter: filters
 
-  tester:
-    id: tester
-
   uploader:
     id: uploader
 

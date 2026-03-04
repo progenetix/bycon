@@ -102,10 +102,6 @@ endpointSets:
     entryType: sampletable
     rootUrl: ___BEACON_ROOT___/services/sampletable
 
-  tester:
-    entryType: tester
-    rootUrl: ___BEACON_ROOT___/services/tester
-
   uploader:
     entryType: uploader
     rootUrl: ___BEACON_ROOT___/services/uploader
