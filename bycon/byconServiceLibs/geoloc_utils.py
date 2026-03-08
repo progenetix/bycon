@@ -1,14 +1,27 @@
-import math, re, sys
+import math
+import re
+import sys
+
 from os import path
 from progress.bar import Bar
 
-from bycon import BYC, BYC_DBS, BYC_PARS, ByconMongo, GeoQuery, RefactoredValues, prdbug, print_html_response
+from bycon import (
+    BYC,
+    BYC_DBS,
+    BYC_PARS,
+    ByconMongo,
+    ByconTSVreader,
+    GeoQuery,
+    RefactoredValues,
+    prdbug,
+    print_html_response
+)
 
 services_lib_path = path.join( path.dirname( path.abspath(__file__) ) )
 sys.path.append( services_lib_path )
 from bycon_plot import ByconPlotPars
-from file_utils import ByconTSVreader
 
+################################################################################
 
 class ByconGeolocs:
     def __init__(self, geo_root="geo_location"):

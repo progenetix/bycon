@@ -3,7 +3,7 @@ from os import environ, path, pardir
 from pymongo import MongoClient
 
 # local
-from bycon_helpers import ByconError, prdbug
+from bycon_helpers import ByconError, ByconTSVreader, prdbug
 from config import *
 
 ################################################################################
@@ -16,7 +16,13 @@ class ChroNames:
         self.chro_aliases = {}
         self.refseq_aliases = {}
         self.ga4ghSQ_aliases = {}
-        self.__set_genome_rsrc_path()
+
+        # TODO: catch error for missing genome edition
+        genome = BYC_PARS.get("assembly_id", "GRCh38").lower()
+        g_rsrc_p = path.join( PKG_PATH, "rsrc", "genomes", genome )
+        self.genome_rsrc_path = g_rsrc_p
+        self.refseq_file = path.join( g_rsrc_p, "refseq_chromosomes.yaml") 
+
         self.__parse_refseq_file()
         self.__chro_id_data()
 
@@ -88,16 +94,6 @@ class ChroNames:
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def __set_genome_rsrc_path(self):
-        # TODO: catch error for missing genome edition
-        genome = BYC_PARS.get("assembly_id", "GRCh38").lower()
-        g_rsrc_p = path.join( PKG_PATH, "rsrc", "genomes", genome )
-        self.genome_rsrc_path = g_rsrc_p
-        self.refseq_file = path.join( g_rsrc_p, "refseq_chromosomes.yaml") 
-
-
     # -------------------------------------------------------------------------#
 
     def __parse_refseq_file(self):
@@ -214,28 +210,36 @@ class VariantTypes:
 ################################################################################
 ################################################################################
 
-class Cytobands():
+class Cytobands:
     """
     The `Cytobands()` class provides methods to access cytoband information from
     a standard UCSC-style cytoband file (cytoBandIdeo.txt), to filter those for
     cytoband or genomic ranges and to convert between cytoband and genomic coordinates.
     """
 
-    def __init__(self):
-        self.cytobands = [ ]
-        self.cytolimits = { }
-        self.genome_size = 0
-        self.filtered_bands = []
-        self.chro = None
-        self.start = None
-        self.end = None
-        self.ChroNames = ChroNames()
-        self.cytoband_response = {}
-        self.cytobands_label = ""
-        self.sorted_chros = BYC["interval_definitions"]["chromosomes"]
-        arg_defs = BYC["argument_definitions"].get("$defs", {"cyto_bands":{}, "chro_bases":{}})
-        self.cytob_pat = re.compile(arg_defs["cyto_bands"].get("pattern", "___error___"))
-        self.chrob_pat = re.compile(arg_defs["chro_bases"].get("pattern", "___error___"))
+    def __init__(self, cytoband_file=None):
+        self.cytobands          = [ ]
+        self.cytolimits         = { }
+        self.genome_size        = 0
+        self.filtered_bands     = [ ]
+        self.chro               = None
+        self.start              = None
+        self.end                = None
+        self.ChroNames          = ChroNames()
+        self.cytoband_response  = {}
+        self.cytobands_label    = ""
+        self.sorted_chros       = BYC["interval_definitions"]["chromosomes"]
+
+        arg_defs        = BYC["argument_definitions"].get("$defs", {"cyto_bands":{}, "chro_bases":{}})
+        self.cytob_pat  = re.compile(arg_defs["cyto_bands"].get("pattern", "___error___"))
+        self.chrob_pat  = re.compile(arg_defs["chro_bases"].get("pattern", "___error___"))
+
+        if not cytoband_file:
+            g_rsrc_p = self.ChroNames.genomePath()
+            self.cb_file = path.join(g_rsrc_p, "cytoBandIdeo.txt")
+        else:
+            self.cb_file = cytoband_file
+        self.header = ["chro", "start", "end", "cytoband", "staining"]
 
         self.__parse_cytoband_file()
 
@@ -360,31 +364,21 @@ class Cytobands():
     # -------------------------------------------------------------------------#
 
     def __parse_cytoband_file(self):
-        g_rsrc_p = self.ChroNames.genomePath()
-        cb_file = path.join(g_rsrc_p, "cytoBandIdeo.txt")
-        cb_keys = [ "chro", "start", "end", "cytoband", "staining" ]
-        i = 0
-        c_bands = [ ]
-        with open(cb_file) as cb_f:                                                                                          
-            for c_band in csv.DictReader(filter(lambda row: row.startswith('#') is False, cb_f), fieldnames=cb_keys, delimiter='\t'):
-                c_bands.append(c_band)
+        # TODO: use ByconTSVreader
+        data, fields = ByconTSVreader().fileToDictlist(self.cb_file, self.header)
 
-        #--------------------------------------------------------------------------#
-
-        # !!! making sure the chromosomes are sorted !!!
-        # TODO: should be in ChroNames?
+        no = 1
         for chro in self.sorted_chros:
             chro = str(chro)
-            c_m = f'chr{chro}'
             chrobands = [ ]
-            for cb in c_bands:
-                if cb["chro"] == c_m:
-                    cb["i"] = i
+            for cb in data:
+                if cb["chro"] == f'chr{chro}':
+                    cb["no"] = no
                     cb["chro"] = cb["chro"].replace("chr", "")
                     cb["chroband"] = f'{cb["chro"]}{cb["cytoband"]}'
                     self.cytobands.append(dict(cb))
                     chrobands.append(dict(cb))
-                    i += 1
+                    no += 1
             self.cytolimits.update({
                 chro: {
                     "chro": [ int(chrobands[0]["start"]), int(chrobands[-1]["end"]) ],
@@ -395,13 +389,14 @@ class Cytobands():
             })
             self.genome_size += int(chrobands[-1]["end"])
 
+
     #--------------------------------------------------------------------------#
 
     def __bands_from_cytobands(self):
-        end_re = re.compile(r"^([pq]\d.*?)\.?\d$")
-        arm_re = re.compile(r"^([pq]).*?$")
-        p_re = re.compile(r"^p.*?$")
-        q_re = re.compile(r"^q.*?$")
+        end_re  = re.compile(r"^([pq]\d.*?)\.?\d$")
+        arm_re  = re.compile(r"^([pq]).*?$")
+        p_re    = re.compile(r"^p.*?$")
+        q_re    = re.compile(r"^q.*?$")
 
         chr_bands = self.cytostring
 
@@ -458,12 +453,12 @@ class Cytobands():
         # using a numeric comparison to sort bands for p higher to lower
         cb_re = re.compile(r'^([pq])((\d)(?:\d(?:\.\d\d?\d?)?)?)$', re.IGNORECASE)
         if cb_re.match(cb_start) and cb_re.match(cb_end):
-            fb1 = float( cb_re.match(cb_start).group(2) )
-            fb2 = float( cb_re.match(cb_end).group(2) )
-            arm1 = cb_re.match(cb_start).group(1)
-            arm2 = cb_re.match(cb_end).group(1)
-            mb1 = int( cb_re.match(cb_start).group(3) )
-            mb2 = int( cb_re.match(cb_end).group(3) )
+            fb1     = float( cb_re.match(cb_start).group(2) )
+            fb2     = float( cb_re.match(cb_end).group(2) )
+            arm1    = cb_re.match(cb_start).group(1)
+            arm2    = cb_re.match(cb_end).group(1)
+            mb1     = int( cb_re.match(cb_start).group(3) )
+            mb2     = int( cb_re.match(cb_end).group(3) )
             if arm1 == arm2:
                 if "p" in arm1:
                     if not mb1 > mb2:
@@ -497,9 +492,8 @@ class Cytobands():
                         band = arm_re.match(cb_end).group(1)
                         end_bands = self.__match_bands(band, cytobands)
 
-        cb_from = start_bands[0]["i"]
-        cb_to = end_bands[-1]["i"] + 1
-
+        cb_from = start_bands[0]["no"] - 1   # 1 based "no"
+        cb_to   = end_bands[-1]["no"]
         matched = self.cytobands[cb_from:cb_to]
 
         self.filtered_bands = matched
@@ -623,49 +617,55 @@ class GeneInfo:
             if len(gene_list) > 0:
                 self.gene_data = list(self.genes_coll.find(query, { '_id': False } ))
 
+
 ################################################################################
 ################################################################################
 ################################################################################
 
 class GeneIntervals:
-    def __init__(self, tsv_path=None):
-        # TODO: this should be checked outside of the class. E.g. standard
-        # use of --inputfile in the caller, reading in, and then using the
-        # created object as input here
-        if tsv_path is None:
-            tsv_path = BYC_PARS.get("gene_interval_tsv", "")
-        if not tsv_path:
-            raise ValueError("No TSV path provided for gene intervals (gene_interval_tsv is empty).")
-        if not path.isabs(tsv_path):
-            genome_rsrc_path = ChroNames().genomePath()
-            tsv_path = path.join(genome_rsrc_path, tsv_path)
+    """ file header minimal content
+        "gene_id", "gene_symbol", "gene_type", "chrom", "start", "end"
+    """
+    def __init__(self, gene_file=None):
+        self.ChroNames      = ChroNames()
+        self.mapped_genes   =   [ ]
+        self.sorted_chros   = BYC["interval_definitions"]["chromosomes"]
 
-        self.tsv_path = path.normpath(tsv_path)
-        self.genes = self.__load_genes()
-    
-    def __load_genes(self):
-        required = {"gene_id", "gene_symbol", "chrom", "start", "end"}
-        genes = []
-        with open(self.tsv_path, "r") as f:
-            reader = csv.DictReader(f, delimiter="\t")
-            header = set(reader.fieldnames or [])
-            missing = required - header
-            if missing:
-                raise ValueError(f"GeneInterval TSV {self.tsv_path} is missing required columns:{sorted(missing)}")
-            for row in reader:
-                try: 
-                    start = int(row["start"])
-                    end = int(row["end"])
-                except (TypeError, ValueError):
-                    continue
-                gene = dict(row)
-                gene["start"] = start
-                gene["end"] = end
-                genes.append(gene)
-        return genes
-    
+        if not gene_file:
+            g_rsrc_p = self.ChroNames.genomePath()
+            self.gene_file = path.join(g_rsrc_p, "cancer_gene_list.tsv")
+        else:
+            self.gene_file = gene_file
+
+        self.__parse_gene_file()
+
+
+    # -------------------------------------------------------------------------#
+
     def get_all_genes(self):
-        return self.genes
+        return self.mapped_genes
 
 
+    # -------------------------------------------------------------------------#
+
+    def __parse_gene_file(self):
+        data, fields = ByconTSVreader().fileToDictlist(self.gene_file)
+
+        no = 1
+        for chro in self.sorted_chros:
+            chro = str(chro)
+            for gene in data:
+                if (r_c := str(gene["chrom"])) == chro:
+                    try: 
+                        start = int(gene["start"])
+                        end = int(gene["end"])
+                    except (TypeError, ValueError):
+                        continue
+                    gene.update({
+                        "start": start,
+                        "end": end,
+                        "no": no   
+                    })
+                    no += 1
+                    self.mapped_genes.append(gene)
 

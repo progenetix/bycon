@@ -9,12 +9,46 @@ from bycon_helpers import ByconMongo, days_from_iso8601duration, prdbug, prjsonn
 
 class ByconSummaries:
     def __init__(self, ds_id=None):
-        self.dataset_id = ds_id
-        self.summaries = []
+        self.dataset_id         = ds_id
+        self.agg_terms          = BYC.get("aggregation_terms", {})
+        self.agg_pars           = BYC_PARS.get("aggregators", [])
 
-        a_d_s = BYC.get("aggregation_terms", {}).get("defaults", [])
-        a_c_s = BYC.get("aggregation_terms", {}).get("$defs", {})
-        a_t_s = BYC_PARS.get("aggregators", [])
+        self.term_coll          = ByconMongo(ds_id).openMongoColl("collations")
+
+        self.summaries          = []
+        self.dataset_summaries  = [] 
+        self.__select_summaries()
+        prdbug(f"Selected summaries for dataset {ds_id}: {self.summaries}")
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def datasetResultSummaries(self, dataset_result={}):
+        self.dataset_result = dataset_result
+
+        # CAVE: Always aggregating on biosamples
+        self.__summarize_dataset_data(use_dataset_result=True)
+
+        return self.dataset_summaries
+
+
+    # -------------------------------------------------------------------------#
+
+    def datasetAllSummaries(self):
+        self.__summarize_dataset_data()
+        return self.dataset_summaries
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- private -----------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __select_summaries(self):
+        a_d_s = self.agg_terms.get("defaults", [])
+        a_c_s = self.agg_terms.get("$defs", {})
+        a_t_s = self.agg_pars
 
         # construct the aggregations from concepts and combinations
         # this might be transitional, e.g. when BYC_PARS["aggregators"]
@@ -51,40 +85,11 @@ class ByconSummaries:
                 if len(concepts) == len(t_a):
                     self.summaries.append(
                         {
-                            # "id": "::".join(ids),
                             "concepts": concepts,
-                            # "label": " by ".join(labels),
-                            # "scope": concepts[0].get("scope", "biosample")
                         }
                     )
 
-        self.dataset_summaries  = [] 
-        self.data_client        = ByconMongo(ds_id).openMongoDatabase()
-        self.term_coll          = ByconMongo(ds_id).openMongoColl("collations")
 
-
-    # -------------------------------------------------------------------------#
-    # ----------------------------- public ------------------------------------#
-    # -------------------------------------------------------------------------#
-
-    def datasetResultSummaries(self, dataset_result={}):
-        self.dataset_result = dataset_result
-
-        # CAVE: Always aggregating on biosamples
-        self.__summarize_dataset_data(use_dataset_result=True)
-
-        return self.dataset_summaries
-
-
-    # -------------------------------------------------------------------------#
-
-    def datasetAllSummaries(self):
-        self.__summarize_dataset_data()
-        return self.dataset_summaries
-
-
-    # -------------------------------------------------------------------------#
-    # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
     def __summarize_dataset_data(self, query={}, use_dataset_result=False):
@@ -111,7 +116,7 @@ class ByconSummaries:
 
     def __generate_query_from_dataset_result(self, a_v):
         # TODO: Default scope to response entity?
-        scope = a_v.get("concepts", [{"scope": "___none___"}])[0].get("scope", "biosample")
+        scope, prop = a_v.get("concepts", [{"scope": "___none___"}])[0].get("property", "___none1___.___none1___").split('.', 1)
         coll = BYC_DBS.get("collections", {}).get(scope, "___none___")
         # TODO: Fallback query for 0 results?
         if (coll_k := f"{coll}.id") not in self.dataset_result.keys():
@@ -125,11 +130,13 @@ class ByconSummaries:
 
     def __reshape_dataset_summaries(self):
         """Post-processing of the aggregation results to remove unnecessary keys.
+        ERROR: removes splits & filters so they are gone from the stack if not
+        newly initialized
         """
-        for i_a, a_v in enumerate(self.dataset_summaries):
-            for i_c, c_v in enumerate(a_v.get("concepts", [])):
-                c_v.pop("splits", None)
-                c_v.pop("terms", None)
+        # for i_a, a_v in enumerate(self.dataset_summaries):
+        #     for i_c, c_v in enumerate(a_v.get("concepts", [])):
+        #         c_v.pop("splits", None)
+        #         c_v.pop("filters", None)
         return
 
 
@@ -147,12 +154,12 @@ class ByconSummaries:
 
         if not (m_c := BYC_DBS.get("collections", {}).get(scopes[0])):
             return
-        data_coll = self.data_client[m_c]
+
+        data_coll = ByconMongo(self.dataset_id).openMongoColl(m_c)
 
         # WIP: prototyping distinctsCount response #############################
         # if we don't allow a structure above concepts the response has to be
         # selected from the minimal one.
-
         r_type = "distribution"
         for c in concepts:
             if not c.get("distribution", True):
@@ -312,13 +319,13 @@ class ByconSummaries:
         ```
         """
 
-        if len(terms := concept.get("terms", [])) < 1:
+        if len(filters := concept.get("filters", [])) < 1:
             return False
 
         scope, concept_id = concept.get("property", "___none___.___none___").split('.', 1)
 
         branches = []
-        for d_i, t in enumerate(terms):
+        for d_i, t in enumerate(filters):
             t_id    = t.get("id", "___none___") 
             t_label = t.get("label", t_id) 
             if not (coll := self.term_coll.find_one( {"id": t_id} )):
@@ -340,7 +347,7 @@ class ByconSummaries:
         return {
             "$switch": {
                 "branches": branches,
-                "default": {"id": "NO_MATCH", "label": "other", "order": len(terms)}
+                "default": {"id": "NO_MATCH", "label": "other", "order": len(filters)}
             }
         }
 
@@ -402,6 +409,13 @@ class ByconSummaries:
                         split_ids.append(f"<{re.sub("P", "", l).lower()}")
                     pre = l
             split_labs = split_l
+
+        # prjsonnice({
+        #     "concept_id": concept_id,
+        #     "split_labs": split_labs,
+        #     "split_vals": split_vals,
+        #     "split_ids": split_ids
+        # })
 
         for d_i, d_l in enumerate(split_labs):
             branches.append({

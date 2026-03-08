@@ -4,8 +4,7 @@ from os import path, environ, pardir
 from progress.bar import Bar
 from pymongo import MongoClient
 
-from bycon import BYC, BYC_DBS
-from byconServiceLibs import ByconTSVreader
+from bycon import BYC, BYC_DBS, ByconTSVreader
 
 dir_path = path.dirname( path.abspath(__file__) )
 geo_rsrc_path = path.join( dir_path, pardir, "rsrc", "geolocs" )

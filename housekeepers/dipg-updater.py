@@ -8,7 +8,7 @@ from ga4gh.vrs.dataproxy import create_dataproxy
 
 from bycon import *
 from vrs_translator import AlleleTranslator
-from byconServiceLibs import assert_single_dataset_or_exit, ByconTSVreader, ByconDatatableExporter
+from byconServiceLibs import assert_single_dataset_or_exit, ByconDatatableExporter
 
 # ./housekeepers/_dipg-updater.py -d progenetix --filters "pgx:cohort-DIPG" --requestEntityPathId individuals --debugMode 0
 # http://progenetix.test/services/sampletable/?responseEntityPathId=individuals&filters=pgx:cohort-DIPG&limit=0

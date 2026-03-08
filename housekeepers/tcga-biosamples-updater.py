@@ -5,7 +5,7 @@ from os import path, pardir
 from pymongo import MongoClient
 
 from bycon import *
-from byconServiceLibs import assert_single_dataset_or_exit, ByconTSVreader
+from byconServiceLibs import assert_single_dataset_or_exit
 
 ################################################################################
 

@@ -69,15 +69,18 @@ end:
 ################################################################################
 
 class GenomeBins:
-    def __init__(self):
+    def __init__(self, binning=None):
         self.interval_definitions = BYC.get("interval_definitions", {})
         self.variant_type_definitions = BYC.get("variant_type_definitions", {})
-        self.binning = BYC_PARS.get("genome_binning", "1Mb")
 
-        CB = Cytobands()
-        self.cytobands      = CB.get_all_cytobands()
-        self.cytolimits     = CB.get_all_cytolimits()
-        self.genome_size    = CB.get_genome_size()
+        if binning:       
+            self.binning = binning
+        else:
+            self.binning = BYC_PARS.get("genome_binning", "1Mb")
+
+        self.CB             = Cytobands()
+        self.cytolimits     = self.CB.get_all_cytolimits()
+        self.genome_size    = self.CB.get_genome_size()
 
         self.int_min_frac   =   self.interval_definitions.get("interval_min_fraction", {}).get("value", 0.001)
  
@@ -89,53 +92,32 @@ class GenomeBins:
         self.__generate_cytoband_intervals()
         self.__generate_genomic_intervals()
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
     # ----------------------------- public -------------------------------------#
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def getGenomeBinningID(self):
         return self.binning
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def getGenomeBins(self):
         return self.genomic_intervals
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def getGenomeBinCount(self):
         return len(self.genomic_intervals)
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
-    # TODO: Not used anywhere?
-    def getAnalysisCoverageMaps(self, analysis_variants=[]):
-        self.__prepare_analysis_intervals()
-        self.analysis_variants = analysis_variants
-        self.__interval_cnv_coverage_arrays()
-        return self.coverage_maps
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
-
-    def getAnalysisFracMaps(self, analysis_variants=[]):
-        self.__prepare_analysis_intervals()
-        self.analysis_variants = analysis_variants
-        self.__interval_cnv_coverage_arrays()
-        self.__interval_cnv_fraction_arrays()
-        return self.fraction_maps
-
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def getAnalysisFracMapsAndStats(self, analysis_variants=[]):
-        self.__prepare_analysis_intervals()
         self.analysis_variants = analysis_variants
-        self.__interval_cnv_coverage_arrays()
-        self.__interval_cnv_fraction_arrays()
-        self.__genome_cnv_statistics()
+        self.__process_analysis_intervals_for_cnvs()
         return (
             self.fraction_maps,
             self.cnv_stats,
@@ -143,18 +125,19 @@ class GenomeBins:
             list(self.duplicates),
         )
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
-    # TODO: Not used anywhere?
-    def genomeCNVstats(self, analysis_variants=[]):
-        self.__prepare_analysis_intervals()
-        self.analysis_variants = analysis_variants
-        self.__interval_cnv_coverage_arrays()
-        self.__genome_cnv_statistics()
-        return self.cnv_stats
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def getAnalysisCNVintervals(self, analysis_variants=[]):
+        self.analysis_variants = analysis_variants
+        self.__process_analysis_intervals_for_cnvs()
+        self.coverage_intervals = []        
+        self.__interval_cnv_coverage_objects()
+        return self.coverage_intervals
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def intervalFrequencyMaps(self, analyses=[]):
         self.analyses = analyses
@@ -162,23 +145,14 @@ class GenomeBins:
         return self.interval_frequencies, self.analyses_count
 
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
-    # TODO: Not used anywhere?
-    def getVariantDuplicates(self, analysis_variants=[]):
-        self.__prepare_analysis_intervals()
-        self.analysis_variants = analysis_variants
-        self.__interval_cnv_coverage_arrays()
-        return list[self.duplicates]
-
-    # --------------------------------------------------------------------------#
-    # ---------------------------- private -------------------------------------#
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+    # ---------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __generate_cytoband_intervals(self):
-        for cb in self.cytobands:
+        for cb in self.CB.get_all_cytobands():
             self.cytoband_intervals.append({
-                "no": int(cb["i"]),
+                "no": int(cb["no"]),
                 "id": f'{cb["chro"]}:{cb["start"]}-{cb["end"]}',
                 "reference_name": cb["chro"],
                 "cytobands": cb["cytoband"],
@@ -186,6 +160,7 @@ class GenomeBins:
                 "end": int(cb["end"]),
                 "size": int(cb["end"]) - int(cb["start"])
             })
+
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
@@ -197,7 +172,7 @@ class GenomeBins:
         c_l     = self.cytolimits
 
         self.genomic_intervals = []
-        i = 1
+        no = 1
         for chro in c_l.keys():
             chro_genes = [ g for g in genes if g.get("chrom") == chro ]
             chro_genes = sorted(chro_genes, key=lambda g: g.get("start", 0))
@@ -210,15 +185,14 @@ class GenomeBins:
                 gene_symbol     = g.get("gene_symbol", gene_id or "")
                 gene_type       = g.get("gene_type", "")
 
-                cbs = str(Cytobands().cytobands_label_from_positions(chro, start, end))
+                cbs = str(self.CB.cytobands_label_from_positions(chro, start, end))
                 base_keys = {"gene_id", "gene_symbol", "gene_type", "chrom", "start", "end"}
                 info = {k: v for k, v in g.items() if k not in base_keys}
 
                 self.genomic_intervals.append({
-                    "no": i,
+                    "no": no,
                     "id": gene_id or gene_symbol,
                     "reference_name": chro,
-                    "arm": "p" if "p" in cbs else "q" if "q" in cbs else "",
                     "cytobands": cbs,
                     "start": start,
                     "end": end,
@@ -226,7 +200,7 @@ class GenomeBins:
                     "gene_symbol": gene_symbol,
                     "info": info
                 })
-                i += 1
+                no += 1
 
         self.interval_count = len(self.genomic_intervals)
 
@@ -238,24 +212,24 @@ class GenomeBins:
         i_d = self.interval_definitions
         c_l = self.cytolimits
 
-        # cytobands ################################################################
+        # cytobands ############################################################
         if self.binning == "cytobands":
             self.genomic_intervals = deepcopy(self.cytoband_intervals)
             return
 
-        # gene intervals ################################################################
+        # gene intervals #######################################################
         if self.binning.startswith("genes"):
             self.__generate_gene_intervals()
             return
         
-        # otherwise intervals ######################################################
+        # otherwise intervals ##################################################
         assert self.binning in i_d["genome_bin_sizes"]["values"].keys(), f'¡¡ Binning value "{self.binning}" not in list !!'
 
         int_b = i_d["genome_bin_sizes"]["values"][self.binning]
         e_p_f = i_d["terminal_intervals_soft_expansion_fraction"].get("value", 0.1)
         e_p = int_b * e_p_f
 
-        i = 1
+        no = 1
         for chro in c_l.keys():
             p_max = c_l[chro]["p"][-1]
             q_max = c_l[chro]["size"]
@@ -282,10 +256,9 @@ class GenomeBins:
 
                 self.genomic_intervals.append(
                     {
-                        "no": i,
+                        "no": no,
                         "id": f"{chro}{arm}:{start:09}-{end:09}",
                         "reference_name": chro,
-                        "arm": arm,
                         "cytobands": f"{cbs}",
                         "start": start,
                         "end": end,
@@ -295,12 +268,23 @@ class GenomeBins:
 
                 start = end
                 end += int_p
-                i += 1
+                no += 1
 
         self.interval_count = len(self.genomic_intervals)
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __process_analysis_intervals_for_cnvs(self):
+        self.__prepare_analysis_intervals()
+        self.__interval_cnv_coverage_arrays()
+        self.__interval_cnv_fraction_arrays()
+        self.__genome_cnv_statistics()
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __prepare_analysis_intervals(self):
         self.cov_labs = {"DUP": "dup", "DEL": "del"}
@@ -311,8 +295,9 @@ class GenomeBins:
             "variant_count": 0,
         }
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __interval_cnv_coverage_arrays(self):
         # Initialize coverage maps with default values
@@ -332,7 +317,6 @@ class GenomeBins:
             # skipping non-CNV vars
             if "CopyNumberChange" not in variant.get("type", ""):
                 continue
-
 
             variant_state_id = variant.get("variant_state", {}).get("id")
             if variant_state_id not in self.variant_type_definitions:
@@ -371,8 +355,27 @@ class GenomeBins:
             self.coverage_maps["variant_count"] += 1
 
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __interval_cnv_coverage_objects(self):
+        if (self.coverage_maps.get("variant_count", 0)) < 1:
+            return
+
+        for i, intv in enumerate(self.genomic_intervals):
+            i_stats = {}
+            for cov_lab in {**self.cov_labs, **self.hl_labs}.values():
+                i_stats[cov_lab] = self.coverage_maps[cov_lab][i]
+                i_stats[f"{cov_lab}_fraction"] = self.fraction_maps[cov_lab][i]
+
+            if any(value > 0 for value in i_stats.values()):
+                pos_int = deepcopy(intv)
+                pos_int.update(i_stats)
+                self.coverage_intervals.append(pos_int)
+
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __interval_cnv_fraction_arrays(self):
         if not self.coverage_maps:
@@ -393,8 +396,9 @@ class GenomeBins:
                     # correct fraction (since some intervals have a different size)
                     self.fraction_maps[hl_lab][i] = round(cov / intv["size"], 3)
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __genome_cnv_statistics(self):
         if not self.coverage_maps:
@@ -407,8 +411,8 @@ class GenomeBins:
             "dupfraction": 0,
             "delfraction": 0,
         }
-        self.chro_stats = {}
 
+        self.chro_stats = {}
         for chro in self.cytolimits.keys():
             self.chro_stats.update({chro: deepcopy(self.cnv_stats)})
             for arm in ["p", "q"]:
@@ -423,7 +427,10 @@ class GenomeBins:
                 if (cov := self.coverage_maps[cov_lab][i]) > 0:
                     lab = f"{cov_lab}coverage"
                     chro = intv["reference_name"]
-                    c_a = f"{chro}{intv['arm']}"
+                    arm = "q"
+                    if "p" in (cb := intv.get("cytobands", "___none___")):
+                        arm = "p"
+                    c_a = f"{chro}{arm}"
                     self.cnv_stats[lab] += cov
                     self.chro_stats[chro][lab] += cov
                     self.chro_stats[c_a][lab] += cov
@@ -463,8 +470,8 @@ class GenomeBins:
                             {f_k: self.__round_frac(self.chro_stats[c_a][s_k], s_a, 3)}
                         )
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __has_overlap(self, interval, v):
         if not (chro := v["location"].get("chromosome")):
@@ -478,15 +485,16 @@ class GenomeBins:
             return False
         return True
 
-    # --------------------------------------------------------------------------#
-    # --------------------------------------------------------------------------#
+
+    # -------------------------------------------------------------------------#
 
     def __round_frac(self, val, maxval, digits=3):
         if (f := round(val / maxval, digits)) > 1:
             f = 1
         return f
 
-    ################################################################################
+
+    # -------------------------------------------------------------------------#
 
     def __interval_counts_from_analyses(self):
         """

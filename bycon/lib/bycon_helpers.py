@@ -1,4 +1,5 @@
 import base36
+import csv
 import humps
 import inspect
 import json
@@ -226,6 +227,62 @@ class ByconH:
         return this[p_range[0]:p_range[-1]]
 
 
+################################################################################
+################################################################################
+
+class ByconTSVreader():
+    def __init__(self):
+        self.dictlist = []
+        self.fieldnames = []
+        self.tsv_data = None
+        self.max_lines = 0
+
+
+    # -------------------------------------------------------------------------#
+    # ----------------------------- public ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def fileToDictlist(self, filepath, fieldnames=None, max_count=None):
+        if type(max_count) is int:
+            self.max_lines = max_count
+        with open(filepath, newline='') as self.tsv_data:
+            self.__dictread(fieldnames)
+        return self.dictlist, self.fieldnames
+
+
+    # -------------------------------------------------------------------------#
+
+    def www_to_dictlist(self, www, fieldnames=None, max_count=None):
+        if type(max_count) is int:
+            self.max_lines = max_count
+        with requests.Session() as s:
+            download = s.get(www)
+            # TODO: error capture/return
+            decoded_content = download.content.decode('utf-8')
+            self.tsv_data = list(decoded_content.splitlines())
+            self.__dictread(fieldnames)
+        return self.dictlist, self.fieldnames
+
+
+    # -------------------------------------------------------------------------#
+    # ---------------------------- private ------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __dictread(self, fieldnames=None):
+        # TODO: implement check, e.g.
+        # missing = required - header
+        # if missing:
+        #     raise ValueError(f"GeneInterval TSV {self.tsv_path} is missing required columns:{sorted(missing)}")
+        data = csv.DictReader(filter(lambda row: row.startswith('#') is False, self.tsv_data), fieldnames=fieldnames, delimiter="\t", quotechar='"')
+        self.fieldnames = list(data.fieldnames)
+        for l in data:
+            self.dictlist.append(dict(l))
+        if 0 < self.max_lines < len(self.dictlist):
+            self.dictlist = random_samples(self.dictlist, self.max_lines)
+
+
+################################################################################
+################################################################################
 ################################################################################
 
 def days_from_iso8601duration(iso8601duration=""):

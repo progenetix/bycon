@@ -36,7 +36,6 @@ class ByconDatasetResults():
         self.id_responses = {}
 
         self.__generate_queries(BQ)
-        prdbug(f"... queries {self.queries}")
         self.__run_stacked_queries()
         self.__requery_to_aggregate()
         self.__set_dataset_results()

@@ -1018,9 +1018,6 @@ class ByconResultSets:
                     "exists": True if rs_c > 0 else False,
                 }
             )
-            prdbug(
-                f"... populated result set for dataset {ds_id}, self.returned_granularity: {self.returned_granularity}, target_count: {q_c}"
-            )
             if self.returned_granularity == "record":
                 r_s_res = self.datasets_data.get(ds_id, [])
                 r_s_res = list(x for x in r_s_res if x)

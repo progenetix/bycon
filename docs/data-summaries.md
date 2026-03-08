@@ -134,7 +134,7 @@ Each `concept` involved in an aggregation should be defined with:
       instead of the logical concept (`individual.diseases.diseaseCode`). This might
       be changed if necessary.
 * optional modifiers:
-    - `terms` for specifying terms to be included in the aggregation
+    - `filters` for specifying filters to be included in the aggregation
     - `splits` for specifying how to split the values (e.g. binning for
       numeric or pseudo-numeric values such as ISO8601 durations for ages)
         * at this time `splits` seem as the best way to specify binning, but this might
@@ -177,7 +177,7 @@ concepts:
       - P120Y
 ```
 
-#### Single property aggregation with `terms`
+#### Single property aggregation with `filters`
 
 ```
 id: selectedCarinomaDiagnoses
@@ -187,15 +187,15 @@ description: >-
 scope: biosample
 concepts:
   - property: biosample.histological_diagnosis.id
-    terms:
-      - NCIT:C9384 # Kidney Carcinoma
-      - NCIT:C3513 # Esophageal Carcinoma
-      - NCIT:C35850 # Head and Neck Carcinoma
-      - NCIT:C4878 # Lung Carcinoma
-      - NCIT:C207229 # Pancreatic Carcinoma
-      - NCIT:C4911 # Gastric Carcinoma
-      - NCIT:C2955 # Colorectal Carcinoma
-      - NCIT:C7927 # Liver Carcinoma
+    filters:
+      - id: NCIT:C9384 # Kidney Carcinoma
+      - id: NCIT:C3513 # Esophageal Carcinoma
+      - id: NCIT:C35850 # Head and Neck Carcinoma
+      - id: NCIT:C4878 # Lung Carcinoma
+      - id: NCIT:C207229 # Pancreatic Carcinoma
+      - id: NCIT:C4911 # Gastric Carcinoma
+      - id: NCIT:C2955 # Colorectal Carcinoma
+      - id: NCIT:C7927 # Liver Carcinoma
 ```
 
 #### 2-dimensional aggregation
@@ -294,11 +294,8 @@ Progenetix - not a standard Beacon property yet) would look like this:
 
 ```javascript
 resultsAggregation: [ {
-    id: "sampleCountries",
-    label: "Sample Countries",
     scope: "biosample",
     concepts: [ { property: "biosample.geo_location.properties.ISO3166alpha3" } ],
-    description: "Count of countries of origin in matched biosamples",
     distribution: [
       {
         conceptValues: [ { id: 'USA', label: 'United States' } ],

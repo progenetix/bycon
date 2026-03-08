@@ -24,7 +24,6 @@ def main():
     output_file = BYC_PARS.get("outputfile") or output_path
 
     GB = GenomeBins()
-    print(f'Using binning="{GB.getGenomeBinningID()}" with {GB.getGenomeBinCount()} intervals.')
 
     data_client = MongoClient(host=BYC_DBS["mongodb_host"])
     data_db = data_client[ds_id]

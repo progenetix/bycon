@@ -6,8 +6,8 @@ import SummaryTraces from "./SummaryTraces";
 //----------------------------------------------------------------------------//
 
 const colNo = 20
-const includeOthers = true
-// const includeOthers = false
+// const includeOthers = true
+const includeOthers = false
 const dashboardPies = ["selectedPlatformTechnologies", "sampleCountries"]
 const dashboardSankeys = ["selectedHistologicalDiagnoses::sampleSex"]
 

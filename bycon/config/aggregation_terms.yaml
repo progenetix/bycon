@@ -1,6 +1,6 @@
 description: >-
   Each of the `concepts` defines the scope (individual, biosample, analysis),
-  property to aggregate on, and optional `terms` or `splits` for selection
+  property to aggregate on, and optional `filters` or `splits` for selection
   or binning of the results in the returned `distribution`.
 
   Note: `sorted` right now only applies to the first dimension if used in 2D.
@@ -32,29 +32,52 @@ defaults:
   - - id: individualAge
     - id: individualSex
   - - id: followupTime
+  - - id: selectedDiseases  # temp
+    - id: sexAtBirth        # temp
 
 $defs:
+  sexAtBirth:
+    id: sexAtBirth
+    label: Sex at birth
+    description: >-
+      Sex of the individual
+    note: temporary demo
+    property: individual.sex.id
+    filters:
+      - id: NCIT:C20197
+        label: male
+      - id: NCIT:C16576
+        label: female
+
+  selectedDiseases:
+    id: selectedDiseases
+    label: Selected Diagnostic Classes (by NCIT)
+    property: individual.index_disease.disease_code.id
+    filters:
+      - id: NCIT:C2919
+        label: Prostate Adenocarcinoma
+      - id: NCIT:C4017
+        label: Breast Ductal Carcinoma
+      - id: NCIT:C3512
+        label: Lung Adenocarcinoma
 
   biosampleCounts:
     id: biosampleCounts
     label: Biosample counts
-    scope: biosample
     distribution: false
     property: biosample.id
 
   histologicalDiagnosesCounts:
     id: histologicalDiagnosesCounts
     label: Diagnoses counts
-    scope: biosample
     distribution: false
     property: biosample.histological_diagnosis.id
 
   selectedHistologicalDiagnoses:
     id: selectedHistologicalDiagnoses
     label: Selected Diagnostic Classes (by NCIT)
-    scope: biosample
     property: biosample.histological_diagnosis.id
-    terms:
+    filters:
       - id: NCIT:C9335
         label: Malignant neoplasm of breast
       - id: NCIT:C4863
@@ -105,9 +128,8 @@ $defs:
     label: Selected Diagnostic Classes (carcinomas; by NCIT)
     description: >-
       Count of histological diagnoses in matched biosamples for selected carcinomas
-    scope: biosample
     property: biosample.histological_diagnosis.id
-    terms:
+    filters:
       - id: NCIT:C9384
         label: Kidney Carcinoma
       - id: NCIT:C3513
@@ -130,9 +152,8 @@ $defs:
     label: Selected Platform Technologies
     description: >-
       Count of basic platform technologies used in matched analyses
-    scope: analysis
     property: analysis.platform_model.id
-    terms:
+    filters:
       - id: EFO:0030075
         label: cDNA microarray
       - id: EFO:0010938
@@ -155,7 +176,6 @@ $defs:
     label: All Platforms by ID
     description: >-
       Count of basic platform technologies used in matched analyses
-    scope: analysis
     property: analysis.platform_model.id
 
   sampleOriginDetails:
@@ -163,7 +183,6 @@ $defs:
     label: Anatomical Origin
     description: >-
       Count of anatomical sites in matched biosamples
-    scope: biosample
     property: biosample.sample_origin_detail.id
 
   sampleSex:
@@ -171,7 +190,6 @@ $defs:
     label: Sex at birth
     description: >-
       Sex of the sample's donor
-    scope: biosample
     property: biosample.individual_info.sex.id
 
   individualSex:
@@ -179,15 +197,13 @@ $defs:
     label: Sex at birth
     description: >-
       Sex of the individual
-    scope: individual
     property: individual.sex.id
 
   sampleICDO3histology:
     id: sampleICDO3histology
     label: ICD-O 3 Histology
     description: >-
-      ICD-O 3 histologies in matched biosamples by age at diagnosis
-    scope: biosample
+      ICD-O 3 histologies in matched biosamples
     property: biosample.icdo_morphology.id
 
   sampleAge:
@@ -195,7 +211,6 @@ $defs:
     label: Age at sample collection
     description: >-
       Age at diagnosis (sample collection...)
-    scope: biosample
     property: biosample.collection_moment
     format: iso8601duration
     splits:
@@ -216,7 +231,6 @@ $defs:
     label: Individual's age at Diagnosis
     description: >-
       Individual's age at diagnosis
-    scope: individual
     property: individual.index_disease.onset.age
     format: iso8601duration
     splits:
@@ -239,7 +253,6 @@ $defs:
     label: Diseases in Individuals
     description: 
       - Disease in matched individuals
-    scope: individual
     property: individual.index_disease.disease_code.id
 
   biosampleDisease:
@@ -247,7 +260,6 @@ $defs:
     label: Diseases in Biosamples
     description: 
       - Disease in matched biosamples
-    scope: biosample
     property: biosample.histological_diagnosis.id
 
   sampleCountries:
@@ -256,7 +268,6 @@ $defs:
     label_key: country
     description: >-
       Count of countries of origin in matched biosamples
-    scope: biosample
     property: biosample.geo_location.properties.ISO3166alpha3
 
   followupTime:
@@ -264,7 +275,6 @@ $defs:
     label: Follow-up Time
     description: >-
       Follow-up time after diagnosis
-    scope: individual
     property: individual.index_disease.followup
     format: iso8601duration
     splits:

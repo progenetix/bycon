@@ -16,6 +16,7 @@ from bycon import (
     BYC_DBS,
     ByconError,
     ByconMongo,
+    ByconTSVreader,
     ByconVariant,
     CollationQuery,
     GenomeBins,

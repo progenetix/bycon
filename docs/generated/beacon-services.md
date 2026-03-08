@@ -243,11 +243,6 @@ The table type can be changed with `tableType=individuals` (or `analyses`).
 * https://progenetix.org/services/sampletable/?responseEntityPathId=analyses&filters=pgx:icdom-81703
 
 
-### `/tester`
-
-    
-
-
 ### `/uploader`
 
 This service is used by UI implementations to upload user provided `.pgxseg` files
