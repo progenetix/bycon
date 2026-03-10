@@ -27,6 +27,9 @@ indexed_special_collections:
 
 indexed_special_dbs:
   cellz:
+    analyses:
+      gene_id:
+        db_key: analyses.var_genemaps.gene_symbol
     biosamples:
       location:
         db_key: geo_location.geometry
@@ -77,6 +80,9 @@ indexed_special_dbs:
         type: compound
 
   progenetix:
+    analyses:
+      gene_id:
+        db_key: analyses.var_genemaps.gene_symbol
     biosamples:
       location:
         db_key: geo_location.geometry

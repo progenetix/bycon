@@ -29,7 +29,7 @@ sized bins (default 1Mb). The most distal bin of each arm then can be of a
 different size.
 
 Bin sizes are selected based on the provided key for a corresponding definition
-in `interval_definitions.genome_bin_sizes` (e.g. 1Mb => 1000000).
+in `genome_definitions.genome_bin_sizes` (e.g. 1Mb => 1000000).
 
 ### Interval Object Schema
 
@@ -70,7 +70,7 @@ end:
 
 class GenomeBins:
     def __init__(self, binning=None):
-        self.interval_definitions = BYC.get("interval_definitions", {})
+        self.genome_definitions = BYC.get("genome_definitions", {})
         self.variant_type_definitions = BYC.get("variant_type_definitions", {})
 
         if binning:       
@@ -82,12 +82,12 @@ class GenomeBins:
         self.cytolimits     = self.CB.get_all_cytolimits()
         self.genome_size    = self.CB.get_genome_size()
 
-        self.int_min_frac   =   self.interval_definitions.get("interval_min_fraction", {}).get("value", 0.001)
+        self.int_min_frac   =   self.genome_definitions.get("interval_min_fraction", {}).get("value", 0.001)
  
         self.genomic_intervals  = []
         self.cytoband_intervals = []
 
-        self.interval_definitions.update({"genome_binning": self.binning})
+        self.genome_definitions.update({"genome_binning": self.binning})
 
         self.__generate_cytoband_intervals()
         self.__generate_genomic_intervals()
@@ -209,7 +209,7 @@ class GenomeBins:
     #--------------------------------------------------------------------------#
 
     def __generate_genomic_intervals(self):
-        i_d = self.interval_definitions
+        i_d = self.genome_definitions
         c_l = self.cytolimits
 
         # cytobands ############################################################

@@ -695,7 +695,7 @@ $defs:
   gene_interval_tsv:
     type: string
     pattern: '^[\w\/\.\-]+$'
-    default: "cancer_gene_list.tsv"
+    default: "cancer_genes.tsv"
     cmdFlags:
       - --geneIntervalTsv 
     description: >-

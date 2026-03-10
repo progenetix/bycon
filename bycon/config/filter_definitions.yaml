@@ -35,6 +35,21 @@ description: >
 
 $defs:
 
+  geneID:
+    id: geneID
+    type: alphanumeric
+    format: string
+    name: Gene ID
+    scope: analyses
+    entity: analysis
+    db_key: 'analyses.var_genemaps.gene_symbol'
+    request_parameter: geneId
+    pattern: '__GENEID__:\w+$'  # temp modification for matching...
+    collationed: False
+    examples:
+      - BRCA1
+      - CDKN2A
+
   ageAtDiagnosis:
     description: >-
       For age at diagnosis we use ISO 8601 duration format, e.g. P18Y for 18 years,

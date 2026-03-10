@@ -429,6 +429,11 @@ class ByconQuery:
         prdbug(f"...GeneIdRequest gene_id: {gene_id}")
         queries = []
         for g in gene_id:
+            g = g.upper()
+            # NOTE: priority genes are not queried for coordinates but directly 
+            # by gene symbol against the `analyses` collection
+            if gene_id in BYC.get("priority_genes", {}):
+                continue
             # TODO: error report/warning
             if not (gene_data := GeneInfo().returnGene(g)):
                 continue
@@ -905,6 +910,7 @@ class ByconQuery:
             f_re = re.compile(f_d.get("pattern", "___none___"))
             prdbug(f"pattern check: {f_d.get('pattern', '___none___')} <> {f_val}")
             if f_re.match(f_val):
+                f_val = re.sub(r'^__\w+__\:', "", f_val)
                 f_info = {
                     "id": f_val,
                     "scope": f_d.get("scope", "biosamples"),

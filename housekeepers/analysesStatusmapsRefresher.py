@@ -102,12 +102,12 @@ def main():
             "cnv_statusmaps": maps,
             "cnv_stats": cs_cnv_stats,
             "cnv_chro_stats": cs_chro_stats,
-            "cnv_genemaps": GGB.getAnalysisCNVintervals(cs_vars),
+            "var_genemaps": GGB.getAnalysisCNVintervals(cs_vars),
             "updated": datetime.now().isoformat()
         }
 
         if BYC.get("TEST_MODE", False) is True:
-            prjsonnice(f"\n==>> {ana_id}: {len(update_obj["cnv_genemaps"])} genes hit")
+            prjsonnice(f"\n==>> {ana_id}: {len(update_obj["var_genemaps"])} genes hit")
             pass
         else:
             cs_coll.update_one( { "_id": _id }, { '$set': update_obj }  )
@@ -119,7 +119,7 @@ def main():
 
     print(f"{counter} analyses were processed")
     print(f"{no_cnv_type} analyses were not from CNV calling")
-    print(f'{updated} analyses were updated for\n    `cnv_statusmaps`\n    `cnv_stats`\n    `cnv_chro_stats`\n    cnv_genemaps\nusing {GB.getGenomeBinCount()} bins ({BYC_PARS.get("genome_binning", "")} and {GGB.getGenomeBinCount()} genes)')
+    print(f'{updated} analyses were updated for\n    `cnv_statusmaps`\n    `cnv_stats`\n    `cnv_chro_stats`\n    var_genemaps\nusing {GB.getGenomeBinCount()} bins ({BYC_PARS.get("genome_binning", "")} and {GGB.getGenomeBinCount()} genes)')
 
     if len(duplicates) > 0:
         print(f'¡¡¡ {len(duplicates)} duplicate variant entries were found !!!')

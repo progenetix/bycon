@@ -39,6 +39,8 @@ genome_path_ids:
     # msarhar1: mSarHar1.11
     # zf7: zf7
 
+default_genes_file: cancer_genes.tsv
+
 terminal_intervals_soft_expansion_fraction:
   description: >-
     This parameter is used for the generation of chromosome-dependend bins. The

@@ -370,6 +370,27 @@ class ByconFilters:
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
+    def __add_gene_id_filter(self):
+        if not (gene_ids := BYC_PARS.get("gene_id")):
+            return
+        if not isinstance(gene_ids, list):
+            gene_ids = [gene_ids]
+        n_g_pars = []
+        for g_id in gene_ids:
+            if not g_id:
+                continue
+            if str(g_id).upper() not in BYC.get("priority_genes", {}):
+                n_g_pars.append(g_id)
+                continue
+            self.filter_pars.append({"id": {f"__GENEID__:{g_id}"}})
+        if len(n_g_pars) > 0:
+            BYC_PARS.update({"gene_id": n_g_pars})
+        else:
+            BYC_PARS.pop("gene_id", None)
+
+
+    # -------------------------------------------------------------------------#
+
     def __parse_filters(self):
         """
         The function checks the filter values for a match to any of the filter

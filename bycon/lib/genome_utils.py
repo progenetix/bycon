@@ -228,7 +228,7 @@ class Cytobands:
         self.ChroNames          = ChroNames()
         self.cytoband_response  = {}
         self.cytobands_label    = ""
-        self.sorted_chros       = BYC["interval_definitions"]["chromosomes"]
+        self.sorted_chros       = BYC["genome_definitions"]["chromosomes"]
 
         arg_defs        = BYC["argument_definitions"].get("$defs", {"cyto_bands":{}, "chro_bases":{}})
         self.cytob_pat  = re.compile(arg_defs["cyto_bands"].get("pattern", "___error___"))
@@ -628,12 +628,12 @@ class GeneIntervals:
     """
     def __init__(self, gene_file=None):
         self.ChroNames      = ChroNames()
-        self.mapped_genes   =   [ ]
-        self.sorted_chros   = BYC["interval_definitions"]["chromosomes"]
+        self.mapped_genes   = [ ]
+        self.sorted_chros   = BYC["genome_definitions"]["chromosomes"]
 
         if not gene_file:
             g_rsrc_p = self.ChroNames.genomePath()
-            self.gene_file = path.join(g_rsrc_p, "cancer_gene_list.tsv")
+            self.gene_file = path.join(g_rsrc_p, BYC["genome_definitions"]["default_genes_file"])
         else:
             self.gene_file = gene_file
 

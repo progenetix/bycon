@@ -109,6 +109,11 @@ try:
                 logger.error(f"Error loading dataset {d}: {str(e)}")
                 raise
 
+    # Load priority genes definitions
+    gene_list = GeneIntervals().get_all_genes()
+    for i, g in enumerate(gene_list):
+        BYC["priority_genes"].update({g.get("gene_symbol", str(i)): g})
+
     # Configuration: End of Loading Stage ######################################
 
     # Configuration: Entry types and endpoints #################################

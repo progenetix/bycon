@@ -602,7 +602,7 @@ a custom file to specify input data, usually tab-delimited with special header
 #### `gene_interval_tsv` 
 **type:** string    
 **pattern:** `^[\w\/\.\-]+$`    
-**default:** `cancer_gene_list.tsv`    
+**default:** `cancer_genes.tsv`    
 **cmdFlags:** `--geneIntervalTsv`    
 **description:**
 path to a TSV file containing gene intervals. The file should at least contains: gene_id, gene_symbol, chrom, start, end.    

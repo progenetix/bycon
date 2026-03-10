@@ -12,7 +12,7 @@ import sys
 from bycon import *
 from byconServiceLibs import *
 
-# ./housekeepers/testgenemap.py -d progenetix --genomeBinning genes --geneIntervalTsv "cancer_gene_list.tsv" --limit 0
+# ./housekeepers/testgenemap.py -d progenetix --genomeBinning genes --geneIntervalTsv "cancer_genes.tsv" --limit 0
 
 ################################################################################
 
