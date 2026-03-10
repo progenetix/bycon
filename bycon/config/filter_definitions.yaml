@@ -37,14 +37,14 @@ $defs:
 
   geneID:
     id: geneID
-    type: alphanumeric
+    type: custom
     format: string
     name: Gene ID
     scope: analyses
     entity: analysis
-    db_key: 'analyses.var_genemaps.gene_symbol'
+    db_key: 'var_genemaps.gene_symbol'
     request_parameter: geneId
-    pattern: '__GENEID__:\w+$'  # temp modification for matching...
+    pattern: '__GENEID__\:\w+$'  # temp modification for matching...
     collationed: False
     examples:
       - BRCA1
@@ -128,7 +128,7 @@ $defs:
     db_key: 'pipeline_name'
     scope: analyses
     entity: analysis
-    pattern: '^..+?$'
+    pattern: '^[\w\ \-]+?$'
     collationed: True
     examples:
       - era-EnsembleCNV
@@ -299,7 +299,7 @@ $defs:
     term_min_depth: 1
     scope: individuals
     entity: individual
-    pattern: '^\w+(:[\w\-]+)?$'
+    pattern: '^\w+\:[\w\-]+$'
     collationed: True
     examples:
       - NCIT:C20197

@@ -69,6 +69,7 @@ class ByconQuery:
         self.skip               = BYC_PARS.get("skip")
         self.test_mode_count    = BYC_PARS.get("test_mode_count", 5)
         self.filters            = ByconFilters().get_filters()
+        prdbug(f"ByconQuery self.filters: {self.filters}")
 
         self.queries    = {"expand": True, "entities": {}}
 
@@ -432,7 +433,7 @@ class ByconQuery:
             g = g.upper()
             # NOTE: priority genes are not queried for coordinates but directly 
             # by gene symbol against the `analyses` collection
-            if gene_id in BYC.get("priority_genes", {}):
+            if g in BYC.get("priority_genes", {}).keys():
                 continue
             # TODO: error report/warning
             if not (gene_data := GeneInfo().returnGene(g)):

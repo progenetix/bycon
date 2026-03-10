@@ -29,7 +29,7 @@ indexed_special_dbs:
   cellz:
     analyses:
       gene_id:
-        db_key: analyses.var_genemaps.gene_symbol
+        db_key: var_genemaps.gene_symbol
     biosamples:
       location:
         db_key: geo_location.geometry
@@ -82,7 +82,7 @@ indexed_special_dbs:
   progenetix:
     analyses:
       gene_id:
-        db_key: analyses.var_genemaps.gene_symbol
+        db_key: var_genemaps.gene_symbol
     biosamples:
       location:
         db_key: geo_location.geometry

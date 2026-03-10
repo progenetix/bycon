@@ -9,7 +9,17 @@ from urllib.parse import urlparse, unquote
 from os import environ
 
 from bycon_helpers import prdbug, prdbughead, ByconError, ByconH, ByconMongo
-from config import BYC, BYC_DBS, BYC_PARS, HTTP_HOST, PARAM_NONE_VALUES, REQUEST_METHOD, REQUEST_PATH_PARAMS, REQUEST_PATH_ROOT, REQUEST_URI
+from config import (
+    BYC,
+    BYC_DBS,
+    BYC_PARS,
+    HTTP_HOST,
+    PARAM_NONE_VALUES,
+    REQUEST_METHOD,
+    REQUEST_PATH_PARAMS,
+    REQUEST_PATH_ROOT,
+    REQUEST_URI
+)
 
 ################################################################################
 
@@ -22,6 +32,7 @@ class ByconParameters:
         self.request_query  = {}
 
         self.__detect_request_environment()
+
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -36,7 +47,6 @@ class ByconParameters:
     def set_parameters(self):
         self.__process_parameters()
         BYC_PARS.update(self.byc_pars)
-        # prdbughead(BYC_PARS)
         return self.byc_pars
 
 
@@ -91,10 +101,35 @@ class ByconParameters:
         self.__pars_from_shell()
         self.__pars_from_POST()
         self.__pars_from_GET()
+        self.__add_gene_id_filter()
         self.__set_debug_mode()
 
 
     # -------------------------------------------------------------------------#
+
+    def __add_gene_id_filter(self):
+        if not (gene_ids := self.byc_pars.get("gene_id")):
+            return
+        if not isinstance(gene_ids, list):
+            gene_ids = [gene_ids]
+        n_g_pars = []
+        for g_id in gene_ids:
+            if not g_id:
+                continue
+            prdbug("... adding gene_id filter for gene id => " + str(g_id))
+            if str(g_id).upper() not in BYC.get("priority_genes", {}).keys():
+                n_g_pars.append(g_id)
+                continue
+            if "fiters" not in self.byc_pars:
+                self.byc_pars.update({"filters": []})
+            self.byc_pars["filters"].append({"id": f"__GENEID__:{g_id}"})
+        if len(n_g_pars) > 0:
+            self.byc_pars.update({"gene_id": n_g_pars})
+        else:
+            self.byc_pars.pop("gene_id", None)
+
+    # -------------------------------------------------------------------------#
+
 
     def __arguments_set_defaults(self):
         for a, d in self.arg_defs.items():
@@ -345,6 +380,7 @@ class ByconFilters:
         self.filter_pars        = BYC_PARS.get("filters", [])
         self.parsed_filters     = []
         self.__parse_filters()
+        prdbug(f"parsed_filters => {self.parsed_filters}")
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
@@ -370,27 +406,6 @@ class ByconFilters:
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
-    def __add_gene_id_filter(self):
-        if not (gene_ids := BYC_PARS.get("gene_id")):
-            return
-        if not isinstance(gene_ids, list):
-            gene_ids = [gene_ids]
-        n_g_pars = []
-        for g_id in gene_ids:
-            if not g_id:
-                continue
-            if str(g_id).upper() not in BYC.get("priority_genes", {}):
-                n_g_pars.append(g_id)
-                continue
-            self.filter_pars.append({"id": {f"__GENEID__:{g_id}"}})
-        if len(n_g_pars) > 0:
-            BYC_PARS.update({"gene_id": n_g_pars})
-        else:
-            BYC_PARS.pop("gene_id", None)
-
-
-    # -------------------------------------------------------------------------#
-
     def __parse_filters(self):
         """
         The function checks the filter values for a match to any of the filter
@@ -403,12 +418,14 @@ class ByconFilters:
         for f in self.filter_pars:
             if not isinstance(f, dict):
                 f = {"id": f}
+            prdbug(f"... __parse_filters: {f}")
             if "id" not in f:
                 continue
             deflagged = re.sub(r'^!', '', f["id"])
             matched = False
             for f_p in self.filter_patterns:
                 if re.compile(f_p).match(deflagged):
+                    prdbug(f".... filter {f['id']} matches pattern {f_p}")
                     matched = True
                     continue
             if matched is False:

@@ -18,7 +18,7 @@ class ByconSummaries:
         self.summaries          = []
         self.dataset_summaries  = [] 
         self.__select_summaries()
-        prdbug(f"Selected summaries for dataset {ds_id}: {self.summaries}")
+        # prdbug(f"Selected summaries for dataset {ds_id}: {self.summaries}")
 
 
     # -------------------------------------------------------------------------#
@@ -194,7 +194,7 @@ class ByconSummaries:
             }
         )
         # sorting either on logical order () detection order
-        prdbug(f"... concept {concepts[0].get("id")} sorted?: {concepts[0].get("sorted")}")
+        # prdbug(f"... concept {concepts[0].get("id")} sorted?: {concepts[0].get("sorted")}")
         if concepts[0].get("sorted") is True:
             agg_p.append({ "$sort": { "_id.order": 1 } })
             a_v.update({"sorted": True})
