@@ -44,7 +44,7 @@ $defs:
     entity: analysis
     db_key: 'var_genemaps.gene_symbol'
     request_parameter: geneId
-    pattern: '__GENEID__\:\w+$'  # temp modification for matching...
+    pattern: '^\w+$'
     collationed: False
     examples:
       - BRCA1

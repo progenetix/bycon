@@ -396,7 +396,7 @@ The maximum variant length in bases e.g. for CNV queries.
 **items:**  
     - `pattern`: `^\w+?(\w+?(\-\w+?)?)?$`      
     - `type`: `string`    
-**db_key:** None    
+**db_key:** var_genemaps.gene_symbol    
 **cmdFlags:** `--geneId`    
 **description:**
 one or more (comma concatenated) gene ids    

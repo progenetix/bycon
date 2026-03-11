@@ -101,7 +101,7 @@ class ByconParameters:
         self.__pars_from_shell()
         self.__pars_from_POST()
         self.__pars_from_GET()
-        self.__add_gene_id_filter()
+        # self.__add_gene_id_filter()
         self.__set_debug_mode()
 
 

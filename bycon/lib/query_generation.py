@@ -422,10 +422,11 @@ class ByconQuery:
         return variant_request_type
 
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __create_geneVariantRequest_query(self, v_pars):
         # query database for gene and use coordinates to create range query
+        # or fork of to analyses collection for priority genes
         gene_id = v_pars.get("gene_id", [])
         prdbug(f"...GeneIdRequest gene_id: {gene_id}")
         queries = []
@@ -434,6 +435,7 @@ class ByconQuery:
             # NOTE: priority genes are not queried for coordinates but directly 
             # by gene symbol against the `analyses` collection
             if g in BYC.get("priority_genes", {}).keys():
+                self.__create_genemap_query(g, v_pars)
                 continue
             # TODO: error report/warning
             if not (gene_data := GeneInfo().returnGene(g)):
@@ -458,7 +460,29 @@ class ByconQuery:
         return queries
 
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __create_genemap_query(self, g, v_pars):
+        v_p_defs    = self.argument_definitions
+        gene        = g.upper()
+        query       = { v_p_defs["gene_id"]["db_key"]: gene }
+        entity      = "analysis"
+
+        if "variant_type" in v_pars:
+            q_p = None
+            if (hl := v_pars.get("variant_type", "").get("HLDUPDEL")):
+                q_p = f"{hl.lower()}_fraction"
+            elif (ll := v_pars.get("variant_type", "").get("DUPDEL")):
+                q_p = f"{ll.lower()}_fraction"
+            if q_p:
+                query.update({q_p: {"$gt": 0}})
+
+        self.__update_queries_for_entity(query, entity)
+
+        # ./beaconServer/beacon.py -d progenetix -r analyses --geneId CDKN2A --limit 2 --debugMode true --variantType "EFO:0020073"
+
+
+    # -------------------------------------------------------------------------#
 
     def __create_variantQueryDigestsRequest_query(self, v_pars):
         # query database for gene and use coordinates to create range query
@@ -520,7 +544,7 @@ class ByconQuery:
         # TODO: Allele query...
 
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __create_cytoBandRequest_query(self, v_pars):
         # query database for cytoband(s) and use coordinates to create range query
@@ -538,7 +562,7 @@ class ByconQuery:
         return self.__create_variantRangeRequest_query(v_pars)
 
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __create_aminoacidChangeRequest_query(self, v_pars):
         vp = v_pars
@@ -554,7 +578,7 @@ class ByconQuery:
         return v_q
 
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __create_genomicAlleleShortFormRequest_query(self, v_pars):
         vp = v_pars
@@ -571,7 +595,7 @@ class ByconQuery:
         return v_q
 
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __create_variantTypeRequest_query(self, v_pars):
         v_p_defs = self.argument_definitions
@@ -585,7 +609,7 @@ class ByconQuery:
         return v_q
 
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __create_variantFusionRequest_query(self, v_pars):
         vp = v_pars
@@ -645,7 +669,7 @@ class ByconQuery:
         return v_q
 
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __create_variantRangeRequest_query(self, v_pars):
         vp = v_pars
@@ -679,7 +703,7 @@ class ByconQuery:
         return v_q
 
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __request_variant_size_limits(self, v_pars):
         vp = v_pars
@@ -700,7 +724,7 @@ class ByconQuery:
         return None
 
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __create_variantBracketRequest_query(self, v_pars):
         vp = v_pars
@@ -726,7 +750,7 @@ class ByconQuery:
         return v_q
 
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __create_variantAlleleRequest_query(self, v_pars):
         """ """
@@ -751,7 +775,7 @@ class ByconQuery:
         return v_q
 
 
-    # --------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
 
     def __create_in_query_for_parameter(self, par, qpar, q_pars):
 

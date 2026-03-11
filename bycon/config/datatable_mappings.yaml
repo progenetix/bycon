@@ -437,7 +437,6 @@ $defs:
         db_key: geo_location.geometry.coordinates
         # computed: True
 
-
       age_days:
         type: number
         db_key: individual_info.index_disease.onset.age_days

@@ -317,6 +317,7 @@ def phenopack_individual(ind, data_db):
 
 def individual_remap_pgx_diseases(ind):
     # TODO: This should be more general, i.e. what is mapped/how, deleted...
+    # TODO: remap disease.onset.age => disease.onset.age.iso8601duration
 
     diseases = []
 
