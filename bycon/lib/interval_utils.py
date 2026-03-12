@@ -186,7 +186,7 @@ class GenomeBins:
                 gene_type       = g.get("gene_type", "")
 
                 cbs = str(self.CB.cytobands_label_from_positions(chro, start, end))
-                base_keys = {"gene_id", "gene_symbol", "gene_type", "chrom", "start", "end"}
+                base_keys = {"gene_id", "gene_symbol", "gene_type", "chrom", "start", "end", "no"}
                 info = {k: v for k, v in g.items() if k not in base_keys}
 
                 self.genomic_intervals.append({
@@ -365,8 +365,9 @@ class GenomeBins:
         for i, intv in enumerate(self.genomic_intervals):
             i_stats = {}
             for cov_lab in {**self.cov_labs, **self.hl_labs}.values():
-                i_stats[cov_lab] = self.coverage_maps[cov_lab][i]
-                i_stats[f"{cov_lab}_fraction"] = self.fraction_maps[cov_lab][i]
+                # i_stats[cov_lab] = self.coverage_maps[cov_lab][i]
+                i_stats[cov_lab] = self.fraction_maps[cov_lab][i]
+                # i_stats[f"{cov_lab}_fraction"] = self.fraction_maps[cov_lab][i]
 
             if any(value > 0 for value in i_stats.values()):
                 pos_int = deepcopy(intv)
@@ -535,7 +536,7 @@ class GenomeBins:
             for i, analysis in enumerate(self.analyses):
                 # the fallback is also a zeroed array ...
                 covs[i] = analysis["cnv_statusmaps"].get(cov_l, [0] * self.interval_count)
-                hls[i]  = analysis["cnv_statusmaps"].get(hl_l, [0] * self.interval_count)
+                hls[i]  = analysis["cnv_statusmaps"].get(hl_l,  [0] * self.interval_count)
 
             # counting all occurrences of an interval for the current type > interval_min_fraction
             counts          = np.count_nonzero(covs >= self.int_min_frac, axis=0)

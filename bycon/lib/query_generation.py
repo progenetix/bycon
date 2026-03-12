@@ -483,9 +483,9 @@ class ByconQuery:
         if (v_t := BYC_PARS.get("variant_type")):
             q_p = None
             if (hl := v_t_defs.get(v_t, {}).get("HLDUPDEL")):
-                q_p = f"{hl.lower()}_fraction"
+                q_p = f"{hl.lower()}"
             elif (ll := v_t_defs.get(v_t, {}).get("DUPDEL")):
-                q_p = f"{ll.lower()}_fraction"
+                q_p = f"{ll.lower()}"
             if q_p:
                 query_obj.update({q_p: {"$gt": 0}})
             else:
