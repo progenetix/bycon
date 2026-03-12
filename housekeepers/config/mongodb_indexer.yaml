@@ -30,6 +30,14 @@ indexed_special_dbs:
     analyses:
       gene_id:
         db_key: var_genemaps.gene_symbol
+      hldel:
+        db_key: var_genemaps.hldel_fraction
+      del:
+        db_key: var_genemaps.del_fraction
+      hldup:
+        db_key: var_genemaps.hldup_fraction
+      dup:
+        db_key: var_genemaps.dup_fraction
     biosamples:
       location:
         db_key: geo_location.geometry
@@ -83,6 +91,14 @@ indexed_special_dbs:
     analyses:
       gene_id:
         db_key: var_genemaps.gene_symbol
+      hldel:
+        db_key: var_genemaps.hldel_fraction
+      del:
+        db_key: var_genemaps.del_fraction
+      hldup:
+        db_key: var_genemaps.hldup_fraction
+      dup:
+        db_key: var_genemaps.dup_fraction
     biosamples:
       location:
         db_key: geo_location.geometry

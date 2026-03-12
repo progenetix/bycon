@@ -463,23 +463,40 @@ class ByconQuery:
     # -------------------------------------------------------------------------#
 
     def __create_genemap_query(self, g, v_pars):
+        """
+        The Genemap Query accesses the special data structure for mapped genes
+        in the `analyses` collection which is currently only used for a set of
+        priority genes and only . The query is created based on the gene symbol
+        and potentially the variant type (if provided) and the respective mapping
+        information for this type (if available). Since the mapped gene info
+        does not contain the types of variants hitting this analysis' instance
+        the type of (CNV) variants is interpolated through their respective
+        coverage values. 
+        """
         v_p_defs    = self.argument_definitions
+        v_t_defs    = self.variant_type_definitions
         gene        = g.upper()
-        query       = { v_p_defs["gene_id"]["db_key"]: gene }
+        query_obj   = {}
         entity      = "analysis"
 
-        if "variant_type" in v_pars:
+        if (v_t := BYC_PARS.get("variant_type")):
             q_p = None
-            if (hl := v_pars.get("variant_type", "").get("HLDUPDEL")):
+            if (hl := v_t_defs.get(v_t, {}).get("HLDUPDEL")):
                 q_p = f"{hl.lower()}_fraction"
-            elif (ll := v_pars.get("variant_type", "").get("DUPDEL")):
+            elif (ll := v_t_defs.get(v_t, {}).get("DUPDEL")):
                 q_p = f"{ll.lower()}_fraction"
             if q_p:
-                query.update({q_p: {"$gt": 0}})
+                query_obj.update({q_p: {"$gt": 0}})
+
+        if len(query_obj.keys()) > 0:
+            query_obj.update({"gene_symbol": gene})
+            query = {"var_genemaps": {"$elemMatch": query_obj}}
+        else:
+            query = {"var_genemaps.gene_symbol": gene}
 
         self.__update_queries_for_entity(query, entity)
 
-        # ./beaconServer/beacon.py -d progenetix -r analyses --geneId CDKN2A --limit 2 --debugMode true --variantType "EFO:0020073"
+        # ./beaconServer/beacon.py -d progenetix -r analyses --geneId CDKN2A --variantType "EFO:0020073"
 
 
     # -------------------------------------------------------------------------#
@@ -1084,6 +1101,9 @@ class GeoQuery:
         for g_k in g_k_s:
             if not self.geo_pars.get(g_k):
                 self.geo_pars.pop(g_k, None)
+
+        if len(self.geo_pars) == 1 and "geo_distance" in self.geo_pars:
+            self.geo_pars = {}
 
         prdbug(f"...__get_geo_pars: {self.geo_pars}")
 
