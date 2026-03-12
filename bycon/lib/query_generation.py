@@ -434,7 +434,7 @@ class ByconQuery:
             g = g.upper()
             # NOTE: priority genes are not queried for coordinates but directly 
             # by gene symbol against the `analyses` collection
-            if g in BYC.get("priority_genes", {}).keys():
+            if self.__check_if_genemap_query(g, v_pars):
                 self.__create_genemap_query(g, v_pars)
                 continue
             # TODO: error report/warning
@@ -459,6 +459,21 @@ class ByconQuery:
 
         return queries
 
+    # -------------------------------------------------------------------------#
+
+    def __check_if_genemap_query(self, g, v_pars):
+        v_t_defs    = self.variant_type_definitions
+        if g not in BYC.get("priority_genes", {}).keys():
+            return False
+
+        # TODO: adjust for multivars ...?
+        if not (v_t := BYC_PARS.get("variant_type")):
+            return True
+        if not (ll := v_t_defs.get(v_t, {}).get("DUPDEL")):
+            return False
+
+        return True
+
 
     # -------------------------------------------------------------------------#
 
@@ -473,7 +488,6 @@ class ByconQuery:
         the type of (CNV) variants is interpolated through their respective
         coverage values. 
         """
-        v_p_defs    = self.argument_definitions
         v_t_defs    = self.variant_type_definitions
         gene        = g.upper()
         query_obj   = {}
