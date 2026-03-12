@@ -434,8 +434,7 @@ class ByconQuery:
             g = g.upper()
             # NOTE: priority genes are not queried for coordinates but directly 
             # by gene symbol against the `analyses` collection
-            if self.__check_if_genemap_query(g, v_pars):
-                self.__create_genemap_query(g, v_pars)
+            if self.__create_genemap_query(g, v_pars):
                 continue
             # TODO: error report/warning
             if not (gene_data := GeneInfo().returnGene(g)):
@@ -459,21 +458,6 @@ class ByconQuery:
 
         return queries
 
-    # -------------------------------------------------------------------------#
-
-    def __check_if_genemap_query(self, g, v_pars):
-        v_t_defs    = self.variant_type_definitions
-        if g not in BYC.get("priority_genes", {}).keys():
-            return False
-
-        # TODO: adjust for multivars ...?
-        if not (v_t := BYC_PARS.get("variant_type")):
-            return True
-        if not (ll := v_t_defs.get(v_t, {}).get("DUPDEL")):
-            return False
-
-        return True
-
 
     # -------------------------------------------------------------------------#
 
@@ -493,6 +477,9 @@ class ByconQuery:
         query_obj   = {}
         entity      = "analysis"
 
+        if g not in BYC.get("priority_genes", {}).keys():
+            return False
+
         if (v_t := BYC_PARS.get("variant_type")):
             q_p = None
             if (hl := v_t_defs.get(v_t, {}).get("HLDUPDEL")):
@@ -501,6 +488,11 @@ class ByconQuery:
                 q_p = f"{ll.lower()}_fraction"
             if q_p:
                 query_obj.update({q_p: {"$gt": 0}})
+            else:
+                prdbug(f"!!! no mapping for variant type {v_t} in genemap query!")
+                return False
+        else:
+            query = {"var_genemaps.gene_symbol": gene}
 
         if len(query_obj.keys()) > 0:
             query_obj.update({"gene_symbol": gene})
@@ -509,6 +501,10 @@ class ByconQuery:
             query = {"var_genemaps.gene_symbol": gene}
 
         self.__update_queries_for_entity(query, entity)
+
+        # returning True since the query is directly added to the queries list
+        # and no further geneId parsing is needed
+        return True
 
         # ./beaconServer/beacon.py -d progenetix -r analyses --geneId CDKN2A --variantType "EFO:0020073"
 
