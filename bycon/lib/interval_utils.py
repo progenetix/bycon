@@ -78,6 +78,8 @@ class GenomeBins:
         else:
             self.binning = BYC_PARS.get("genome_binning", "1Mb")
 
+        self.cnv_lengths    = False
+
         self.CB             = Cytobands()
         self.cytolimits     = self.CB.get_all_cytolimits()
         self.genome_size    = self.CB.get_genome_size()
@@ -131,6 +133,7 @@ class GenomeBins:
 
     def getAnalysisCNVintervals(self, analysis_variants=[]):
         self.analysis_variants = analysis_variants
+        self.cnv_lengths = True
         self.__process_analysis_intervals_for_cnvs()
         self.coverage_intervals = []        
         self.__interval_cnv_coverage_objects()
@@ -301,10 +304,19 @@ class GenomeBins:
 
     def __interval_cnv_coverage_arrays(self):
         # Initialize coverage maps with default values
-        self.coverage_maps = self.maps.copy()
+        self.coverage_maps  = {}
+        self.segments_stash = False
+        if self.cnv_lengths:
+            self.segments_stash = {}
         self.coverage_maps.update({"variant_count": 0})
         for label in {**self.cov_labs, **self.hl_labs}.values():
-            self.coverage_maps[label] = [0] * self.interval_count
+            self.coverage_maps.update({label: []})
+            for i in range(0, self.interval_count):
+                self.coverage_maps[label].append(0)
+            if self.cnv_lengths:
+                self.segments_stash.update({label: []})
+                for i in range(0, self.interval_count):
+                    self.segments_stash[label].append(set())
 
         # Handle empty or non-iterable analysis_variants
         if type(self.analysis_variants).__name__ == "Cursor":
@@ -345,12 +357,23 @@ class GenomeBins:
 
             for i, intv in enumerate(self.genomic_intervals):
                 if self.__has_overlap(intv, variant):
-                    overlap_end     = min(intv["end"], variant["location"]["end"])
-                    overlap_start   = max(intv["start"], variant["location"]["start"])
+                    i_s = intv["start"]
+                    i_e = intv["end"]
+                    v_s = variant["location"]["start"]
+                    v_e = variant["location"]["end"]
+                    v_l = v_e - v_s
+                    overlap_end     = min(i_e, v_e)
+                    overlap_start   = max(i_s, v_s)
                     overlap_length  = overlap_end - overlap_start
                     self.coverage_maps[cov_label][i] += overlap_length
+                    # print(f"cov {cov_label} - {i}: {intv["reference_name"]}:{i_s}-{i_e} => {variant["location"].get("chromosome")}:{v_s}-{v_e}")
+                    if self.segments_stash:
+                        self.segments_stash[cov_label][i].add(v_l)
+                        # print(f"cov {cov_label} - {i}: {self.segments_stash[cov_label][i]} => {self.coverage_maps[cov_label][i]}")
                     if hl_label:
                         self.coverage_maps[hl_label][i] += overlap_length
+                        if self.segments_stash:
+                            self.segments_stash[hl_label][i].add(v_l)
 
             self.coverage_maps["variant_count"] += 1
 
@@ -372,6 +395,13 @@ class GenomeBins:
             if any(value > 0 for value in i_stats.values()):
                 pos_int = deepcopy(intv)
                 pos_int.update(i_stats)
+                max_seg = 0
+                for cov_lab in {**self.cov_labs, **self.hl_labs}.values():
+                    if (segs := self.segments_stash[cov_lab][i]):
+                        if (max_s := max(segs)) > max_seg:
+                            max_seg = max_s
+                        pos_int.update({f"{cov_lab}_max_segment": max_s})
+                pos_int.update({"max_segment":max_seg})
                 self.coverage_intervals.append(pos_int)
 
 
@@ -489,7 +519,7 @@ class GenomeBins:
 
     # -------------------------------------------------------------------------#
 
-    def __round_frac(self, val, maxval, digits=3):
+    def __round_frac(self, val, maxval, digits=4):
         if (f := round(val / maxval, digits)) > 1:
             f = 1
         return f

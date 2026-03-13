@@ -480,8 +480,10 @@ class ByconQuery:
         if g not in BYC.get("priority_genes", {}).keys():
             return False
 
+        query_obj   = {"gene_symbol": gene}
+
+        q_p = None
         if (v_t := BYC_PARS.get("variant_type")):
-            q_p = None
             if (hl := v_t_defs.get(v_t, {}).get("HLDUPDEL")):
                 q_p = f"{hl.lower()}"
             elif (ll := v_t_defs.get(v_t, {}).get("DUPDEL")):
@@ -491,13 +493,14 @@ class ByconQuery:
             else:
                 prdbug(f"!!! no mapping for variant type {v_t} in genemap query!")
                 return False
-        else:
-            query = {"var_genemaps.gene_symbol": gene}
 
-        if len(query_obj.keys()) > 0:
-            query_obj.update({"gene_symbol": gene})
+        if maxl := v_pars.get(p_n):
+            query_obj.update({"max_segment": {"$lte": maxl}})
+
+        if len(query_obj.keys()) > 1:
             query = {"var_genemaps": {"$elemMatch": query_obj}}
         else:
+            # direct dotted query
             query = {"var_genemaps.gene_symbol": gene}
 
         self.__update_queries_for_entity(query, entity)
