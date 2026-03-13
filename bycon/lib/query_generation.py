@@ -494,7 +494,7 @@ class ByconQuery:
                 prdbug(f"!!! no mapping for variant type {v_t} in genemap query!")
                 return False
 
-        if maxl := v_pars.get(p_n):
+        if maxl := v_pars.get("variant_max_length"):
             query_obj.update({"max_segment": {"$lte": maxl}})
 
         if len(query_obj.keys()) > 1:
@@ -503,7 +503,12 @@ class ByconQuery:
             # direct dotted query
             query = {"var_genemaps.gene_symbol": gene}
 
+        print(f"...Genemap query:")
+        prjsonnice(query)
+
         self.__update_queries_for_entity(query, entity)
+
+
 
         # returning True since the query is directly added to the queries list
         # and no further geneId parsing is needed
