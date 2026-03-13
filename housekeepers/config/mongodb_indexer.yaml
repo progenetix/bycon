@@ -34,18 +34,22 @@ indexed_special_dbs:
         db_key:
           var_genemaps.gene_symbol: 1
           var_genemaps.hldel: 1
+          var_genemaps.max_segment: 1
       gene_id_del:
         db_key:
           var_genemaps.gene_symbol: 1
           var_genemaps.del: 1
+          var_genemaps.max_segment: 1
       gene_id_hldup:
         db_key:
           var_genemaps.gene_symbol: 1
           var_genemaps.hldup: 1
+          var_genemaps.max_segment: 1
       gene_id_dup:
         db_key:
           var_genemaps.gene_symbol: 1
           var_genemaps.dup: 1
+          var_genemaps.max_segment: 1
     biosamples:
       location:
         db_key: geo_location.geometry
@@ -103,18 +107,22 @@ indexed_special_dbs:
         db_key:
           var_genemaps.gene_symbol: 1
           var_genemaps.hldel: 1
+          var_genemaps.max_segment: 1
       gene_id_del:
         db_key:
           var_genemaps.gene_symbol: 1
           var_genemaps.del: 1
+          var_genemaps.max_segment: 1
       gene_id_hldup:
         db_key:
           var_genemaps.gene_symbol: 1
           var_genemaps.hldup: 1
+          var_genemaps.max_segment: 1
       gene_id_dup:
         db_key:
           var_genemaps.gene_symbol: 1
           var_genemaps.dup: 1
+          var_genemaps.max_segment: 1
     biosamples:
       location:
         db_key: geo_location.geometry
