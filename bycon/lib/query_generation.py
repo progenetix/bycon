@@ -510,6 +510,7 @@ class ByconQuery:
         return True
 
         # ./beaconServer/beacon.py -d progenetix -r analyses --geneId CDKN2A --variantType "EFO:0020073"
+        # db.analyses.findOne({"var_genemaps":{$elemMatch:{"gene_symbol":"CDKN2A","max_segment":{$lte:500000}, "hldel": 1}}})
 
 
     # -------------------------------------------------------------------------#
