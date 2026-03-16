@@ -465,12 +465,13 @@ class ByconQuery:
         """
         The Genemap Query accesses the special data structure for mapped genes
         in the `analyses` collection which is currently only used for a set of
-        priority genes and only . The query is created based on the gene symbol
+        priority genes. The query is created based on the gene symbol
         and potentially the variant type (if provided) and the respective mapping
         information for this type (if available). Since the mapped gene info
         does not contain the types of variants hitting this analysis' instance
         the type of (CNV) variants is interpolated through their respective
-        coverage values. 
+        coverage values.
+        Also: max variant length
         """
         v_t_defs    = self.variant_type_definitions
         gene        = g.upper()
