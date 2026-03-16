@@ -16,7 +16,10 @@ milestones.
     - information so far can be retrieved by explicitely adding `--deliveryKeys var_genemaps`
       or `&deliveryKeys=var_genemaps` in command line or to the query, respectively
     - `var_genemaps` objects are generated through an addition to the `GenomeBins`
-      class (in `__generate_gene_intervals` and `__interval_cnv_coverage_objects`)
+      class (in `__generate_gene_intervals` and `__interval_cnv_coverage_objects`).
+      please note that maps are **sparse**. _i.e._ only contain information about
+      matched genes with at least one (CNV) hit.
+    - Example (for MYCN in an analysis with high level duplication):
 ```
     {
       no: 126,
