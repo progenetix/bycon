@@ -119,9 +119,9 @@ def remap_analyses(r_s_res):
                 if k not in d_k_s:
                     r_s_res[cs_i].pop(k, None)
         return r_s_res
-        # ./beaconServer/beacon.py -d progenetix -r analyses --geneId CDKN2A --variantType "EFO:0020073" --deliveryKeys var_genemaps
+        # ./beaconServer/beacon.py -d progenetix -r analyses --includeHandovers false --geneId CDKN2A --variantType "EFO:0020073" --deliveryKeys var_genemaps
 
-    pop_keys = ["info", "geo_location", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
+    pop_keys = ["info", "geo_location", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats", "var_genemaps"]
     # TODO: move the cnvstats option away from here
     if "cnvstats" in str(BYC_PARS.get("request_entity_path_id")):
         pop_keys = ["info", "cnv_statusmaps"]

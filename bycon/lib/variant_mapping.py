@@ -1,10 +1,11 @@
 import re
 
+from ga4gh.vrs.dataproxy import SequenceProxy, create_dataproxy
+from humps import decamelize
+
 from bycon_helpers import get_nested_value
 from config import BYC
-from ga4gh.vrs.dataproxy import SequenceProxy, create_dataproxy
 from genome_utils import ChroNames
-from humps import decamelize
 from parameter_parsing import RefactoredValues
 from vrs_translator import AdjacencyTranslator, AlleleTranslator, CnvTranslator
 

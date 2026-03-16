@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 
-# version: 2024-12-05
+# version: 2025-03-16
 
 import sys, re, yaml
 from os import getlogin, makedirs, path, system
@@ -31,6 +31,8 @@ def main(no_sudo):
         sudo_cmd = ""
     else:
         sudo_cmd = "sudo"
+
+    cmdargs = sys.argv[1:]
 
     local_conf_source = path.join(dir_path, "local", "")
     i_f = path.join(local_conf_source, "env_paths.yaml" )
@@ -75,9 +77,13 @@ def main(no_sudo):
     system(f'{sudo_cmd} chmod 775 {services_target}*.py')
     print(f'{sudo_cmd} chmod 775 {services_target}*.py')
 
-    print(f'Updated bycon files from\n{path.join(dir_path, "bycon")}\nto\n{b_i_d_p}')
+    print(f'Updated bycon executable files from\n{path.join(dir_path, "bycon")}\nto\n{b_i_d_p}')
 
     ############################################################################
+
+    if "-w" not in cmdargs:
+        print('Skipping web frontend build and installation. Use `-w` to enable.')
+        exit()
 
     proceed = ""
     proceed = input(f'Do you want to build the web frontend?\n"y" => test server, "s" => main server, otherwise enter for stopping: ')
@@ -111,7 +117,7 @@ def main(no_sudo):
 ################################################################################
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1 and sys.argv[1] == "--no-sudo":
+    if len(sys.argv) > 1 and "--no-sudo" in sys.argv:
         no_sudo = True
     else:
         no_sudo = False

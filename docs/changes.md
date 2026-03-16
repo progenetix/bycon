@@ -6,6 +6,34 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### 2026-03-16 (v2.8.0 "genemaps")
+
+* added genemaps as `var_genemaps` to the internal `analyses` records:
+    - based on a list of ~1300 (at this time) cancer associated genes
+    - contains information about CNV (so far) hits on these genes per sample, including
+      CNV class (indirectly through e.g. `hldup` for fraction of high-level duplication
+      of the gene's CDRT), and gene information
+    - information so far can be retrieved by explicitely adding `--deliveryKeys var_genemaps`
+      or `&deliveryKeys=var_genemaps` in command line or to the query, respectively
+    - `var_genemaps` objects are generated through an addition to the `GenomeBins`
+      class (in `__generate_gene_intervals` and `__interval_cnv_coverage_objects`)
+```
+    {
+      no: 126,
+      id: 'ENSG00000134323.12',
+      reference_name: '2', cytobands: '2p24.3',
+      start: 15940549, end: 15947007, size: 6458,
+      gene_symbol: 'MYCN',
+      info: {onco_gene_type: 'oncogene', oncokb_flag: '1', cosmic_flag: '1'},
+      dup: 1, del: 0, hldup: 1, hldel: 0,
+      dup_max_segment: 264191, hldup_max_segment: 264191, max_segment: 264191
+    },
+```
+* `geneId` querys now utilize this information if `geneId` parameter is in list of
+  pre-computed genes; otherwise fallback to positional query
+* aggregation responses and their processing in the web stack have been adjusted 
+  the newer formats (still experimental)
+
 ### 2026-02-25 (v2.7.5)
 
 * summaries code optimization

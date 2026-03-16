@@ -4,6 +4,7 @@
 # We're using versioned pip and python here.
 # CAVE: Installation with `--no-isolation` to enable offline builds
 # pip3 uninstall bycon --break-system-packages
+A=$1
 python3 -m build --no-isolation --sdist .
 
 # Temporary installation target; removed at the end
@@ -15,7 +16,7 @@ pip3 install $BY --no-index --no-build-isolation --break-system-packages
 
 # installation of beacon and services apps into the webserver locations
 # this also asks for website generation
-./install.py
+./install.py $A
 
 # cleanup
 rm -rf ./build
