@@ -103,10 +103,6 @@ class VariantsResponse:
 def remap_analyses(r_s_res):
     if not "analysis" in BYC["response_entity_id"]:
         return r_s_res
-    pop_keys = ["info", "geo_location", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
-    # TODO: move the cnvstats option away from here
-    if "cnvstats" in str(BYC_PARS.get("request_entity_path_id")):
-        pop_keys = ["info", "cnv_statusmaps"]
 
     for cs_i, cs_r in enumerate(r_s_res):
         # TODO: REMOVE VERIFIER HACKS (partially done...)
@@ -115,8 +111,24 @@ def remap_analyses(r_s_res):
             "pipeline_name": p_i.get("id", "progenetix"),
             "analysis_date": cs_r.get("analysis_date", date_isoformat(datetime.now()))
         })
+
+    if len(d_k_s := BYC_PARS.get("delivery_keys", [])) > 0:
+        d_k_s = ["id", "biosample_id", "individual_id"] + d_k_s
+        for cs_i, cs_r in enumerate(r_s_res):
+            for k in list(cs_r.keys()):
+                if k not in d_k_s:
+                    r_s_res[cs_i].pop(k, None)
+        return r_s_res
+        # ./beaconServer/beacon.py -d progenetix -r analyses --geneId CDKN2A --variantType "EFO:0020073" --deliveryKeys var_genemaps
+
+    pop_keys = ["info", "geo_location", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats"]
+    # TODO: move the cnvstats option away from here
+    if "cnvstats" in str(BYC_PARS.get("request_entity_path_id")):
+        pop_keys = ["info", "cnv_statusmaps"]
+    for cs_i, cs_r in enumerate(r_s_res):
         for k in pop_keys:
             r_s_res[cs_i].pop(k, None)
+
     return r_s_res
 
 
