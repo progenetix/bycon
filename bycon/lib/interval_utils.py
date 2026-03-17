@@ -411,6 +411,7 @@ class GenomeBins:
     def __interval_cnv_fraction_arrays(self):
         if not self.coverage_maps:
             self.__interval_cnv_coverage_arrays()
+
         self.fraction_maps = deepcopy(self.coverage_maps)
 
         if (self.coverage_maps.get("variant_count", 0)) < 1:

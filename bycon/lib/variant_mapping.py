@@ -3,6 +3,8 @@ import re
 from ga4gh.vrs.dataproxy import SequenceProxy, create_dataproxy
 from humps import decamelize
 
+# ------------------------------- bycon imports -------------------------------#
+
 from bycon_helpers import get_nested_value
 from config import BYC
 from genome_utils import ChroNames

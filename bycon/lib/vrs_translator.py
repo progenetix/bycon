@@ -3,6 +3,8 @@
 Input formats: VRS (serialized), hgvs, spdi, gnomad (vcf), beacon
 Output formats: VRS (serialized), hgvs, spdi, gnomad (vcf)
 
+**This is a modified version, speziell for the `bycon` project.**
+
 """
 
 import logging

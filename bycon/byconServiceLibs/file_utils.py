@@ -1,6 +1,5 @@
 import csv
 import re
-import requests
 
 from pathlib import Path
 from os import environ, pardir, path

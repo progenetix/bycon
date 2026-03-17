@@ -2,7 +2,8 @@ import csv, re, yaml
 from os import environ, path, pardir
 from pymongo import MongoClient
 
-# local
+# ------------------------------- bycon imports -------------------------------#
+
 from bycon_helpers import ByconError, ByconTSVreader, prdbug
 from config import *
 

@@ -6,6 +6,8 @@ from pymongo import MongoClient
 from os import environ
 from isodate import date_isoformat
 
+# ------------------------------- bycon imports -------------------------------#
+
 from bycon_helpers import prdbug, clean_empty_properties
 from config import *
 from variant_mapping import ByconVariant

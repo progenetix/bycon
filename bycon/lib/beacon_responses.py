@@ -6,6 +6,8 @@ from datetime import datetime
 from deepmerge import always_merger
 from humps import camelize
 
+# ------------------------------- bycon imports -------------------------------#
+
 from bycon_helpers import ByconError, ByconH, ByconMongo, clean_empty_properties, dict_replace_values, prdbug, prjsoncam
 from bycon_summaries import ByconSummaries
 from config import BEACON_ROOT, BYC, BYC_DBS, BYC_PARS, HTTP_HOST
