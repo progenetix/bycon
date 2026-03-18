@@ -239,19 +239,19 @@ class ByconVariant:
         but does not try to accommodate all use cases.
         """
 
-        v = self.byc_variant
-        l_o = v.get("location", {})
-        v_s = v.get("variant_state", {})
-        v_s_id = v_s.get("id", "___none___").replace(":", "_")
-        s_id = l_o.get("sequence_id")
-        chro = l_o.get("chromosome")
-        pgxseg_l = self.__pgxseg_line().replace("\t", "::")
+        v       = self.byc_variant
+        l_o     = v.get("location", {})
+        v_s     = v.get("variant_state", {})
+        v_s_id  = v_s.get("id", "___none___").replace(":", "_")
+        s_id    = l_o.get("sequence_id")
+        chro    = l_o.get("chromosome")
+        pgxseg  = self.__pgxseg_line().replace("\t", "::")
 
         if not (cnv_l := self.byc_variant.get("VRS_cnv_type")):
             return v
 
         vrs_v = self.vrs_cnv_translator.translate_from(
-            pgxseg_l, "pgxseg", copy_change=cnv_l
+            pgxseg, "pgxseg", copy_change=cnv_l
         )
         self.vrs_variant = decamelize(vrs_v.model_dump(exclude_none=True))
         self.vrs_variant["location"].update({"sequence_id": s_id, "chromosome": chro})
@@ -261,6 +261,7 @@ class ByconVariant:
                 "variant_state": v_s,
             }
         )
+
 
     # -------------------------------------------------------------------------#
 

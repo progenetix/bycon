@@ -16,7 +16,13 @@ from pymongo import MongoClient
 
 # ------------------------------- bycon imports -------------------------------#
 
-from config import BYC, BYC_DBS, BYC_UNCAMELED, BYC_UPPER, HTTP_HOST
+from config import (
+    BYC,
+    BYC_DBS,
+    BYC_UNCAMELED,
+    BYC_UPPER,
+    HTTP_HOST
+)
 
 ################################################################################
 
@@ -188,6 +194,7 @@ class ByconID:
 class ByconH:
     def __init__(self):
         self.env = HTTP_HOST
+
 
     #--------------------------------------------------------------------------#
     #----------------------------- public -------------------------------------#
@@ -472,7 +479,7 @@ def get_nested_value(parent, dotted_key, parameter_type="string"):
         except:
             v = ""
     elif len(ps) > 5:
-        print("¡¡¡ Parameter key "+dotted_key+" nested too deeply (>5) !!!")
+        print(f"¡¡¡ Parameter key {dotted_key} nested too deeply (>5) !!!")
         return '_too_deep_'
 
     return v
