@@ -93,7 +93,7 @@ def publications_inserter():
                     print(p_k, ": skipped - already in _byconServicesDB.publications")
                     continue
                 else:
-                    n_p = mongo_client["_byconServicesDB"]["publications"].find_one({"id": p_k })
+                    n_p = pub_coll.find_one({"id": p_k })
                     print(p_k, ": existed but overwritten since *update* in effect")
             else:
                 n_p = get_empty_publication()
