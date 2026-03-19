@@ -8,9 +8,13 @@ milestones.
 
 ### WiP
 
-* ipdate/fix of the `publicationsinserter`
+* update/fix of the `publicationsinserter`
     - correct use of `geo_location.properties.id` instead of `id` in `add_geolocation_to_pgxdoc`
       for geoloc retrieval
+    - fix of sample number retrieval from table
+* `include_handovers` is now false by default (Cave: has to be set to true as parameter for UI calls ...)
+* codeSmetics
+* placeholder `__plot_add_markers_circle` in `bycon_plot`
 
 ### 2026-03-16 (v2.8.0 "genemaps")
 
