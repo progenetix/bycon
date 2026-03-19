@@ -2,13 +2,12 @@
 
 from os import path
 from pathlib import Path
-from pymongo import MongoClient
 from isodate import date_isoformat
 import csv, datetime, requests, sys
 import datetime
 
 from bycon import *
-from byconServiceLibs import ByconGeoResource, datatable_utils, log_path_root, service_helpers
+from byconServiceLibs import ByconGeoResource, log_path_root, add_geolocation_to_pgxdoc, service_helpers
 
 loc_path = path.dirname( path.abspath(__file__) )
 services_conf_path = path.join( loc_path, "config" )
@@ -55,9 +54,8 @@ def publications_inserter():
     m_d = BYC_DBS["services_db"]
     m_c = BYC_DBS.get("collections", {}).get("publication")
 
-    mongo_client    = MongoClient(host=m_h)
-    pub_coll        = mongo_client[m_d][m_c]
-    bios_coll       = mongo_client["progenetix"]["biosamples"]
+    pub_coll        = ByconMongo(m_d).openMongoColl(m_c)
+    bios_coll       = ByconMongo("progenetix").openMongoColl("biosamples")
     publication_ids = pub_coll.distinct("id")
     progenetix_ids  = bios_coll.distinct("references.pubmed.id")
     progenetix_ids  = [item for item in progenetix_ids if item is not None]
@@ -112,7 +110,8 @@ def publications_inserter():
                         v = ""
 
             if (geoprov_id := pub.get("geoprov_id")):
-                add_geolocation_to_pgxdoc(n_p, geoprov_id)
+                print(f'{p_k}: adding geolocation from {geoprov_id}')
+                n_p = add_geolocation_to_pgxdoc(n_p, geoprov_id)
 
             epmc, e = retrieve_epmc_publications(pmid)
             if e is not False:
@@ -124,17 +123,19 @@ def publications_inserter():
             get_ncit_tumor_types(n_p, pub)
 
             if p_k in progenetix_ids:
-                n_p["counts"].update({ "progenetix" : 0 })
-                n_p["counts"].update({ "arraymap" : 0 })
-                for s in bios_coll.find({ "external_references.id" : p_k }):
+                n_p["counts"].update({ "progenetix" : n_p["counts"].get("progenetix", 0) })
+                n_p["counts"].update({ "arraymap" : n_p["counts"].get("arraymap", 0) })
+                for s in bios_coll.find({ "references.pubmed.id" : p_k }):
                     n_p["counts"]["progenetix"] += 1
                 for s in bios_coll.find({ "cohorts.id" : "pgxcohort-arraymap" }):
                     n_p["counts"]["arraymap"] += 1
 
             for c in n_p["counts"].keys():
-                if isinstance(n_p["counts"][c], str):
+                pub_c_k = "counts."+c
+                t_c = pub.get(pub_c_k, "").strip()
+                if isinstance(t_c, str):
                     try:
-                        n_p["counts"].update({c: int(n_p["counts"][c])})
+                        n_p["counts"].update({c: int(t_c)})
                     except:
                         pass
             n_p["counts"]["ngs"] = int(n_p["counts"]["wes"]) + int(n_p["counts"]["wgs"])
@@ -148,7 +149,7 @@ def publications_inserter():
                     
     print(f"{up_count} publications were inserted or updated")
 
-    ByconGeoResource().update_geolocations(m_d, m_c)
+    # ByconGeoResource().update_geolocations(m_d, m_c)
 
 ##############################################################################
 ##############################################################################

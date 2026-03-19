@@ -261,12 +261,12 @@ def add_geolocation_to_pgxdoc(pgxdoc, geoprov_id):
     m_d = BYC_DBS["services_db"]
     m_c = BYC_DBS.get("collections", {}).get("geolocs")
     geo_coll = ByconMongo(m_d).openMongoColl(m_c)
-    geo_info = geo_coll.find_one({"id": geoprov_id}, {"_id": 0, "id": 0})
+    q_s = f"^{geoprov_id}::"
+    geo_info = geo_coll.find_one({"geo_location.properties.id": {"$regex": q_s}}, {"_id": 0, "id": 0})
     if geo_info is None:
         return pgxdoc
     pgxdoc.update({"geo_location": geo_info.get("geo_location", {})})
     pgxdoc["geo_location"]["properties"].update({"id": geoprov_id})
-    mongo_client.close()
 
     return pgxdoc
 

@@ -6,6 +6,12 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
+### WiP
+
+* ipdate/fix of the `publicationsinserter`
+    - correct use of `geo_location.properties.id` instead of `id` in `add_geolocation_to_pgxdoc`
+      for geoloc retrieval
+
 ### 2026-03-16 (v2.8.0 "genemaps")
 
 * added genemaps as `var_genemaps` to the internal `analyses` records:
