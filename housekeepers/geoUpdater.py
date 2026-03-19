@@ -4,7 +4,7 @@ from os import path, environ, pardir
 from progress.bar import Bar
 from pymongo import MongoClient
 
-from bycon import BYC, BYC_DBS, ByconTSVreader
+from bycon import BYC, BYC_DBS, ByconGeolocs, ByconTSVreader
 
 dir_path = path.dirname( path.abspath(__file__) )
 geo_rsrc_path = path.join( dir_path, pardir, "rsrc", "geolocs" )
@@ -54,36 +54,7 @@ countries_f_n = "countryInfo.txt"
 fieldnames = ["ISO", "ISO3", "ISO-Numeric", "fips", "Country", "Capital", "Area(in sq km)", "Population", "Continent", "tld", "CurrencyCode", "CurrencyName", "Phone", "Postal Code Format", "Postal Code Regex", "Languages", "geonameid", "neighbours", "EquivalentFipsCode"]
 countries, fieldnames = ByconTSVreader().fileToDictlist(path.join( geo_rsrc_path, countries_f_n), fieldnames=fieldnames, max_count=0)
 
-continents ={
-	"AF": "Africa",
-	"AN": "Antarctica",
-	"AS": "Asia",
-	"EU": "Europe",
-	"NA": "North America",
-	"OC": "Oceania",
-	"SA": "South America",
-	"AT": "Atlantis"
-}
-
-atlantis = {
-		"geonameid": "0",
-		"id": "atlantis::bermudatriangle",
-		"geo_source": "custom entry",
-		"geo_location": {
-			"type": 'Feature',
-			"geometry": { "type": 'Point', "coordinates": [ -71, 25 ] },
-			"properties": {
-				"id": "atlantis::bermudatriangle::-71::25",
-				"label": f"Atlantis, Bermuda Triangle",
-				"ISO3166alpha2": "00",
-				"ISO3166alpha3": "000",
-				"city": "Atlantis",
-				"continent": "AT",
-				"country": "Bermuda Triangle"
-		}
-	  }
-	}
-
+BGL = ByconGeolocs()
 
 c_by_code = {}
 for c in countries:
@@ -91,7 +62,7 @@ for c in countries:
 
 bar = Bar(f"=> reading cities", max=len(cities), suffix='%(percent)d%%'+" of "+str(len(cities)) )
 
-geolocs = [atlantis]
+geolocs = [BGL.geolocDefault()]
 for c in cities:
 	bar.next()
 	country_code = c.get("country_code", "__none__")
@@ -118,7 +89,7 @@ for c in cities:
 				"ISO3166alpha2": ISO3166alpha2,
 				"ISO3166alpha3": ISO3166alpha3,
 				"city": city,
-				"continent": continents.get(continent_code, "___none___"),
+				"continent": BGL.continentFromCode(continent_code),
 				"country": country_name
 		}
 	  }

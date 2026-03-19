@@ -24,8 +24,11 @@ from bycon_plot import ByconPlotPars
 ################################################################################
 
 class ByconGeolocs:
-    def __init__(self, geo_root="geo_location"):
-        self.geo_root = geo_root
+    def __init__(self, geo_root=None):
+        self.geo_defaults   = BYC.get("geo_defaults", {})
+        self.geo_root       = self.geo_defaults.get("geo_root_par", "geo_location")
+        if geo_root:
+            self.geo_root = geo_root
         self.geo_locations = []
         self.geo_webfile = BYC_PARS.get("inputfile", "")
 
@@ -37,6 +40,18 @@ class ByconGeolocs:
     def get_locations_from_web(self):
         self.__read_geomarker_table_web()
         return self.geo_locations
+
+
+    # -------------------------------------------------------------------------#
+
+    def continentFromCode(self, code="AT"):
+        return self.geo_defaults.get("continent_mappings", {}).get(code, "Unknown")
+
+
+    # -------------------------------------------------------------------------#
+
+    def geolocDefault(self):
+        return self.geo_defaults.get("geoloc_default", {})
 
 
     # -------------------------------------------------------------------------#

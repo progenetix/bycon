@@ -266,7 +266,6 @@ def add_geolocation_to_pgxdoc(pgxdoc, geoprov_id):
     if geo_info is None:
         return pgxdoc
     pgxdoc.update({"geo_location": geo_info.get("geo_location", {})})
-    pgxdoc["geo_location"]["properties"].update({"id": geoprov_id})
 
     return pgxdoc
 

@@ -7,7 +7,7 @@ import csv, datetime, requests, sys
 import datetime
 
 from bycon import *
-from byconServiceLibs import ByconGeoResource, log_path_root, add_geolocation_to_pgxdoc, service_helpers
+from byconServiceLibs import ByconGeoResource, ByconGeolocs, log_path_root, add_geolocation_to_pgxdoc, service_helpers
 
 loc_path = path.dirname( path.abspath(__file__) )
 services_conf_path = path.join( loc_path, "config" )
@@ -61,7 +61,7 @@ def publications_inserter():
     progenetix_ids  = [item for item in progenetix_ids if item is not None]
     progenetix_ids  = list(filter(lambda x: x.startswith("pubmed"), progenetix_ids))
 
-    # TODO: Use schema ...
+    # TODO: Use schema / table header mapping ... 
 
     up_count = 0
 
@@ -97,17 +97,19 @@ def publications_inserter():
                     print(p_k, ": existed but overwritten since *update* in effect")
             else:
                 n_p = get_empty_publication()
-                n_p.update({"id":p_k})
-
-            for k, v in pub.items():
-                v = v.strip()
-                if k:
-                    if k in skip_cols:
-                        continue
-                    if len(str(v)) < 1:
-                        continue
-                    if v.lower() == "delete":
-                        v = ""
+            
+            n_p.update({
+                "id":p_k,
+                "contact": {
+                    "name": pub.get("contact.name", "").strip(),
+                    "email": pub.get("contact.email", "").strip(),
+                    "affiliation": pub.get("contact.affiliation", "").strip(),
+                    "orcid": pub.get("contact.orcid", "").strip()
+                },
+                "status": pub.get("status", "").strip(),
+                "note": pub.get("note", "").strip(),
+                "pubmedid": pmid,
+            })
 
             if (geoprov_id := pub.get("geoprov_id")):
                 print(f'{p_k}: adding geolocation from {geoprov_id}')
@@ -118,9 +120,9 @@ def publications_inserter():
                 print(e)
                 continue
 
-            update_from_epmc_publication(n_p, epmc)            
-            publication_update_label(n_p)
-            get_ncit_tumor_types(n_p, pub)
+            n_p = update_from_epmc_publication(n_p, epmc)            
+            n_p = publication_update_label(n_p)
+            n_p = get_ncit_tumor_types(n_p, pub)
 
             if p_k in progenetix_ids:
                 n_p["counts"].update({ "progenetix" : n_p["counts"].get("progenetix", 0) })
@@ -244,23 +246,9 @@ def get_empty_publication():
     publication = ByconSchemas("Publication", "").get_schema_instance()
     publication.update({
         "updated": date_isoformat(datetime.now()),
-        "geo_location": {
-            "type": 'Feature',
-            "geometry": {"type": 'Point', "coordinates": [0, 0]},
-            "properties": {
-                "label": 'Atlantis, Null Island',
-                "city": 'Atlantis',
-                "country": 'Null Island',
-                "continent": 'Africa',
-                "latitude": 0,
-                "longitude": 0,
-                "ISO3166alpha3": 'AAA',
-                "precision": 'city'
-            }
-        },
+        "geo_location": ByconGeolocs().geolocDefault(),
         "counts": {"ccgh": 0, "acgh": 0, "wes": 0, "wgs": 0, "ngs": 0, "genomes": 0, "progenetix": 0, "arraymap": 0},
     })
-
     return publication
 
 

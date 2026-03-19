@@ -1,0 +1,29 @@
+geo_root_par: geo_location
+
+continent_mappings:
+  AF: Africa
+  AN: Antarctica
+  AS: Asia
+  EU: Europe
+  NA: North America
+  OC: Oceania
+  SA: South America
+  AT: Atlantis
+
+geoloc_default:
+  geonameid: "0"
+  geo_source: custom entry
+  geo_location:
+    type: Feature
+    geometry:
+      type: Point
+      coordinates: [-71, 25]
+    properties:
+      id: atlantis::bermudatriangle::-71::25
+      label: Atlantis, Bermuda Triangle
+      ISO3166alpha2: "00"
+      ISO3166alpha3: "000"
+      city: Atlantis
+      continent: AT
+      country: Bermuda Triangle
+
