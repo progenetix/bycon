@@ -137,6 +137,7 @@ BYC = {
     "filter_definitions":       {},
     "handover_definitions":     {},
     "genome_definitions":       {},
+    "geo_defaults":             {},
     "plot_defaults":            {},
     "priority_genes":           {},
     "request_profiles":         {},
