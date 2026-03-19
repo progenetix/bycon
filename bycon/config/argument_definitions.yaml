@@ -637,7 +637,7 @@ $defs:
 
   include_handovers:
     type: boolean
-    default: true
+    default: false
     cmdFlags:
       - --includeHandovers
     description: only used for web requests & testing 

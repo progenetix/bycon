@@ -1,10 +1,14 @@
 #!/usr/local/bin/python3
 
-# version: 2025-03-16
+# version: 2026-03-19
 
-import sys, re, yaml
+import sys
+import re
+import yaml
+
 from os import getlogin, makedirs, path, system
 from contextlib import chdir
+
 dir_path = path.dirname( path.abspath(__file__) )
 
 """

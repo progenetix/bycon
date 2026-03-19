@@ -1,4 +1,11 @@
-import base64, inspect, io, math, re, sys
+import base64
+import inspect
+import io
+import math
+import re
+import sys
+
+
 from datetime import datetime, date
 from humps import decamelize
 from os import environ, path
@@ -260,6 +267,7 @@ class ByconPlot:
             self.__plot_add_circle_settings()
             self.__plot_add_cytobands_circle()
             self.__plot_add_histogram_circle(f_set)
+            self.__plot_add_markers_circle()    # TBD
             self.plv["Y"] += self.plv["circ_radius_outer"]
             # the half plot_area_height is subtracted since the label function
             # adds the same amount for Y-centering linear histogram labels
@@ -653,10 +661,11 @@ class ByconPlot:
         labs.append(0)
 
         for chro in self.plv["plot_chros"]:
-            c_l = self.cytolimits.get(str(chro), {})
-            chr_f = c_l["size"] / self.plv["circ_genome_with_gaps"]
-            c_f_s = area_f_0
-            c_f_e = area_f_0 + chr_f
+
+            c_l     = self.cytolimits.get(str(chro), {})
+            chr_f   = c_l["size"] / self.plv["circ_genome_with_gaps"]
+            c_f_s   = area_f_0
+            c_f_e   = area_f_0 + chr_f
 
             largeArcFlag = 0
             if c_f_s > 0.75:
@@ -1307,6 +1316,7 @@ class ByconPlot:
                 if y_m == 0:
                     skip = True
 
+
     # -------------------------------------------------------------------------#
     # --------------------------- probesplot ----------------------------------#
     # -------------------------------------------------------------------------#
@@ -1427,6 +1437,22 @@ class ByconPlot:
         self.plv.update({"plot_last_area_ye": self.plv["Y"]})
         self.plv["Y"] += self.plv["plot_region_gap_width"]
 
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def __plot_add_markers_circle(self):
+        self.__add_labs_from_plot_region_labels()
+        self.__add_labs_from_gene_symbols()
+        self.__add_labs_from_cytobands()
+        labs = self.plv.get("plot_labels", [])
+        if len(labs) < 1:
+            return
+        prdbug(f'{inspect.stack()[1][3]} from {inspect.stack()[2][3]}')
+        # TBD
+        return
+
+
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 
@@ -1438,17 +1464,19 @@ class ByconPlot:
         if len(labs) < 1:
             return
         prdbug(f'{inspect.stack()[1][3]} from {inspect.stack()[2][3]}')
-        b2pf = self.plv["plot_b2pf"]
-        x = self.plv["plot_area_x0"]
-        p_m_f_s = self.plv["plot_marker_font_size"]
-        p_m_l_p = self.plv["plot_marker_label_padding"]
-        p_m_lane_p = self.plv["plot_marker_lane_padding"]
-        p_m_l_h = p_m_f_s + p_m_l_p * 2
-        p_m_lane_h = p_m_l_h + p_m_lane_p
-        max_lane = 0
-        marker_y_0 = round(self.plv["plot_first_area_y0"], 1)
-        marker_y_e = round(self.plv["plot_last_area_ye"] + p_m_lane_p, 1)
-        m_p_e = [(x - 30)]
+
+        b2pf        = self.plv["plot_b2pf"]
+        x           = self.plv["plot_area_x0"]
+        p_m_f_s     = self.plv["plot_marker_font_size"]
+        p_m_l_p     = self.plv["plot_marker_label_padding"]
+        p_m_lane_p  = self.plv["plot_marker_lane_padding"]
+        p_m_l_h     = p_m_f_s + p_m_l_p * 2
+        p_m_lane_h  = p_m_l_h + p_m_lane_p
+        max_lane    = 0
+        marker_y_0  = round(self.plv["plot_first_area_y0"], 1)
+        marker_y_e  = round(self.plv["plot_last_area_ye"] + p_m_lane_p, 1)
+        m_p_e       = [(x - 30)]
+
         for chro in self.plv["plot_chros"]:
             c_l = self.cytolimits.get(str(chro), {})
             chr_w = c_l["size"] * self.plv["plot_b2pf"]
@@ -1588,6 +1616,7 @@ class ByconPlot:
             if m is not None:
                 self.plv["plot_labels"].update(m)
 
+
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 
@@ -1667,6 +1696,7 @@ style="margin: auto; font-family: Helvetica, sans-serif;">
 
         return svg
 
+
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 
@@ -1680,6 +1710,7 @@ style="margin: auto; font-family: Helvetica, sans-serif;">
         print(self.svg)
         print()
         exit()
+
 
 ################################################################################
 ################################################################################
@@ -1703,6 +1734,7 @@ class ByconCircleTools:
 
         return self.point_X, self.point_Y
 
+
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 
@@ -1716,6 +1748,7 @@ class ByconCircleTools:
 
         self.svg = f'<path d="{self.svgpath} Z" fill="{rgb}" stroke="none" />'
         return self.svg
+
 
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
@@ -1736,7 +1769,7 @@ class ByconCircleTools:
 
     def svg_text(self, radius, text_f, text="", style=""):
         self.point_fraction = text_f
-        self.point_radius = radius
+        self.point_radius   = radius
         self.__pgCirclePoint()
         return """
     <text x="{}" y="{}"
@@ -1761,10 +1794,10 @@ class ByconCircleTools:
         Radius and circle fraction are provided as variables while the center
         is inheruted.
         """
-        self.point_RAD = self.point_fraction * 2 * math.pi;
-        self.point_DEG = self.point_fraction * 360;
-        self.point_X = round(math.cos(self.point_RAD) * self.point_radius + self.cx, self.point_precision)
-        self.point_Y = round(math.sin(self.point_RAD) * self.point_radius + self.cy, self.point_precision)
+        self.point_RAD  = self.point_fraction * 2 * math.pi;
+        self.point_DEG  = self.point_fraction * 360;
+        self.point_X    = round(math.cos(self.point_RAD) * self.point_radius + self.cx, self.point_precision)
+        self.point_Y    = round(math.sin(self.point_RAD) * self.point_radius + self.cy, self.point_precision)
 
 
     # -------------------------------------------------------------------------#
@@ -1774,16 +1807,18 @@ class ByconCircleTools:
         largeArcFlag = 0
         if self.stop_f - self.start_f > 0.5:
             largeArcFlag = 1
-        startXi, startYi = self.point_xy(self.radius_i, self.start_f)
-        startXo, startYo = self.point_xy(self.radius_o, self.start_f)
-        stopXi, stopYi = self.point_xy(self.radius_i, self.stop_f)
-        stopXo, stopYo = self.point_xy(self.radius_o, self.stop_f)
+
+        startXi, startYi    = self.point_xy(self.radius_i, self.start_f)
+        startXo, startYo    = self.point_xy(self.radius_o, self.start_f)
+        stopXi, stopYi      = self.point_xy(self.radius_i, self.stop_f)
+        stopXo, stopYo      = self.point_xy(self.radius_o, self.stop_f)
 
         self.svgpath = " ".join([str(x) for x in [
             'M', startXi, startYi,
             'A', self.radius_i, self.radius_i,
             0, largeArcFlag, 1, stopXi, stopYi,
-            'L', stopXo, stopYo, 'A', self.radius_o, self.radius_o,
+            'L', stopXo, stopYo,
+            'A', self.radius_o, self.radius_o,
             0, largeArcFlag, 0, startXo, startYo
         ]])
 
@@ -1795,16 +1830,17 @@ class ByconCircleTools:
         largeArcFlag = 0
         if self.stop_f - self.start_f > 0.5:
             largeArcFlag = 1
-        startX, startY = self.point_xy(self.arc_radius, self.start_f)
-        stopX, stopY = self.point_xy(self.arc_radius, self.stop_f)
 
-        degdelta = (self.stop_f - self.start_f) * 360
+        startX, startY  = self.point_xy(self.arc_radius, self.start_f)
+        stopX, stopY    = self.point_xy(self.arc_radius, self.stop_f)
+        degdelta        = (self.stop_f - self.start_f) * 360
 
         self.svgpath = " ".join([str(x) for x in [
             'M', startX, startY,
             'A', self.arc_radius, self.arc_radius,
             degdelta, largeArcFlag, 1, stopX, stopY
         ]])
+
 
     # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
