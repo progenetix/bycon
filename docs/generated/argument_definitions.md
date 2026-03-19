@@ -554,7 +554,7 @@ For defining a special output format, mostly for `byconaut` services use. Exampl
 
 #### `include_handovers` 
 **type:** boolean    
-**default:** `True`    
+**default:** `False`    
 **cmdFlags:** `--includeHandovers`    
 **description:**
 only used for web requests & testing    
