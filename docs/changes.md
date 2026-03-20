@@ -15,6 +15,7 @@ milestones.
 * `include_handovers` is now false by default (Cave: has to be set to true as parameter for UI calls ...)
 * codeSmetics
 * placeholder `__plot_add_markers_circle` in `bycon_plot`
+* new `geo_defaults.yaml` for default geolocation parameters (e.g. for unknown locations)
 
 ### 2026-03-16 (v2.8.0 "genemaps")
 

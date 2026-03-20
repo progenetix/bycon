@@ -1122,7 +1122,6 @@ def print_json_response(this={}, status_code=200):
         print("Content-Type: application/json")
         print()
 
-    # There are some "do not camelize" exceptions downstream
     prjsoncam(this)
     print()
     exit()
