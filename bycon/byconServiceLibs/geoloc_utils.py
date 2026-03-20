@@ -167,8 +167,8 @@ class ByconGeoResource:
                 pcoords = bgl.get("geometry", {}).get("coordinates", [])
 
             if len(pcoords) != 2:
-                nocoords += 1
-                print(bgl.get("properties"))
+                # nocoords += 1
+                print(f"\n!!! no coordinates im {bgl.get("properties")}!!!")
                 continue
             BYC_PARS.update({
                 "geo_latitude": pcoords[1],

@@ -109,6 +109,8 @@ def publications_inserter():
                 "status": pub.get("status", "").strip(),
                 "note": pub.get("note", "").strip(),
                 "pubmedid": pmid,
+                "progenetix_curator": pub.get("progenetix_curator", "").strip(),
+                "progenetix_use": ByconH().truth(pub.get("progenetix_use", "").strip())
             })
 
             if (geoprov_id := pub.get("geoprov_id")):
@@ -151,7 +153,7 @@ def publications_inserter():
                     
     print(f"{up_count} publications were inserted or updated")
 
-    # ByconGeoResource().update_geolocations(m_d, m_c)
+    ByconGeoResource().update_geolocations(m_d, m_c)
 
 ##############################################################################
 ##############################################################################

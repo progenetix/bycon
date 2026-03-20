@@ -103,6 +103,20 @@ properties:
     examples:
       - "2020-09-10T17:44:10.170Z"
 
+  progenetixCurator:
+    type: string
+    examples:
+      - Paula Carrio-Cordo
+      - Rahel Paloots
+      - Sofia Pfund
+      - Hangjia Zhao
+      - Ziying Yang
+      - Kay von Grunigen
+      - Michael Baudis
+
+  progenetixUse:
+    type: boolean
+
 $defs:
   Contact:
     type: object
