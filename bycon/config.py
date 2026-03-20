@@ -38,6 +38,7 @@ REQUEST_METHOD      = environ.get('REQUEST_METHOD', '')
 SCRIPT_URI          = environ.get('SCRIPT_URI', '')
 HTTP_HOST           = environ.get('HTTP_HOST', "___shell___")
 X_FORWARDED_PROTO   = str(environ.get('HTTP_X_FORWARDED_PROTO'))
+
 BEACON_ROOT         = f"{REQUEST_SCHEME}://{HTTP_HOST}"
 if not "https" in BEACON_ROOT and not "https" in X_FORWARDED_PROTO:
     BEACON_ROOT = BEACON_ROOT.replace("https://", "http://")
@@ -54,6 +55,8 @@ if "services" in PROJECT_PATH:
 BYC_PARS = {}
 
 # path elements after the `beacon` or `services` REQUEST_PATH_ROOT
+# .../{REQUEST_PATH_ROOT}/{request_entity_path_id}/  {path_ids}   /{response_entity_path_id}
+# .../       beacon      /      individuals       /pgxind-kftx25eh/      biosamples
 REQUEST_PATH_PARAMS = [
     "request_entity_path_id",
     "path_ids",
@@ -61,7 +64,7 @@ REQUEST_PATH_PARAMS = [
 ]
 
 # globals for treating "Null" value versions (e.g. from JS frontend to parameter
-# to stack interpretation)
+# to stack interpretation); tests are performed in a case-insensitive
 PARAM_NONE_VALUES = ["none", "null", "undefined"]
 
 #------------------------------------------------------------------------------#
@@ -90,6 +93,7 @@ BYC_DBS = {
     }
 }
 
+# limits for MongoDB queries to avoid databasse errors
 MONGO_DISTINCT_STORAGE_LIMIT    = 300000
 VARIANTS_RESPONSE_LIMIT         = 300000
 
@@ -125,7 +129,7 @@ BYC = {
     ],
 
     # ..._mappings / ..._definitions are generated from YAML files & should stay
-    # static unless not overridden by local defaults
+    # static unless overridden by local defaults
 
     "aggregation_terms":        {},
     "argument_definitions":     {},
@@ -146,6 +150,8 @@ BYC = {
     "request_profiles":         {},
     "variant_type_definitions": {},
 
+    # parameter spaces for which local overrides are accepted
+    # these are generated from the YAML files in `local`
     "loc_mod_pars": [
         "authorizations",
         "env_paths",
