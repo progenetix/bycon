@@ -42,7 +42,7 @@ $defs:
     scope: publications
     entity: publication
     db_key: counts.genomes
-    pattern: '^\d+$'
+    pattern: '^genomes:[><=].*?\d+$'
     collationed: False
     examples:
       - 'genomes:>0'

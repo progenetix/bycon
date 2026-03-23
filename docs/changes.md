@@ -8,6 +8,7 @@ milestones.
 
 ### WiP
 
+* fix broken `services/api` (when eliminating * imports the `BEACON_ROOT` was forgotten...)
 * update/fix of the `publicationsinserter`
     - correct use of `geo_location.properties.id` instead of `id` in `add_geolocation_to_pgxdoc`
       for geoloc retrieval

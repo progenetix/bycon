@@ -9,6 +9,7 @@ from os import path
 from collections import OrderedDict
 
 from bycon import (
+    BEACON_ROOT,
     BYC,
     BYC_PARS,
     ByconFilteringTerms,

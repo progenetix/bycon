@@ -178,9 +178,9 @@ genome-wide screening experiments in cancer.
 #### Examples
 
 * <https://progenetix.org/services/publications/?filters=pubmed>
-* <http://progenetix.org/services/publications/?filters=pubmed,genomes:&gt;200,arraymap:&gt;1>
-* <http://progenetix.org/services/publications/?filters=pubmed:22824167&method=details>
-* <http://progenetix.org/services/publications/?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
+* <https://progenetix.org/services/publications/?filters=genomes:>0&plotType=map>
+* <https://progenetix.org/services/publications/?filters=pubmed:22824167&method=details>
+* <https://progenetix.org/services/publications/?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
 
 
 ### `/sampleglobe`

@@ -31,9 +31,9 @@ def publications():
     #### Examples
 
     * <https://progenetix.org/services/publications/?filters=pubmed>
-    * <http://progenetix.org/services/publications/?filters=pubmed,genomes:&gt;200,arraymap:&gt;1>
-    * <http://progenetix.org/services/publications/?filters=pubmed:22824167&method=details>
-    * <http://progenetix.org/services/publications/?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
+    * <https://progenetix.org/services/publications/?filters=genomes:>0&plotType=map>
+    * <https://progenetix.org/services/publications/?filters=pubmed:22824167&method=details>
+    * <https://progenetix.org/services/publications/?geoLongitude=8.55&geoLatitude=47.37&geoDistance=100000>
     """
 
     # The `publications.yaml` file contains an override for `filter_definitions`
@@ -130,6 +130,8 @@ def __check_publications_map_response(results):
 
     BM = ByconMap()
     BM.add_data_from_results_list(geolocs)
+    if "globe" in str(BYC_PARS.get("plot_type", "___none___")):
+        BM.printGlobeHTML()
     BM.printMapHTML()
 
 

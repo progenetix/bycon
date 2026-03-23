@@ -9,7 +9,8 @@ const colNo = 20
 // const includeOthers = true
 const includeOthers = false
 const dashboardPies = ["selectedPlatformTechnologies", "sampleCountries"]
-const dashboardSankeys = ["selectedHistologicalDiagnoses::sampleSex"]
+// const dashboardSankeys = ["selectedHistologicalDiagnoses::sampleSex"]
+const dashboardSankeys = []
 
 //----------------------------------------------------------------------------//
 

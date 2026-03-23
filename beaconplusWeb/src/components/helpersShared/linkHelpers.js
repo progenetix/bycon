@@ -116,7 +116,11 @@ export function epmcId(publicationId) {
 }
 
 export function epmcUrl(publicationId) {
-  return `http://www.europepmc.org/abstract/MED/${epmcId(publicationId)}`
+  return `https://www.europepmc.org/abstract/MED/${epmcId(publicationId)}`
+}
+
+export function orcidUrl(orcid) {
+  return `https://www.orcid.org/${orcid}`
 }
 
 export function EpmcLink({ publicationId }) {
