@@ -92,6 +92,46 @@ class ByconQuery:
 
 
     # -------------------------------------------------------------------------#
+
+    def variantsQuery(self):
+        if len(q := self.queries.get("entities", {}).get("genomicVariant", {}).get("query", [])) < 1:
+            return False
+        if len(q) == 1:
+            return q[0]
+        return {"$and": q}
+
+
+    # -------------------------------------------------------------------------#
+
+    def analysesQuery(self):
+        if len(q := self.queries.get("entities", {}).get("analysis", {}).get("query", [])) < 1:
+            return False
+        if len(q) == 1:
+            return q[0]
+        return {"$and": q}
+
+
+    # -------------------------------------------------------------------------#
+
+    def biosamplesQuery(self):
+        if len(q := self.queries.get("entities", {}).get("biosample", {}).get("query", [])) < 1:
+            return False
+        if len(q) == 1:
+            return q[0]
+        return {"$and": q}
+
+
+    # -------------------------------------------------------------------------#
+
+    def individualsQuery(self):
+        if len(q := self.queries.get("entities", {}).get("individual", {}).get("query", [])) < 1:
+            return False
+        if len(q) == 1:
+            return q[0]
+        return {"$and": q}
+
+
+    # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 

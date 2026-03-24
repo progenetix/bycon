@@ -5,10 +5,12 @@ from bycon import (
     BeaconErrorResponse,
     BYC,
     BYC_PARS,
+    ByconQuery,
     ChroNames,
     Cytobands,
     GeneInfo,
     prdbug,
+    prjsonnice,
     print_json_response
 )
 
@@ -28,16 +30,16 @@ def genespans():
     """
 
     # form id assumes start match (e.g. for autocompletes)
+    # query = ByconQuery().recordsQuery()
     if len(gene_ids := BYC_PARS.get("path_ids", [])) == 1:
-        # REST path id assumes exact match
         results = GeneInfo().returnGene(gene_ids[0])
-    else:
-        gene_ids = BYC_PARS.get("gene_id", [])
-        # print(type(BYC_PARS.get("gene_id", [])))
+    elif len(gene_ids := BYC_PARS.get("gene_id", [])) > 0:
         gene_id = gene_ids[0] if len(gene_ids) > 0 else None
-        # print(gene_id)
-        # exit()
         results = GeneInfo().returnGenelist(gene_id)
+    elif v_query := ByconQuery().variantsQuery():
+        prjsonnice(v_query)
+        # exit()
+        results = GeneInfo().returnGenelistFromLocationquery(v_query)
 
     BeaconErrorResponse().respond_if_errors()
 

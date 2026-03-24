@@ -1,11 +1,13 @@
-import csv, re, yaml
-from os import environ, path, pardir
-from pymongo import MongoClient
+import csv
+import re
+import yaml
+
+from os import path
 
 # ------------------------------- bycon imports -------------------------------#
 
-from bycon_helpers import ByconError, ByconTSVreader, prdbug
-from config import *
+from bycon_helpers import ByconError, ByconMongo, ByconTSVreader, prdbug
+from config import BYC, BYC_DBS, BYC_PARS, PKG_PATH
 
 ################################################################################
 ################################################################################
@@ -564,12 +566,9 @@ class Cytobands:
 class GeneInfo:
     def __init__(self):
         self.gene_data = []
-
-        m_h = BYC_DBS["mongodb_host"]
         m_d = BYC_DBS["services_db"]
         m_c = BYC_DBS.get("collections", {}).get("genes")
-        self.mongo_client = MongoClient(host=m_h)
-        self.genes_coll = self.mongo_client[m_d][m_c]
+        self.genes_coll = ByconMongo(m_d).openMongoColl(m_c)
 
 
     # -------------------------------------------------------------------------#
@@ -589,16 +588,18 @@ class GeneInfo:
 
 
     # -------------------------------------------------------------------------#
+
+    def returnGenelistFromLocationquery(self, query=False):
+        if not query:
+            return []
+        return list(self.genes_coll.find(query, { '_id': False } ))
+
+
+    # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
     # -------------------------------------------------------------------------#
 
     def __gene_id_data(self, gene_id, single=True):
-        mongo_client = MongoClient(host=BYC_DBS["mongodb_host"])
-        db_names = list(mongo_client.list_database_names())
-        if BYC_DBS["services_db"] not in db_names:
-            BYC["ERRORS"].append(f"services db `{BYC_DBS['services_db']}` does not exist")
-            return
-
         q_f_s = ["symbol", "ensembl_gene_ids", "synonyms"]
         terminator = ""
         if single is True:
