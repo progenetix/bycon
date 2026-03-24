@@ -8,6 +8,7 @@ milestones.
 
 ### WiP
 
+* The new version of the `_byconServicesDB.genes` collection now has VRS-like `location` parameters (albite as list of locations for GRCh38 and CHM13). Now - if no `geneId` is provided - a positional query is evaluated & performed.
 * fix broken `services/api` (when eliminating * imports the `BEACON_ROOT` was forgotten...)
 * update/fix of the `publicationsinserter`
     - correct use of `geo_location.properties.id` instead of `id` in `add_geolocation_to_pgxdoc`
