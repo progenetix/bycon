@@ -37,8 +37,6 @@ def genespans():
         gene_id = gene_ids[0] if len(gene_ids) > 0 else None
         results = GeneInfo().returnGenelist(gene_id)
     elif v_query := ByconQuery().variantsQuery():
-        prjsonnice(v_query)
-        # exit()
         results = GeneInfo().returnGenelistFromLocationquery(v_query)
 
     BeaconErrorResponse().respond_if_errors()
