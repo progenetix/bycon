@@ -402,6 +402,8 @@ class GenomeBins:
                             max_seg = max_s
                         pos_int.update({f"{cov_lab}_max_segment": max_s})
                 pos_int.update({"max_segment":max_seg})
+                for pk in ["reference_name", "cytobands", "start", "end", "info"]:
+                    pos_int.pop(pk, None)
                 self.coverage_intervals.append(pos_int)
 
 
