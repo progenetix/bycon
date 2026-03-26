@@ -9,21 +9,24 @@ endpointSets:
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
-      genomicVariantLookup:
-        returnedEntryType: genomicVariant
-        url: ___BEACON_ROOT___/beacon/datasets/{id}/g_variants
-      biosampleLookup:
-        returnedEntryType: biosample
-        url: ___BEACON_ROOT___/beacon/datasets/{id}/biosamples
+      phenopacketLookup:
+        returnedEntryType: phenopacket
+        url: ___BEACON_ROOT___/beacon/datasets/{id}/phenopackets
       individualLookup:
         returnedEntryType: individual
         url: ___BEACON_ROOT___/beacon/datasets/{id}/individuals
-      runLookup:
-        returnedEntryType: run
-        url: ___BEACON_ROOT___/beacon/datasets/{id}/runs
+      biosampleLookup:
+        returnedEntryType: biosample
+        url: ___BEACON_ROOT___/beacon/datasets/{id}/biosamples
       analysisLookup:
         returnedEntryType: analysis
         url: ___BEACON_ROOT___/beacon/datasets/{id}/analyses
+      runLookup:
+        returnedEntryType: run
+        url: ___BEACON_ROOT___/beacon/datasets/{id}/runs
+      genomicVariantLookup:
+        returnedEntryType: genomicVariant
+        url: ___BEACON_ROOT___/beacon/datasets/{id}/g_variants
 
   cohortEndpoints:
     entryType: cohort
@@ -33,21 +36,24 @@ endpointSets:
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
+      phenopacketLookup:
+        returnedEntryType: phenopacket
+        url: ___BEACON_ROOT___/beacon/cohorts/{id}/phenopackets
       individualLookup:
         returnedEntryType: individual
         url: ___BEACON_ROOT___/beacon/cohorts/{id}/individuals
-      genomicVariantLookup:
-        returnedEntryType: genomicVariant
-        url: ___BEACON_ROOT___/beacon/cohorts/{id}/g_variants
       biosampleLookup:
         returnedEntryType: biosample
         url: ___BEACON_ROOT___/beacon/cohorts/{id}/biosamples
-      runLookup:
-        returnedEntryType: run
-        url: ___BEACON_ROOT___/beacon/cohorts/{id}/runs
       analysisLookup:
         returnedEntryType: analysis
         url: ___BEACON_ROOT___/beacon/cohorts/{id}/analyses
+      runLookup:
+        returnedEntryType: run
+        url: ___BEACON_ROOT___/beacon/cohorts/{id}/runs
+      genomicVariantLookup:
+        returnedEntryType: genomicVariant
+        url: ___BEACON_ROOT___/beacon/cohorts/{id}/g_variants
 
   genomicVariantEndpoints:
     entryType: genomicVariant
@@ -60,6 +66,9 @@ endpointSets:
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
+      phenopacketLookup:
+        returnedEntryType: phenopacket
+        url: ___BEACON_ROOT___/beacon/g_variants/{id}/phenopackets
       individualLookup:
         returnedEntryType: individual
         url: ___BEACON_ROOT___/beacon/g_variants/{id}/individuals
@@ -81,6 +90,9 @@ endpointSets:
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
+      individualLookup:
+        returnedEntryType: individual
+        url: ___BEACON_ROOT___/beacon/phenopackets/{id}/individuals
       biosampleLookup:
         returnedEntryType: biosample
         url: ___BEACON_ROOT___/beacon/phenopackets/{id}/biosamples
@@ -102,6 +114,9 @@ endpointSets:
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
+      phenopacketLookup:
+        returnedEntryType: phenopacket
+        url: ___BEACON_ROOT___/beacon/individuals/{id}/phenopackets
       biosampleLookup:
         returnedEntryType: biosample
         url: ___BEACON_ROOT___/beacon/individuals/{id}/biosamples
@@ -125,6 +140,9 @@ endpointSets:
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
+      phenopacketLookup:
+        returnedEntryType: phenopacket
+        url: ___BEACON_ROOT___/beacon/biosamples/{id}/phenopackets
       individualLookup:
         returnedEntryType: individual
         url: ___BEACON_ROOT___/beacon/biosamples/{id}/individuals
@@ -145,6 +163,9 @@ endpointSets:
     singleEntryUrl: ___BEACON_ROOT___/beacon/analyses/{id}
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     endpoints:
+      phenopacketLookup:
+        returnedEntryType: phenopacket
+        url: ___BEACON_ROOT___/beacon/analyses/{id}/phenopackets
       individualLookup:
         returnedEntryType: individual
         url: ___BEACON_ROOT___/beacon/analyses/{id}/individuals
@@ -166,6 +187,9 @@ endpointSets:
     filteringTermsUrl: ___BEACON_ROOT___/beacon/filtering_terms
     aggregationTermsUrl: ___BEACON_ROOT___/beacon/aggregation_terms
     endpoints:
+      phenopacketLookup:
+        returnedEntryType: phenopacket
+        url: ___BEACON_ROOT___/beacon/runs/{id}/phenopackets
       individualLookup:
         returnedEntryType: individual
         url: ___BEACON_ROOT___/beacon/runs/{id}/individuals

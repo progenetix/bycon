@@ -969,9 +969,8 @@ class ByconResultSets:
         q_v_s = res.get("target_values", [])
         q_v_s = ByconH().paginated_list(q_v_s, self.skip, self.limit)
 
-        prdbug(
-            f"... retrieving data for dataset {ds_id}, collection {q_coll}, {len(q_v_s)} records"
-        )
+        dbm = f"... retrieving data for dataset {ds_id}, collection {q_coll}, {len(q_v_s)} records"
+        prdbug(dbm)
 
         data_coll = ByconMongo(ds_id).openMongoColl(q_coll)
 
@@ -988,17 +987,14 @@ class ByconResultSets:
         BHO = ByconHO()
         for i, r_set in enumerate(self.result_sets):
             ds_id = r_set["id"]
-            ds_res = self.datasets_results.get(ds_id)
-            if not ds_res:
+            if not (ds_res := self.datasets_results.get(ds_id)):
                 continue
 
-            r_set.update(
-                {
-                    "results_handovers": BHO.get_dataset_handovers(
-                        ds_id, self.datasets_results
-                    )
-                }
-            )
+            r_set.update({
+                "results_handovers": BHO.get_dataset_handovers(
+                    ds_id, self.datasets_results
+                )
+            })
 
             q_c = ds_res.get("target_count", 0)
 
@@ -1010,6 +1006,7 @@ class ByconResultSets:
                 collection = h_o_k.split(".")[0]
                 info["counts"].update({collection: h_o["target_count"]})
                 entity = h_o.get("entity_id", "___none___")
+                prdbug(f"__populate_result_sets key {h_o_k} .. entity {entity} with response_entity_id {self.response_entity_id}")
                 if entity == self.response_entity_id:
                     rs_c = h_o["target_count"]
             self.result_sets[i].update(

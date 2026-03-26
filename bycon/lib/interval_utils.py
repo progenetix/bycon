@@ -189,8 +189,8 @@ class GenomeBins:
                 gene_type       = g.get("gene_type", "")
 
                 cbs = str(self.CB.cytobands_label_from_positions(chro, start, end))
-                base_keys = {"gene_id", "gene_symbol", "gene_type", "chrom", "start", "end", "no"}
-                info = {k: v for k, v in g.items() if k not in base_keys}
+                # base_keys = {"gene_id", "gene_symbol", "gene_type", "chrom", "start", "end", "no"}
+                # info = {k: v for k, v in g.items() if k not in base_keys}
 
                 self.genomic_intervals.append({
                     "no": no,
@@ -200,8 +200,8 @@ class GenomeBins:
                     "start": start,
                     "end": end,
                     "size": end - start,
-                    "gene_symbol": gene_symbol,
-                    "info": info
+                    "gene_symbol": gene_symbol
+                    # "info": info
                 })
                 no += 1
 
@@ -401,7 +401,7 @@ class GenomeBins:
                         if (max_s := max(segs)) > max_seg:
                             max_seg = max_s
                         pos_int.update({f"{cov_lab}_max_segment": max_s})
-                pos_int.update({"max_segment":max_seg})
+                pos_int.update({"max_segment": max_seg})
                 self.coverage_intervals.append(pos_int)
 
 

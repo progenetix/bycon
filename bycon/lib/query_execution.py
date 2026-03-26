@@ -27,6 +27,7 @@ class ByconDatasetResults():
         self.res_obj_defs = {}
         self.queries = {}
         for e in self.queried_entities:
+            prdbug(f"... setting up response object definition for {e}")
             c = BYC_DBS.get("collections", {}).get(e, "___none___")
             self.res_obj_defs.update({f'{c}.id': {
                 "collection": c,
@@ -77,9 +78,12 @@ class ByconDatasetResults():
         c_n_s = self.bycon_mongo.collectionList()
         q_e_s = BQ.get("entities", {})
         for e, q_o in q_e_s.items():
+            prdbug(f"... generating query for {e}")
             if (q := q_o.get("query")):
+                prdbug(f"... {BYC_DBS.get("collections", {}).get(e)}")
                 if str(c := BYC_DBS.get("collections", {}).get(e)) in c_n_s:
                     self.queries.update({e: q})
+                    prdbug(f"... generated query for {e}: {q}")
 
 
     # -------------------------------------------------------------------------#

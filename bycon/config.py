@@ -2,7 +2,7 @@ from os import environ, path, pardir
 import sys
 import socket
 
-BEACON_API_VERSION  = "v2.2.2-beaconplus"
+BEACON_API_VERSION  = "v2.3.0-beaconplus"
 
 """
 Runtime global variables that might be modified through providing them
