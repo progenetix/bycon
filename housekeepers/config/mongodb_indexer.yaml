@@ -184,10 +184,12 @@ indexed_special_dbs:
         db_key: symbol
       synonyms:
         db_key: synonyms
+      sequence_id:
+        db_key: location.sequence_id
       start:
-        db_key: start
+        db_key: location.start
       end:
-        db_key: end
+        db_key: location.end
 
     geolocs:
       id:
