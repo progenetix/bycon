@@ -107,7 +107,7 @@ def main():
 
         if BYC.get("TEST_MODE", False) is True:
             print(f"\n==>> {ana_id}: {len(update_obj["var_genemaps"])} genes hit")
-            prjsonnice(f"{update_obj["var_genemaps"]}")
+            prjsonnice(update_obj["var_genemaps"])
             pass
         else:
             cs_coll.update_one( { "_id": _id }, { '$set': update_obj }  )
