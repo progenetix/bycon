@@ -1,78 +1,353 @@
-"$schema": https://json-schema.org/draft/2020-12/schema
-"$id": https://progenetix.org/services/schemas/ProgenetixGene/v2022-12-21
+$id: https://progenetix.org/schemas/ProgenetixGene/v2026-03-26
+$schema: https://json-schema.org/draft/2020-12/schema
 title: ProgenetixGene
-type: object
 description: >-
-  Genomic mapping position of the coding region of a gene.
+  NCBI Gene Descriptor (v2reportsGeneDescriptor) extended with GA4GH VRS
+  SequenceLocations
+type: object
 required:
-  all_of:
-    - referenceName
-      start
-      end
-      symbol
+  - annotations
+  - geneId
+  - symbol
+  - location
 properties:
-  symbol:
-    type: string
-    examples:
-      - TP53
-  accessionVersion:
-    type: string
-    examples:
-      - NC_000016.10
-      - NW_003315972.2
   geneId:
     type: string
-    examples:
-      - "1029"
-  referenceName:
+    format: uint64
+    title: NCBI Gene ID
+  symbol:
     type: string
-    examples:
-      - "17"
-      - X
-  start:
-    type: integer
-    examples:
-      - 7669608
-  end:
-    type: integer
-    examples:
-      - 7676593
-  cytobands:
+    title: Gene symbol
+  description:
     type: string
-    examples:
-      - 17p13.1
-  geneLocusLength:
-    type: integer
-    examples:
-      - 27572
-  synonyms:
+    title: Gene name
+  taxId:
+    type: string
+    format: uint64
+    title: NCBI Taxonomy ID for the organism
+  taxname:
+    type: string
+    title: Taxonomic name of the organism
+  commonName:
+    type: string
+    title: Common name of the organism
+  type:
+    $ref: '#/$defs/v2reportsGeneType'
+    title: Type of gene
+  rnaType:
+    $ref: '#/$defs/v2reportsRnaType'
+  orientation:
+    $ref: '#/$defs/v2reportsOrientation'
+    title: Direction of the gene relative to the genome coordinates
+  referenceStandards:
     type: array
-    items: string
-    examples:
-      - - ARF
-        - MLM
-        - P14
-        - P16
-        - P19
-        - INK4
+    items:
+      $ref: '#/$defs/v2reportsGenomicRegion'
+  genomicRegions:
+    type: array
+    items:
+      $ref: '#/$defs/v2reportsGenomicRegion'
+  chromosomes:
+    type: array
+    items:
+      type: string
+  nomenclatureAuthority:
+    $ref: '#/$defs/v2reportsNomenclatureAuthority'
   swissProtAccessions:
     type: array
-    items: string
-    examples:
-      - - P42771
-        - Q8N726
+    items:
+      type: string
+  ensemblGeneIds:
+    type: array
+    items:
+      type: string
   omimIds:
     type: array
-    items: string
-    examples:
-      - - "600160"
-  ensemblGene_Ids:
+    items:
+      type: string
+  synonyms:
     type: array
-    items: string
-    examples:
-      - - "ENSG00000147889"
-  geneType:
+    items:
+      type: string
+  replacedGeneId:
     type: string
-    examples:
-      - PROTEIN_CODING
+    format: uint64
+    title: The NCBI Gene ID for the gene that was merged into the current gene record
+  annotations:
+    type: array
+    items:
+      $ref: '#/$defs/v2reportsAnnotation'
+  transcriptCount:
+    type: integer
+    title: Number of transcripts encoded by the gene
+  proteinCount:
+    type: integer
+    title: Number of proteins encoded by the gene
+  transcriptTypeCounts:
+    type: array
+    items:
+      $ref: '#/$defs/v2reportsTranscriptTypeCount'
+  geneGroups:
+    type: array
+    items:
+      $ref: '#/$defs/v2reportsGeneGroup'
+  summary:
+    type: array
+    items:
+      $ref: '#/$defs/v2reportsGeneSummary'
+  geneOntology:
+    $ref: '#/$defs/v2reportsGeneOntology'
+  locusTag:
+    type: string
+  location:
+    type: array
+    items:
+      $ref: '#/$defs/SequenceLocation'
+    description: GA4GH VRS SequenceLocations mapping
 additionalProperties: true
+
+$defs:
+  v2reportsGeneType:
+    type: string
+    enum:
+    - UNKNOWN
+    - tRNA
+    - rRNA
+    - snRNA
+    - scRNA
+    - snoRNA
+    - PROTEIN_CODING
+    - PSEUDO
+    - TRANSPOSON
+    - miscRNA
+    - ncRNA
+    - BIOLOGICAL_REGION
+    - OTHER
+    default: UNKNOWN
+    title: 'NB: GeneType values match Entrez Gene'
+  v2reportsRnaType:
+    type: string
+    enum:
+    - rna_UNKNOWN
+    - premsg
+    - tmRna
+    default: rna_UNKNOWN
+  v2reportsOrientation:
+    type: string
+    enum:
+    - none
+    - plus
+    - minus
+    default: none
+  v2reportsGenomicRegion:
+    type: object
+    properties:
+      geneRange:
+        $ref: '#/$defs/v2reportsSeqRangeSet'
+        title: The range of this Gene record on this genomic region.
+      type:
+        $ref: '#/$defs/v2reportsGenomicRegionGenomicRegionType'
+        title: Type of genomic region
+  v2reportsNomenclatureAuthority:
+    type: object
+    properties:
+      authority:
+        type: string
+        title: The nomenclature authority for this gene record
+      identifier:
+        type: string
+        title: The nomenclature authority identifier for this gene record
+  v2reportsAnnotation:
+    type: object
+    properties:
+      assemblyAccession:
+        type: string
+        title: Genome assembly accession
+      assemblyName:
+        type: string
+        title: Genome assembly name
+      annotationName:
+        type: string
+        title: Genome annotation name
+      annotationReleaseDate:
+        type: string
+        title: Genome annotation release date
+      genomicLocations:
+        type: array
+        items:
+          $ref: '#/$defs/v2reportsGenomicLocation'
+  v2reportsTranscriptTypeCount:
+    type: object
+    properties:
+      type:
+        $ref: '#/$defs/v2reportsTranscriptTranscriptType'
+        title: Type of transcript
+      count:
+        type: integer
+        title: Number of transcripts of a particular type
+  v2reportsGeneGroup:
+    type: object
+    properties:
+      id:
+        type: string
+        title: Gene group identifier, currently these only include gene ortholog sets
+      method:
+        type: string
+        title: Method used to calculate the gene group, currently this only includes
+          "NCBI Ortholog"
+  v2reportsGeneSummary:
+    type: object
+    properties:
+      source:
+        type: string
+        title: Source of the gene summary
+      description:
+        type: string
+        title: Gene summary text itself that describes the gene
+      date:
+        type: string
+        title: Date that the gene summary was last updated
+  v2reportsGeneOntology:
+    type: object
+    properties:
+      assignedBy:
+        type: string
+        title: The database that made the annotation
+      molecularFunctions:
+        type: array
+        items:
+          $ref: '#/$defs/v2reportsProcessMetadata'
+      biologicalProcesses:
+        type: array
+        items:
+          $ref: '#/$defs/v2reportsProcessMetadata'
+      cellularComponents:
+        type: array
+        items:
+          $ref: '#/$defs/v2reportsProcessMetadata'
+  v2reportsSeqRangeSet:
+    type: object
+    properties:
+      accessionVersion:
+        type: string
+        title: NCBI Accession.version of the sequence
+      range:
+        type: array
+        items:
+          $ref: '#/$defs/v2reportsRange'
+  v2reportsGenomicRegionGenomicRegionType:
+    type: string
+    enum:
+    - UNKNOWN
+    - REFSEQ_GENE
+    - PSEUDOGENE
+    - BIOLOGICAL_REGION
+    - OTHER
+    default: UNKNOWN
+  v2reportsGenomicLocation:
+    type: object
+    properties:
+      genomicAccessionVersion:
+        type: string
+      sequenceName:
+        type: string
+      genomicRange:
+        $ref: '#/$defs/v2reportsRange'
+      exons:
+        type: array
+        items:
+          $ref: '#/$defs/v2reportsRange'
+  v2reportsTranscriptTranscriptType:
+    type: string
+    enum:
+    - UNKNOWN
+    - PROTEIN_CODING
+    - NON_CODING
+    - PROTEIN_CODING_MODEL
+    - NON_CODING_MODEL
+    default: UNKNOWN
+  v2reportsProcessMetadata:
+    type: object
+    properties:
+      name:
+        type: string
+        title: Gene ontology term name
+      goId:
+        type: string
+        title: Gene ontology identifier
+      evidenceCode:
+        type: string
+        title: Indicates how the annotation is supported
+      qualifier:
+        type: string
+        title: Explicitly link gene products to GO terms
+      reference:
+        $ref: '#/$defs/v2reportsReference'
+        title: Source of evidence supporting the GO annotation
+  v2reportsRange:
+    type: object
+    properties:
+      begin:
+        type: string
+        format: uint64
+        title: Sequence start position
+      end:
+        type: string
+        format: uint64
+        title: Sequence stop position
+      orientation:
+        $ref: '#/$defs/v2reportsOrientation'
+        title: Direction relative to the genome
+      order:
+        type: integer
+        title: The position of this sequence in a group of sequences
+      ribosomalSlippage:
+        type: integer
+        title: When ribosomal slippage is desired, fill out slippage amount between
+          this and previous range.
+  v2reportsReference:
+    type: object
+    properties:
+      pmids:
+        type: array
+        items:
+          type: string
+          format: uint64
+  SequenceLocation:
+    type: object
+    required:
+      - type
+      - sequenceReference
+      - start
+      - end
+      - sequenceId
+      - chromosome
+    properties:
+      type:
+        type: string
+        const: SequenceLocation
+      sequenceReference:
+        $ref: '#/$defs/SequenceReference'
+      start:
+        type: integer
+        minimum: 0
+      end:
+        type: integer
+        minimum: 0
+      sequenceId:
+        type: string
+        pattern: '^refseq:'
+      chromosome:
+        type: string
+  SequenceReference:
+    type: object
+    required:
+      - type
+      - refgetAccession
+    properties:
+      type:
+        type: string
+        const: SequenceReference
+      refgetAccession:
+        type: string
+        pattern: ^SQ\.[a-zA-Z0-9_-]+$
