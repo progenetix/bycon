@@ -6,8 +6,8 @@ from pymongo import MongoClient
 
 from bycon import BYC, BYC_DBS, ByconGeolocs, ByconTSVreader
 
-dir_path = path.dirname( path.abspath(__file__) )
-geo_rsrc_path = path.join( dir_path, pardir, "rsrc", "geolocs" )
+dir_path 		= path.dirname( path.abspath(__file__) )
+geo_rsrc_path 	= path.join( dir_path, pardir, "rsrc", "geolocs" )
 
 # https://download.geonames.org/export/dump/cities500.zip
 
@@ -70,14 +70,15 @@ for c in cities:
 		continue
 
 	city = c.get("asciiname", "")
-	country_name = country.get("Country", "___none___")
-	ISO3166alpha2 = country_code
-	ISO3166alpha3 = country.get("ISO3", "")
-	continent_code = country.get("Continent", "___none___")
-	geo_long = float(c.get("longitude", 0))
-	geo_lat = float(c.get("latitude", 0))
-	geoprov_id = f"{city}::{country_name}::{geo_long}::{geo_lat}".lower().replace(" ", "")
-	geo_city = {
+	country_name 	= country.get("Country", "___none___")
+	ISO3166alpha2 	= country_code
+	ISO3166alpha3 	= country.get("ISO3", "")
+	continent_code 	= country.get("Continent", "___none___")
+	geo_long 		= float(c.get("longitude", 0))
+	geo_lat 		= float(c.get("latitude", 0))
+	geoprov_id 		= f"{city}::{country_name}::{geo_long}::{geo_lat}".strip().lower().replace(" ", "")
+
+	geolocs.append({
 		"geonameid": c.get("geonameid"),
 		"geo_source": f"geonames.org {cities_f_n} and {countries_f_n}",
 		"geo_location": {
@@ -91,11 +92,7 @@ for c in cities:
 				"city": city,
 				"continent": BGL.continentFromCode(continent_code),
 				"country": country_name
-		}
-	  }
-	}
-
-	geolocs.append(geo_city)
+	}}})
 
 bar.finish()
 
