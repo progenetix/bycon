@@ -1,16 +1,17 @@
 $id: https://progenetix.org/schemas/ProgenetixGene/v2026-03-26
 $schema: https://json-schema.org/draft/2020-12/schema
 title: ProgenetixGene
-description: NCBI Gene Descriptor (v2reportsGeneDescriptor) extended with GA4GH VRS
+description: >-
+  NCBI Gene Descriptor (v2reportsGeneDescriptor) extended with GA4GH VRS
   SequenceLocations
 type: object
 required:
-- annotations
-- gene_id
-- symbol
-- location
+  - annotations
+  - geneId
+  - symbol
+  - location
 properties:
-  gene_id:
+  geneId:
     type: string
     format: uint64
     title: NCBI Gene ID
@@ -20,29 +21,29 @@ properties:
   description:
     type: string
     title: Gene name
-  tax_id:
+  taxId:
     type: string
     format: uint64
     title: NCBI Taxonomy ID for the organism
   taxname:
     type: string
     title: Taxonomic name of the organism
-  common_name:
+  commonName:
     type: string
     title: Common name of the organism
   type:
     $ref: '#/$defs/v2reportsGeneType'
     title: Type of gene
-  rna_type:
+  rnaType:
     $ref: '#/$defs/v2reportsRnaType'
   orientation:
     $ref: '#/$defs/v2reportsOrientation'
     title: Direction of the gene relative to the genome coordinates
-  reference_standards:
+  referenceStandards:
     type: array
     items:
       $ref: '#/$defs/v2reportsGenomicRegion'
-  genomic_regions:
+  genomicRegions:
     type: array
     items:
       $ref: '#/$defs/v2reportsGenomicRegion'
@@ -50,17 +51,17 @@ properties:
     type: array
     items:
       type: string
-  nomenclature_authority:
+  nomenclatureAuthority:
     $ref: '#/$defs/v2reportsNomenclatureAuthority'
-  swiss_prot_accessions:
+  swissProtAccessions:
     type: array
     items:
       type: string
-  ensembl_gene_ids:
+  ensemblGeneIds:
     type: array
     items:
       type: string
-  omim_ids:
+  omimIds:
     type: array
     items:
       type: string
@@ -68,7 +69,7 @@ properties:
     type: array
     items:
       type: string
-  replaced_gene_id:
+  replacedGeneId:
     type: string
     format: uint64
     title: The NCBI Gene ID for the gene that was merged into the current gene record
@@ -76,17 +77,17 @@ properties:
     type: array
     items:
       $ref: '#/$defs/v2reportsAnnotation'
-  transcript_count:
+  transcriptCount:
     type: integer
     title: Number of transcripts encoded by the gene
-  protein_count:
+  proteinCount:
     type: integer
     title: Number of proteins encoded by the gene
-  transcript_type_counts:
+  transcriptTypeCounts:
     type: array
     items:
       $ref: '#/$defs/v2reportsTranscriptTypeCount'
-  gene_groups:
+  geneGroups:
     type: array
     items:
       $ref: '#/$defs/v2reportsGeneGroup'
@@ -94,9 +95,9 @@ properties:
     type: array
     items:
       $ref: '#/$defs/v2reportsGeneSummary'
-  gene_ontology:
+  geneOntology:
     $ref: '#/$defs/v2reportsGeneOntology'
-  locus_tag:
+  locusTag:
     type: string
   location:
     type: array
@@ -104,6 +105,7 @@ properties:
       $ref: '#/$defs/SequenceLocation'
     description: GA4GH VRS SequenceLocations mapping
 additionalProperties: true
+
 $defs:
   v2reportsGeneType:
     type: string
@@ -140,7 +142,7 @@ $defs:
   v2reportsGenomicRegion:
     type: object
     properties:
-      gene_range:
+      geneRange:
         $ref: '#/$defs/v2reportsSeqRangeSet'
         title: The range of this Gene record on this genomic region.
       type:
@@ -158,19 +160,19 @@ $defs:
   v2reportsAnnotation:
     type: object
     properties:
-      assembly_accession:
+      assemblyAccession:
         type: string
         title: Genome assembly accession
-      assembly_name:
+      assemblyName:
         type: string
         title: Genome assembly name
-      annotation_name:
+      annotationName:
         type: string
         title: Genome annotation name
-      annotation_release_date:
+      annotationReleaseDate:
         type: string
         title: Genome annotation release date
-      genomic_locations:
+      genomicLocations:
         type: array
         items:
           $ref: '#/$defs/v2reportsGenomicLocation'
@@ -208,25 +210,25 @@ $defs:
   v2reportsGeneOntology:
     type: object
     properties:
-      assigned_by:
+      assignedBy:
         type: string
         title: The database that made the annotation
-      molecular_functions:
+      molecularFunctions:
         type: array
         items:
           $ref: '#/$defs/v2reportsProcessMetadata'
-      biological_processes:
+      biologicalProcesses:
         type: array
         items:
           $ref: '#/$defs/v2reportsProcessMetadata'
-      cellular_components:
+      cellularComponents:
         type: array
         items:
           $ref: '#/$defs/v2reportsProcessMetadata'
   v2reportsSeqRangeSet:
     type: object
     properties:
-      accession_version:
+      accessionVersion:
         type: string
         title: NCBI Accession.version of the sequence
       range:
@@ -245,11 +247,11 @@ $defs:
   v2reportsGenomicLocation:
     type: object
     properties:
-      genomic_accession_version:
+      genomicAccessionVersion:
         type: string
-      sequence_name:
+      sequenceName:
         type: string
-      genomic_range:
+      genomicRange:
         $ref: '#/$defs/v2reportsRange'
       exons:
         type: array
@@ -270,10 +272,10 @@ $defs:
       name:
         type: string
         title: Gene ontology term name
-      go_id:
+      goId:
         type: string
         title: Gene ontology identifier
-      evidence_code:
+      evidenceCode:
         type: string
         title: Indicates how the annotation is supported
       qualifier:
@@ -299,7 +301,7 @@ $defs:
       order:
         type: integer
         title: The position of this sequence in a group of sequences
-      ribosomal_slippage:
+      ribosomalSlippage:
         type: integer
         title: When ribosomal slippage is desired, fill out slippage amount between
           this and previous range.
@@ -314,17 +316,17 @@ $defs:
   SequenceLocation:
     type: object
     required:
-    - type
-    - sequence_reference
-    - start
-    - end
-    - sequence_id
-    - chromosome
+      - type
+      - sequenceReference
+      - start
+      - end
+      - sequenceId
+      - chromosome
     properties:
       type:
         type: string
         const: SequenceLocation
-      sequence_reference:
+      sequenceReference:
         $ref: '#/$defs/SequenceReference'
       start:
         type: integer
@@ -332,7 +334,7 @@ $defs:
       end:
         type: integer
         minimum: 0
-      sequence_id:
+      sequenceId:
         type: string
         pattern: '^refseq:'
       chromosome:
@@ -340,12 +342,12 @@ $defs:
   SequenceReference:
     type: object
     required:
-    - type
-    - refget_accession
+      - type
+      - refgetAccession
     properties:
       type:
         type: string
         const: SequenceReference
-      refget_accession:
+      refgetAccession:
         type: string
         pattern: ^SQ\.[a-zA-Z0-9_-]+$
