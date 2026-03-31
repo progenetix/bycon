@@ -1,6 +1,6 @@
 import csv, re, sys, time, base36, yaml
 from datetime import datetime
-from os import environ, path, pardir
+from os import environ, path
 
 from bycon import BYC, ByconID, Cytobands, ByconVariant, ChroNames
 

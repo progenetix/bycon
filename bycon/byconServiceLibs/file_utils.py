@@ -2,7 +2,7 @@ import csv
 import re
 
 from pathlib import Path
-from os import environ, pardir, path
+from os import environ, path
 from pymongo import MongoClient
 from random import sample as random_samples
 

@@ -1,5 +1,5 @@
 import re
-from os import environ, path, pardir
+from os import environ, path
 from pymongo import MongoClient
 from operator import itemgetter
 

@@ -1,7 +1,7 @@
 import humps, re, json, yaml
 
 from json_ref_dict import RefDict, materialize
-from os import path, scandir, pardir
+from os import path, scandir
 from pathlib import Path
 
 # ------------------------------- bycon imports -------------------------------#

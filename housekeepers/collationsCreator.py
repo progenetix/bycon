@@ -3,10 +3,9 @@
 import json, re, sys, yaml
 from datetime import datetime
 from os import path, environ, pardir
-from pymongo import MongoClient
 from progress.bar import Bar
 
-from bycon import BYC, BYC_DBS, config, prdbug
+from bycon import BYC, BYC_DBS, ByconMongo, prdbug
 from byconServiceLibs import assert_single_dataset_or_exit, hierarchy_from_file, set_collation_types, write_log
 
 dir_path = path.dirname( path.abspath(__file__) )
@@ -31,15 +30,14 @@ def main():
     f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
     
     for coll_type, coll_defs in f_d_s.items():
-        collationed = coll_defs.get("collationed")
-        if not collationed:
-            continue
         __process_collation_type(ds_id, coll_type, coll_defs)
 
 
 ################################################################################
 
 def __process_collation_type(ds_id, coll_type, coll_defs):
+    if not coll_defs.get("collationed"):
+        return
     pre_h_f = path.join( project_path, "rsrc", "classificationTrees", f"{coll_type}.tsv" )
     collection = coll_defs["scope"]
     db_key = coll_defs["db_key"]
@@ -56,8 +54,8 @@ def __process_collation_type(ds_id, coll_type, coll_defs):
 
     hier_min = coll_defs.get("term_min_depth", 0) + 1
 
-    coll_coll = MongoClient(host=BYC_DBS["mongodb_host"])[ ds_id ]["collations"]
-    data_coll = MongoClient(host=BYC_DBS["mongodb_host"])[ ds_id ][ collection ]
+    coll_coll = ByconMongo(ds_id).openMongoColl("collations")
+    data_coll = ByconMongo(ds_id).openMongoColl(collection)
 
     onto_ids = __get_ids_for_prefix( data_coll, coll_defs )
     onto_keys = list( set(onto_ids) & hier.keys() )
@@ -142,17 +140,16 @@ def get_prefix_hierarchy(ds_id, coll_type, pre_h_f):
         return
 
     hier = hierarchy_from_file(ds_id, coll_type, pre_h_f)
-    no = len(hier.keys())
 
     # now adding terms missing from the tree ###################################
     print("Looking for missing {} codes in {}.{} ...".format(coll_type, ds_id, coll_defs["scope"]))
 
-    data_coll = MongoClient(host=BYC_DBS["mongodb_host"])[ ds_id ][coll_defs["scope"]]
-    db_key = coll_defs.get("db_key", "")    
-    onto_ids = __get_ids_for_prefix( data_coll, coll_defs )
+    data_coll   = ByconMongo(ds_id).openMongoColl(coll_defs["scope"])
+    db_key      = coll_defs.get("db_key", "")    
+    onto_ids    = __get_ids_for_prefix( data_coll, coll_defs )
 
+    no = len(hier.keys())
     added_no = 0
-
     if coll_type == "NCIT":
         added_no += 1
         no += 1
@@ -223,24 +220,21 @@ def get_prefix_hierarchy(ds_id, coll_type, pre_h_f):
 ################################################################################
 
 def __make_dummy_publication_hierarchy(ds_id):
-    f_d_s = BYC.get("filter_definitions", {}).get("$defs", {})
-    coll_type = "pubmed"
-    coll_defs = f_d_s[coll_type]
-
-    data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ ds_id ]
-    data_coll = data_db[ coll_defs["scope"] ]
-    data_pat = coll_defs["pattern"]
-    db_key = coll_defs["db_key"]
+    f_d_s       = BYC.get("filter_definitions", {}).get("$defs", {})
+    coll_type   = "pubmed"
+    coll_defs   = f_d_s.get(coll_type, {})
+    data_coll   = ByconMongo(ds_id).openMongoColl(coll_defs["scope"])
+    data_pat    = coll_defs["pattern"]
+    db_key      = coll_defs["db_key"]
 
     pre_ids = __get_ids_for_prefix(data_coll, coll_defs)
 
-    pub_coll = MongoClient(host=BYC_DBS["mongodb_host"])["_byconServicesDB"]["publications"]
-    query = { "id": { "$regex": r'^pubmed\:\d+?$' } }
-    no = len(pre_ids)
-    bar = Bar("Publications...", max = no, suffix='%(percent)d%%'+" of "+str(no) )
+    pub_coll    = ByconMongo("_byconServicesDB").openMongoColl("publications")
+    query       = { "id": { "$regex": r'^pubmed\:\d+?$' } }
+    no          = len(pre_ids)
+    bar         = Bar("Publications...", max = no, suffix='%(percent)d%%'+" of "+str(no) )
 
     hier = {}
-
     order = 0
     for pmid in pre_ids:
         if not (pub := pub_coll.find_one( {"id": pmid }, { "_id": 0 } )):
@@ -271,16 +265,15 @@ def __make_dummy_publication_hierarchy(ds_id):
 ################################################################################
 
 def __get_dummy_hierarchy(ds_id, coll_type, coll_defs):
-    data_db = MongoClient(host=BYC_DBS["mongodb_host"])[ ds_id ]
-    data_coll = data_db[ coll_defs["scope"] ]
-    data_pat = coll_defs["pattern"]
-    db_key = coll_defs["db_key"]
+    data_coll   = ByconMongo(ds_id).openMongoColl(coll_defs["scope"])
+    data_pat    = coll_defs["pattern"]
+    db_key      = coll_defs["db_key"]
 
     pre_ids = __get_ids_for_prefix(data_coll, coll_defs)
+
     hier = { }
     no = len(pre_ids)
     bar = Bar(coll_type, max = no, suffix='%(percent)d%%'+" of "+str(no) )
-
     for order, c_id in enumerate(sorted(pre_ids), start=1):
         bar.next()
         hier.update( { c_id: __get_hierarchy_item( data_coll, coll_defs, coll_type, c_id, order, 0, [ c_id ] ) } )
@@ -292,21 +285,21 @@ def __get_dummy_hierarchy(ds_id, coll_type, coll_defs):
 ################################################################################
 
 def __get_hierarchy_item(data_coll, coll_defs, coll_type, c_id, order, depth, path):
-
     return {
-        "id":  c_id,
-        "label": __get_label_for_code(data_coll, coll_defs, c_id),
-        "type": coll_defs.get("type", ""),
-        "collation_type": coll_type,
+        "id":               c_id,
+        "label":            __get_label_for_code(data_coll, coll_defs, c_id),
+        "type":             coll_defs.get("type", ""),
+        "collation_type":   coll_type,
         "namespace_prefix": coll_defs.get("namespace_prefix", ""),
-        "scope": coll_defs.get("scope", ""),
-        "entity": coll_defs.get("entity", ""),
-        "db_key": coll_defs.get("db_key", ""),
-        "updated": datetime.now().isoformat(),
-        "hierarchy_paths": [ { "order": int(order), "depth": int(depth), "path": list(path) } ],
-        "parent_terms": list(path),
-        "child_terms": [ c_id ]
+        "scope":            coll_defs.get("scope", ""),
+        "entity":           coll_defs.get("entity", ""),
+        "db_key":           coll_defs.get("db_key", ""),
+        "updated":          datetime.now().isoformat(),
+        "hierarchy_paths":  [ { "order": int(order), "depth": int(depth), "path": list(path) } ],
+        "parent_terms":     list(path),
+        "child_terms":      [ c_id ]
     }
+
 
 ################################################################################
 
@@ -314,31 +307,11 @@ def __get_ids_for_prefix(data_coll, coll_defs):
 
     db_key = coll_defs["db_key"]
     pre_re = re.compile( coll_defs["pattern"] )
-
-    prdbug(f'__get_ids_for_prefix ... : "{db_key}"" - pattern {pre_re}')
     pre_ids = data_coll.distinct( db_key, { db_key: { "$regex": pre_re } } )
     pre_ids = list(filter(lambda d: pre_re.match(d), pre_ids))
-    prdbug(f'__get_ids_for_prefix ... : found {len(pre_ids)}')
+    prdbug(f'__get_ids_for_prefix "{db_key}" (pattern {pre_re}): found {len(pre_ids)}')
 
     return pre_ids
-
-################################################################################
-
-def _get_child_ids_for_prefix(data_coll, coll_defs):
-
-    child_ids = []
-
-    if not "series_pattern" in coll_defs:
-        return child_ids
-
-    db_key = coll_defs["db_key"]
-
-    child_re = re.compile( coll_defs["series_pattern"] )
-
-    child_ids = data_coll.distinct( db_key, { db_key: { "$regex": child_re } } )
-    child_ids = list(filter(lambda d: child_re.match(d), child_ids))
-
-    return child_ids
 
 
 ################################################################################
@@ -359,6 +332,7 @@ def __get_label_for_code(data_coll, coll_defs, c_id):
         ex_par = ex_par[0]
     if (ex_lab := ex_par.get("label")):
         return ex_lab
+
     return c_id
 
 
