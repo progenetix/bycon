@@ -33,6 +33,7 @@ class ByconMongo:
         self.databases      = list(self.client.list_database_names())
         self.db_name        = self.__check_db_name(db_name)
         self.collections    = []
+        self.dummy          = {"id": "___dummy___"}
 
 
     #--------------------------------------------------------------------------#
@@ -79,6 +80,32 @@ class ByconMongo:
     def resultCursorFromQuery(self, coll_name, query, fields={}):
         coll = self.openMongoColl(coll_name)
         return coll.find(query, fields)
+
+
+    #--------------------------------------------------------------------------#
+
+    def insertDummy(self, coll_name):
+        self.openMongoDatabase()
+        res = self.db[coll_name].insert_one(self.dummy)
+        return res
+
+
+    #--------------------------------------------------------------------------#
+
+    def deleteDummies(self, coll_name):
+        self.openMongoDatabase()
+        res = self.db[coll_name].delete_many(self.dummy)
+        return res
+
+
+    #--------------------------------------------------------------------------#
+
+    def deleteOneDocument(self, coll_name, query):
+        if type(query) is not dict:
+            return False
+        coll = self.openMongoColl(coll_name)
+        doc_id = coll.delete_one(query)
+        return doc_id
 
 
     #--------------------------------------------------------------------------#

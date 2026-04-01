@@ -49,6 +49,7 @@ class ByconBundler:
         self.datasets_results       = None
         self.collation_types        = BYC_PARS.get("collation_types", [])
         self.min_number             = BYC_PARS.get("min_number", 0)
+        self.entity_dbs             = BYC_DBS.get("collections", {})
         self.header                 = []
         self.data                   = []
         self.fieldnames             = []
@@ -267,7 +268,10 @@ class ByconBundler:
 
     def __analyses_bundle_from_result_set(self):
         # TODO: doesn't really work for biosamples until we have status maps etc.
-        bundle_type = "analyses"
+        bundle_type              = "analyses"
+        bundle_cnvdb             = f"{bundle_type}_interval_maps"
+        bundle_item_foreign_key  = "analysis_id"
+
         for ds_id, ds_res in self.datasets_results.items():
             prdbug(f'... __analyses_bundle_from_result_set {ds_id} => {ds_res.keys()}')
             res_k = f'{bundle_type}.id'
@@ -276,14 +280,16 @@ class ByconBundler:
             if not res_k in ds_res:
                 continue
 
-            sample_coll     = ByconMongo(ds_id).openMongoColl(bundle_type)
-            s_r             = ds_res[res_k]
-            s_ids           = s_r["target_values"]
-            r_no            = len(s_ids)
-            s_ids           = ByconH().paginated_list(s_ids, self.skip, self.limit)
+            cnv_coll    = ByconMongo(ds_id).openMongoColl(bundle_cnvdb)
+            s_r         = ds_res[res_k]
+            s_ids       = s_r["target_values"]
+            r_no        = len(s_ids)
+            s_ids       = ByconH().paginated_list(s_ids, self.skip, self.limit)
+
             prdbug(f'...... __analyses_bundle_from_result_set after limit: {len(s_ids)}')
+
             for s_id in s_ids:
-                s = sample_coll.find_one({"id": s_id })
+                s = cnv_coll.find_one({bundle_item_foreign_key: s_id })
 
                 cnv_chro_stats = s.get("cnv_chro_stats", False)
                 cnv_statusmaps = s.get("cnv_statusmaps", False)
@@ -292,13 +298,13 @@ class ByconBundler:
                     continue
 
                 p_o = {
-                    "dataset_id": ds_id,
-                    "analysis_id": s.get("id", "NA"),
-                    "biosample_id": s.get("biosample_id", "NA"),
-                    "label": s.get("label", s.get("biosample_id", "")),
-                    "cnv_chro_stats": s.get("cnv_chro_stats"),
-                    "cnv_statusmaps": s.get("cnv_statusmaps"),
-                    "variants": []
+                    "dataset_id":       ds_id,
+                    "analysis_id":      s.get(bundle_item_foreign_key, "NA"),
+                    "biosample_id":     s.get("biosample_id", "NA"),
+                    "label":            s.get("label", s.get("biosample_id", "")),
+                    "cnv_chro_stats":   s.get("cnv_chro_stats"),
+                    "cnv_statusmaps":   s.get("cnv_statusmaps"),
+                    "variants":         []
                 }
 
                 # TODO: add optional probe reading and ...

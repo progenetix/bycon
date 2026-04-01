@@ -420,8 +420,9 @@ def export_callsets_matrix(datasets_results, ds_id):
 
     if not (cs_r := datasets_results[ds_id].get("analyses.id")):
         return
-    bs_coll = ByconMongo(ds_id).openMongoColl("biosamples")
-    cs_coll = ByconMongo(ds_id).openMongoColl("analyses")
+    bs_coll     = ByconMongo(ds_id).openMongoColl("biosamples")
+    cs_coll     = ByconMongo(ds_id).openMongoColl("analyses")
+    cnv_coll    = ByconMongo(ds_id).openMongoColl("analyses_interval_maps")
 
     open_text_streaming("interval_callset_matrix.pgxmatrix")
 
@@ -459,22 +460,22 @@ def export_callsets_matrix(datasets_results, ds_id):
     print("\t".join(h_line))
 
     for cs_id, group_id in cs_ids.items():
-        cs = cs_coll.find_one({"id":cs_id})
+        cs_cnvs = cnv_coll.find_one({"analysis_id":cs_id})
         if "values" in m_format:
             print("\t".join(
                 [
                     cs_id,
-                    cs.get("biosample_id", "NA"),
+                    cs_cnvs.get("biosample_id", "NA"),
                     group_id,
-                    *map(str, cs["cnv_statusmaps"]["max"]),
-                    *map(str, cs["cnv_statusmaps"]["min"])
+                    *map(str, cs_cnvs["cnv_statusmaps"]["max"]),
+                    *map(str, cs_cnvs["cnv_statusmaps"]["min"])
                 ]
             ))
         else:
             print("\t".join(
                 [
                     cs_id,
-                    cs.get("biosample_id", "NA"),
+                    cs_cnvs.get("biosample_id", "NA"),
                     group_id,
                     *map(str, cs["cnv_statusmaps"]["dup"]),
                     *map(str, cs["cnv_statusmaps"]["del"])
