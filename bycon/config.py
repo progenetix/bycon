@@ -89,7 +89,10 @@ BYC_DBS = {
         "filteringTerm":    "collations",
         "cohort":           "collations",
         "collation":        "collations",
-        "publication":      "publications"
+        "publication":      "publications",
+        "analyses_cnv_maps":    "analyses_1Mb_maps",
+        "analyses_genes_maps":  "analyses_genes_maps"
+
     }
 }
 
