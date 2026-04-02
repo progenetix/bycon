@@ -269,7 +269,7 @@ class ByconBundler:
     def __analyses_bundle_from_result_set(self):
         # TODO: doesn't really work for biosamples until we have status maps etc.
         bundle_type              = "analyses"
-        bundle_cnvdb             = f"{bundle_type}_interval_maps"
+        bundle_cnvdb             = f"{bundle_type}_1Mb_maps"
         bundle_item_foreign_key  = "analysis_id"
 
         for ds_id, ds_res in self.datasets_results.items():

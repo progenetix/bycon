@@ -71,12 +71,13 @@ end:
 class GenomeBins:
     def __init__(self, binning=None):
         self.genome_definitions = BYC.get("genome_definitions", {})
+        self.genome_bin_default = self.genome_definitions.get("genome_bin_default", "1Mb")
         self.variant_type_definitions = BYC.get("variant_type_definitions", {})
 
         if binning:       
             self.binning = binning
         else:
-            self.binning = BYC_PARS.get("genome_binning", "1Mb")
+            self.binning = BYC_PARS.get("genome_binning", self.genome_bin_default)
 
         self.cnv_lengths    = False
 

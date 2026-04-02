@@ -7,7 +7,6 @@ genome_bin_sizes:
       frequency maps (parameter --genomeBinning)
     * only ...Mb, kb or b are supported as unit (or no unit => b)
   values:
-    default: 1000000
     1Mb: 1000000
     2Mb: 2000000
     3Mb: 3000000
@@ -55,9 +54,9 @@ interval_min_fraction:
   description: >-
     This value can be used to exclude intervals with a very low CNV overlap (e.g.
     when denoising or to limit edge counts). It is e.g. used for frequency
-    calculations; a default of 0.001 results in <1kb not being counted for 1Mb
+    calculations; a default of 0.0001 results in <100bp not being counted for 1Mb
     bins.
-  value: 0.001
+  value: 0.0001
 
 chromosomes:            # defined in order & as strings
   - "1"

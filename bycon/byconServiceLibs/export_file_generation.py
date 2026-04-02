@@ -422,7 +422,7 @@ def export_callsets_matrix(datasets_results, ds_id):
         return
     bs_coll     = ByconMongo(ds_id).openMongoColl("biosamples")
     cs_coll     = ByconMongo(ds_id).openMongoColl("analyses")
-    cnv_coll    = ByconMongo(ds_id).openMongoColl("analyses_interval_maps")
+    cnv_coll    = ByconMongo(ds_id).openMongoColl("analyses_1Mb_maps")
 
     open_text_streaming("interval_callset_matrix.pgxmatrix")
 
@@ -447,8 +447,10 @@ def export_callsets_matrix(datasets_results, ds_id):
 
     bios_ids = set()
     cs_ids = {}
-    cs_cursor = cs_coll.find({"id": {"$in": q_vals }, "cnv_statusmaps": {"$exists": True}} )
+    cs_cursor = cs_coll.find({"id": {"$in": q_vals }} )
     for cs in cs_cursor:
+        if not (cnv_coll.find_one({"analysis_id": cs["id"]})):
+            continue
         bios = bs_coll.find_one( { "id": cs["biosample_id"] } )
         bios_ids.add(bios["id"])
         s_line = "#sample=>biosample_id={};analysis_id={}".format(bios["id"], cs["id"])
@@ -477,8 +479,8 @@ def export_callsets_matrix(datasets_results, ds_id):
                     cs_id,
                     cs_cnvs.get("biosample_id", "NA"),
                     group_id,
-                    *map(str, cs["cnv_statusmaps"]["dup"]),
-                    *map(str, cs["cnv_statusmaps"]["del"])
+                    *map(str, cs_cnvs["cnv_statusmaps"]["dup"]),
+                    *map(str, cs_cnvs["cnv_statusmaps"]["del"])
                 ]
             ))
 

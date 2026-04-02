@@ -123,10 +123,10 @@ def remap_analyses(r_s_res):
         return r_s_res
         # ./beaconServer/beacon.py -d progenetix -r analyses --includeHandovers false --geneId CDKN2A --variantType "EFO:0020073" --deliveryKeys var_genemaps
 
-    pop_keys = ["info", "geo_location", "cnv_statusmaps", "cnv_chro_stats", "cnv_stats", "var_genemaps"]
+    pop_keys = ["info", "geo_location"]
     # TODO: move the cnvstats option away from here
     if "cnvstats" in str(BYC_PARS.get("request_entity_path_id")):
-        pop_keys = ["info", "cnv_statusmaps"]
+        pop_keys = ["info"]
     for cs_i, cs_r in enumerate(r_s_res):
         for k in pop_keys:
             r_s_res[cs_i].pop(k, None)
