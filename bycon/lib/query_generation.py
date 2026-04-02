@@ -54,6 +54,10 @@ class ByconQuery:
         self.cytoband_definitions = BYC.get("cytobands", [])
         self.ChroNames = ChroNames()
 
+        # WiP - currently disabled
+        # self.priority_genes       = list(BYC.get("priority_genes", {}).keys())
+        self.priority_genes     = []
+
         self.requested_entity   = BYC.get("request_entity_id", False)
         self.response_entity    = BYC.get("response_entity", {})
         self.response_entity_id = BYC.get("response_entity_id", "")
@@ -484,9 +488,9 @@ class ByconQuery:
             # Since this is a pre-processor to the range request
             v_pars.update(
                 {
-                    "reference_name": f"refseq:{gene.get('accession_version', '___none___')}",
-                    "start": [gene.get("start", 0)],
-                    "end": [gene.get("end", 1)],
+                    "reference_name": f"{gene["location"][0].get('sequence_id', '___none___')}",
+                    "start": [gene["location"][0].get("start", 0)],
+                    "end": [gene["location"][0].get("end", 1)],
                 }
             )
             q_t = self.__create_variantRangeRequest_query(v_pars)
@@ -518,7 +522,7 @@ class ByconQuery:
         query_obj   = {}
         entity      = "analysis"
 
-        if g not in BYC.get("priority_genes", {}).keys():
+        if g not in self.priority_genes:
             return False
 
         query_obj   = {"gene_symbol": gene}
