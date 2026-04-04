@@ -90,9 +90,9 @@ BYC_DBS = {
         "cohort":           "collations",
         "collation":        "collations",
         "publication":      "publications",
-        "analyses_cnv_maps":    "analyses_1Mb_maps",
-        "analyses_genes_maps":  "analyses_genes_maps"
-
+        "analysis_cnv_map":  "analyses_1Mb_maps",
+        "analysis_gene_map": "analyses_genes_maps",
+        "collation_cnv_map": "collations_1Mb_frequencymaps"
     }
 }
 
