@@ -1,6 +1,6 @@
 import datetime
 from bycon import ByconResultSets, prdbug
-from byconServiceLibs import GenomeBins, export_callsets_matrix
+from byconServiceLibs import export_callsets_matrix
 
 def samplematrix():
     """
@@ -10,8 +10,6 @@ def samplematrix():
     `.../biosamples/{id}`
     """
     prdbug(f'... starting at {datetime.datetime.now().strftime("%H:%M:%S")}')
-    GenomeBins()
-    prdbug(f'... start results query at {datetime.datetime.now().strftime("%H:%M:%S")}')
     rss = ByconResultSets().datasetsResults()
     prdbug(f'... finished results query at {datetime.datetime.now().strftime("%H:%M:%S")}')
     # TODO: right now only the first dataset will be exported ...

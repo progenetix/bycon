@@ -564,18 +564,18 @@ class ByconPlot:
     # -------------------------------------------------------------------------#
 
     def __plot_add_histogram_circle(self, f_set):
-        i_f = f_set.get("interval_frequencies", [])
-        cnv_c = self.plv.get("histoval_colorkeys", {})
-        cnv_f = self.plv.get("histoval_directions", {})
-        area_f_0 = self.plv["start_f"]
+        i_f         = f_set.get("interval_frequencies", [])
+        cnv_c       = self.plv.get("histoval_colorkeys", {})
+        cnv_f       = self.plv.get("histoval_directions", {})
+        area_f_0    = self.plv["start_f"]
 
         for chro in self.plv["plot_chros"]:
-            c_l = self.cytolimits.get(str(chro), {})
-            chr_f = c_l["size"] / self.plv["circ_genome_with_gaps"]
-            c_f_s = area_f_0
-            c_f_e = area_f_0 + chr_f
-            z_x, z_y = self.BCT.point_xy(self.plv["circ_radius_hist_zero"], c_f_s)
-            e_x, e_y = self.BCT.point_xy(self.plv["circ_radius_hist_zero"], c_f_e)
+            c_l         = self.cytolimits.get(str(chro), {})
+            chr_f       = c_l["size"] / self.plv["circ_genome_with_gaps"]
+            c_f_s       = area_f_0
+            c_f_e       = area_f_0 + chr_f
+            z_x, z_y    = self.BCT.point_xy(self.plv["circ_radius_hist_zero"], c_f_s)
+            e_x, e_y    = self.BCT.point_xy(self.plv["circ_radius_hist_zero"], c_f_e)
 
             largeArcFlag = 0
             if c_f_s > (self.plv["start_f"] + 1):
@@ -591,14 +591,14 @@ class ByconPlot:
             )
             self.plv["pls"].append(pieSVG)
 
-            c_i_f = list(filter(lambda d: d["reference_name"] == chro, i_f.copy()))
-            c_i_no = len(c_i_f)
+            c_i_f   = list(filter(lambda d: d["reference_name"] == chro, i_f.copy()))
+            c_i_no  = len(c_i_f)
 
             # using explicit order for overplotting with HL values
             for GL in ["gain_frequency", "gain_hlfrequency", "loss_frequency", "loss_hlfrequency"]:
-                p_c_k = cnv_c.get(GL, "___none___")
-                p_c = self.plv.get(p_c_k, "#808080")
-                h_f = cnv_f.get(GL, 1)
+                p_c_k   = cnv_c.get(GL, "___none___")
+                p_c     = self.plv.get(p_c_k, "#808080")
+                h_f     = cnv_f.get(GL, 1)
 
                 histoSVG = f'\n<path d= "' + " ".join([str(x) for x in [
                     'M', e_x, e_y,
@@ -607,18 +607,19 @@ class ByconPlot:
                     'L ']])
 
                 for c_i_i, i_v in enumerate(c_i_f, start=1):
-                    i_s = i_v.get("start", 0)
-                    m = i_s + (i_v.get("end", 0) - i_s) / 2
-                    l_f_p = m / self.plv["circ_genome_with_gaps"]
-                    l_f_f = area_f_0 + l_f_p
-                    v = i_v.get(GL, 0)
-                    h = v * self.plv["plot_y2pf"] * h_f
-                    r_v = self.plv["circ_radius_hist_zero"] + h
-                    s_x, s_y = self.BCT.point_xy(r_v, l_f_f)
-                    histoSVG += f'{s_x} {s_y} '
+                    i_s         = i_v.get("start", 0)
+                    m           = i_s + (i_v.get("end", 1) - i_s) / 2
+                    l_f_p       = m / self.plv["circ_genome_with_gaps"]
+                    l_f_f       = area_f_0 + l_f_p
+                    v           = i_v.get(GL, 0)
+                    h           = v * self.plv["plot_y2pf"] * h_f
+                    r_v         = self.plv["circ_radius_hist_zero"] + h
+                    s_x, s_y    = self.BCT.point_xy(r_v, l_f_f)
+                    histoSVG    += f'{s_x} {s_y} '
 
                 histoSVG += f' Z" style="stroke-width: 0.0;  fill: {p_c};" />'
                 self.plv["pls"].append(histoSVG)
+
             area_f_0 += chr_f + self.plv["circ_gap_fraction"]
 
         self.__plot_histogram_circle_add_grid()

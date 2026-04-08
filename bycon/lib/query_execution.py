@@ -27,12 +27,13 @@ class ByconDatasetResults():
         self.res_obj_defs = {}
         self.queries = {}
         for e in self.queried_entities:
-            prdbug(f"... setting up response object definition for {e}")
-            c = BYC_DBS.get("collections", {}).get(e, "___none___")
+            bycon_entity = RecordsHierarchy().entityAlias(e)
+            prdbug(f"... setting up response object definition for {bycon_entity}")
+            c = BYC_DBS.get("collections", {}).get(bycon_entity, "___none___")
             self.res_obj_defs.update({f'{c}.id': {
                 "collection": c,
-                "entity_id": e,
-                "id_parameter": f'{e}_id',
+                "entity_id": bycon_entity,
+                "id_parameter": f'{bycon_entity}_id',
                 "upstream_ids": [f'{x}_id' for x in RecordsHierarchy().upstream(e)]
             }})
 
@@ -100,11 +101,11 @@ class ByconDatasetResults():
             if not (e in q_e_s):
                 continue
             query = self.queries.get(e)
+            bycon_entity = RecordsHierarchy().entityAlias(e)
             c = BYC_DBS.get("collections", {}).get(e, "___none___")
             ent_resp_def = self.res_obj_defs.get(f'{c}.id')
             prdbug(f"... prefetching entity multi id response for {e} with query {query}")
             self.__prefetch_entity_multi_id_response(ent_resp_def, query)
-            prdbug(f"... prefetching worked")
 
 
     # -------------------------------------------------------------------------#
@@ -115,6 +116,7 @@ class ByconDatasetResults():
 
 
         """
+        prdbug(h_o_def)
         t_c     = h_o_def.get("collection")
         d_k_s   = h_o_def.get("upstream_ids", [])
         m_k     = h_o_def.get("id_parameter", "id")
@@ -167,6 +169,7 @@ class ByconDatasetResults():
         t_c     = h_o_def.get("collection")
         id_k    = h_o_def.get("id_parameter")
         ids     = self.bycon_mongo.distinctsFromQuery(t_c, "id", query)
+        prdbug(f"__refetch_entity_id_response {id_k} => {query}")
 
         if (ex_resp := self.id_responses.get(id_k)):
             self.id_responses.update({id_k: {"values": list(set(ex_resp.get("values", [])) & set(ids))}})

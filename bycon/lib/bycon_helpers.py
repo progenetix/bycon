@@ -62,6 +62,18 @@ class ByconMongo:
 
     #--------------------------------------------------------------------------#
 
+    def recreateMongoColl(self, coll_name=None):
+        if (coll := self.openMongoColl(coll_name)) is not False:
+            coll.drop()
+        self.insertDummy(coll_name)
+        coll = self.openMongoColl(coll_name)
+        coll.create_index("id", unique=True)
+        self.deleteDummies(coll_name)
+        return coll
+
+
+    #--------------------------------------------------------------------------#
+
     def databaseList(self):
         return self.databases
 
@@ -84,17 +96,21 @@ class ByconMongo:
 
     #--------------------------------------------------------------------------#
 
-    def insertDummy(self, coll_name):
+    def insertDummy(self, coll_name, dummy=None):
+        if type(dummy) is not dict:
+            dummy = self.dummy
         self.openMongoDatabase()
-        res = self.db[coll_name].insert_one(self.dummy)
+        res = self.db[coll_name].insert_one(dummy)
         return res
 
 
     #--------------------------------------------------------------------------#
 
-    def deleteDummies(self, coll_name):
+    def deleteDummies(self, coll_name, dummy_query=None):
+        if type(dummy_query) is not dict:
+            dummy_query = self.dummy
         self.openMongoDatabase()
-        res = self.db[coll_name].delete_many(self.dummy)
+        res = self.db[coll_name].delete_many(dummy_query)
         return res
 
 

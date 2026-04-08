@@ -18,6 +18,20 @@ milestones.
 * codeSmetics
 * placeholder `__plot_add_markers_circle` in `bycon_plot`
 * new `geo_defaults.yaml` for default geolocation parameters (e.g. for unknown locations)
+* `FIX: GenomeBins()` invokd a new instance of `Cytobands` for each interval
+  during generation - i.e. reading in the cytoband file...
+* changed the command line argument shortcut for `--requestEntityPathId` to `-e`
+* Changes to allow the coherent use of multiple CNV statusmap and frequency options through the use of the --genomeBinning parameter. Implemented in the `bycon` package is now an extension of the `GenomeBins` class which creates canonical collection names for the binning depending status and frequency collections; and their names can be retrieved through
+
+* `GenomeBins().analysisCNVmapCollection()`
+* `GenomeBins().collationCNVmapCollection()`
+
+... respectively. 
+
+#### Examples
+
+* In `byconaut` preparing the collections with `./utilities/analysesStatusmapsRefresher.py --limit 0 -d progenetix --genomeBinning 10Mb && ./utilities/collationsFrequencymapsCreator.py --limit 2000 -d progenetix --genomeBinning 10Mb`
+* use of the so created maps in `bycon` services API calls, e.g. <https://progenetix.org/services/sampleplots/?filters=pgx:icdom-85003&plotPars=plotChros:1,8,17::plotGeneSymbols:MYC,ERBB2,TP53&limit=1000&datasetIds=progenetix&genomeBinning=10Mb>
 
 ### 2026-03-16 (v2.8.0 "genemaps")
 

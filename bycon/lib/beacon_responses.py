@@ -962,6 +962,7 @@ class ByconResultSets:
     def __retrieve_single_dataset_data(self, ds_id="___none___"):
         if not (ds_results := self.datasets_results.get(ds_id)):
             return
+        prdbug(f" ... __retrieve_single_dataset_data hok {self.handover_key} vs. {ds_results.keys()}")
         if self.handover_key not in ds_results.keys():
             return
         res = ds_results.get(self.handover_key, {})
@@ -1006,8 +1007,9 @@ class ByconResultSets:
                 collection = h_o_k.split(".")[0]
                 info["counts"].update({collection: h_o["target_count"]})
                 entity = h_o.get("entity_id", "___none___")
+                bycon_entity = RecordsHierarchy().entityAlias(self.response_entity_id)
                 prdbug(f"__populate_result_sets key {h_o_k} .. entity {entity} with response_entity_id {self.response_entity_id}")
-                if entity == self.response_entity_id:
+                if entity == bycon_entity:
                     rs_c = h_o["target_count"]
             self.result_sets[i].update(
                 {

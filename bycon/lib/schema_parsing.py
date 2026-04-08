@@ -36,19 +36,21 @@ class RecordsHierarchy:
     # -------------------------------------------------------------------------#
 
     def entities(self):
-        return self.record_entities
+        # return self.record_entities
+        return list(self.record_aliases.keys())
 
 
     # -------------------------------------------------------------------------#
 
     def entityAlias(self, entity):
-        self.record_aliases.get(entity, entity)
+        return self.record_aliases.get(entity, entity)
 
 
     # -------------------------------------------------------------------------#
 
     def downstream(self, entity="___none___"):
         ds = []
+        entity = self.entityAlias(entity)
         if entity not in self.record_entities:
             return ds
         now = False
@@ -64,6 +66,7 @@ class RecordsHierarchy:
 
     def upstream(self, entity="___none___"):
         us = []
+        entity = self.entityAlias(entity)
         if entity not in self.record_entities:
             return us
         now = True

@@ -58,6 +58,8 @@ class ByconBundler:
         self.analysisVarsBundles    = []
         self.intervalFreqsBundles   = []
 
+        self.GB            = GenomeBins()
+
         self.bundle = {
             "variants":     [],
             "analyses":     [],
@@ -143,19 +145,6 @@ class ByconBundler:
 
     #--------------------------------------------------------------------------#
 
-    def pgxseg_to_keyed_bundle(self, filepath):
-        self.readPGXfile(filepath)
-        if not "biosample_id" in self.fieldnames:
-            self.errors.append("¡¡¡ The `biosample_id` parameter is required for variant assignment !!!")
-            return
-        self.__deparse_pgxseg_samples_header()
-        self.__keyed_bundle_add_variants_from_lines()
-
-        return self.keyedBundle
-
-
-    #--------------------------------------------------------------------------#
-
     def pgxseg_to_plotbundle(self, filepath):
         self.pgxseg_to_keyed_bundle(filepath)
         self.__flatten_keyed_bundle()
@@ -167,6 +156,19 @@ class ByconBundler:
             "interval_frequencies_bundles": afb,
             "analyses_variants_bundles": avb
         }
+
+
+    #--------------------------------------------------------------------------#
+
+    def pgxseg_to_keyed_bundle(self, filepath):
+        self.readPGXfile(filepath)
+        if not "biosample_id" in self.fieldnames:
+            self.errors.append("¡¡¡ The `biosample_id` parameter is required for variant assignment !!!")
+            return
+        self.__deparse_pgxseg_samples_header()
+        self.__keyed_bundle_add_variants_from_lines()
+
+        return self.keyedBundle
 
 
     #--------------------------------------------------------------------------#
@@ -268,42 +270,42 @@ class ByconBundler:
 
     def __analyses_bundle_from_result_set(self):
         # TODO: doesn't really work for biosamples until we have status maps etc.
-        bundle_type              = "analyses"
-        bundle_cnvdb             = f"{bundle_type}_1Mb_maps"
-        bundle_item_foreign_key  = "analysis_id"
+        bundle_type     = "analyses"
+        bundle_cnvdb    = self.GB.analysisCNVmapCollection()
 
         for ds_id, ds_res in self.datasets_results.items():
-            prdbug(f'... __analyses_bundle_from_result_set {ds_id} => {ds_res.keys()}')
-            res_k = f'{bundle_type}.id'
             if not ds_res:
                 continue
+            prdbug(f'... __analyses_bundle_from_result_set {ds_id} => {ds_res.keys()}')
+            res_k = f'{bundle_type}.id'
             if not res_k in ds_res:
                 continue
 
-            cnv_coll    = ByconMongo(ds_id).openMongoColl(bundle_cnvdb)
             s_r         = ds_res[res_k]
+            prdbug(s_r)
             s_ids       = s_r["target_values"]
+            prdbug(f'...... __analyses_bundle_from_result_set {res_k} before limit: {len(s_ids)}')
             r_no        = len(s_ids)
             s_ids       = ByconH().paginated_list(s_ids, self.skip, self.limit)
 
             prdbug(f'...... __analyses_bundle_from_result_set after limit: {len(s_ids)}')
 
+            cnv_coll    = ByconMongo(ds_id).openMongoColl(bundle_cnvdb)
             for s_id in s_ids:
-                s = cnv_coll.find_one({bundle_item_foreign_key: s_id })
-
-                cnv_chro_stats = s.get("cnv_chro_stats", False)
-                cnv_statusmaps = s.get("cnv_statusmaps", False)
-
-                if cnv_chro_stats is False or cnv_statusmaps is False:
+                if not (s := cnv_coll.find_one({"id": s_id })):
+                    continue
+                if not (cnv_chro_stats := s.get("cnv_chro_stats", False)):
+                    continue
+                if not (cnv_statusmaps := s.get("cnv_statusmaps", False)):
                     continue
 
                 p_o = {
                     "dataset_id":       ds_id,
-                    "analysis_id":      s.get(bundle_item_foreign_key, "NA"),
+                    "analysis_id":      s_id,
                     "biosample_id":     s.get("biosample_id", "NA"),
                     "label":            s.get("label", s.get("biosample_id", "")),
-                    "cnv_chro_stats":   s.get("cnv_chro_stats"),
-                    "cnv_statusmaps":   s.get("cnv_statusmaps"),
+                    "cnv_chro_stats":   cnv_chro_stats,
+                    "cnv_statusmaps":   cnv_statusmaps,
                     "variants":         []
                 }
 
@@ -348,8 +350,6 @@ class ByconBundler:
         cs_ided     = b_k_b.get("analyses_by_id", {})
         vars_ided   = b_k_b.get("variants_by_analysis_id", {})
 
-        GB = GenomeBins()
-
         for v in varlines:
             bs_id = v.get("biosample_id", "___none___")
 
@@ -386,7 +386,7 @@ class ByconBundler:
             vars_ided[cs_id].append(update_v)
 
         for cs_id, cs_vars in vars_ided.items():
-            maps, cs_cnv_stats, cs_chro_stats, duplicates = GB.getAnalysisFracMapsAndStats(cs_vars)
+            maps, cs_cnv_stats, cs_chro_stats, duplicates = self.GB.getAnalysisFracMapsAndStats(cs_vars)
             cs_ided[cs_id].update({"cnv_statusmaps": maps})
             cs_ided[cs_id].update({"cnv_stats": cs_cnv_stats})
             cs_ided[cs_id].update({"cnv_chro_stats": cs_chro_stats})
@@ -421,10 +421,12 @@ class ByconBundler:
 
     def __analysisBundleCreateIsets(self, label=""):
         # self.dataset_ids = list(set([cs.get("dataset_id", "NA") for cs in self.bundle["analyses"]]))
-        GB = GenomeBins()
         for ds_id in self.datasets_results.keys():
             dscs = list(filter(lambda cs: cs.get("dataset_id", "NA") == ds_id, self.bundle["analyses"]))
-            intervals, cnv_ana_count = GB.intervalFrequencyMaps(dscs)
+
+
+
+            intervals, cnv_ana_count = self.GB.intervalFrequencyMaps(dscs)
             if cnv_ana_count < self.min_number:
                 continue
             iset = {
@@ -446,9 +448,8 @@ class ByconBundler:
     def __fileAnalysisBundleCreateIsets(self, label=""):
         # self.dataset_ids = list(set([cs.get("dataset_id", "NA") for cs in self.bundle["analyses"]]))
         ds_id = "file"
-        GB = GenomeBins()
         dscs = self.bundle["analyses"]
-        intervals, cnv_ana_count = GB.intervalFrequencyMaps(dscs)
+        intervals, cnv_ana_count = self.GB.intervalFrequencyMaps(dscs)
         iset = {
             "dataset_id": ds_id,
             "group_id": ds_id,
@@ -467,23 +468,26 @@ class ByconBundler:
 
     def __isetBundlesFromCollationParameters(self):
         fmap_name = "frequencymap"
+        cnv_freq_coll_name = self.GB.collationCNVmapCollection()
         query = CollationQuery().getQuery()
  
         prdbug(f'... __isetBundlesFromCollationParameters query {query}')
 
         for ds_id in self.datset_ids:
-            for collation_f in ByconMongo(ds_id).resultCursorFromQuery("collations", query):
+            cnv_freq_coll = ByconMongo(ds_id).openMongoColl(cnv_freq_coll_name)
+            for coll_id in ByconMongo(ds_id).distinctsFromQuery("collations", "id", query):
+                if (collation_f := cnv_freq_coll.find_one({"id": coll_id})) is None:
+                    continue
                 if not (fmap := collation_f.get(fmap_name)):
                     continue
-                fmap_count = fmap.get("frequencymap_samples", 0)
+                fmap_count = collation_f.get("cnv_analyses", 0)
                 if fmap_count < self.min_number:
                     continue
                 r_o = {
                     "dataset_id": ds_id,
-                    "group_id": collation_f.get("id", ""),
-                    "label": re.sub(r';', ',', collation_f.get("label", "")),
+                    "group_id": coll_id,
+                    "label": re.sub(r';', ',', collation_f.get("label", coll_id)),
                     "sample_count": fmap_count,
-                    "frequencymap_samples": fmap.get("frequencymap_samples", fmap_count),
                     "interval_frequencies": fmap.get("intervals", [])
                 }                    
                 self.intervalFreqsBundles.append(r_o)

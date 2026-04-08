@@ -31,11 +31,12 @@ from bycon_plot import ByconPlotPars
 
 class PGXfreq:
     def __init__(self, frequencysets=[]):
-        self.frequencysets = frequencysets
-        self.header_cols = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
-        self.meta_items = ["group_id", "label", "dataset_id", "sample_count"]
-        self.filename = "frequencies.pgxfreq"
-        self.output_lines = []
+        self.frequencysets  = frequencysets
+        self.header_cols    = ["reference_name", "start", "end", "gain_frequency", "loss_frequency", "no"]
+        self.meta_items     = ["group_id", "label", "dataset_id", "sample_count"]
+        self.filename       = "frequencies.pgxfreq"
+        self.output_lines   = []
+        self.GB    = GenomeBins()
 
         self.__add_meta_lines()
 
@@ -70,8 +71,8 @@ class PGXfreq:
     # -------------------------------------------------------------------------#
 
     def __add_meta_lines(self):
-        g_b = GenomeBins().getGenomeBinningID()
-        i_no = GenomeBins().getGenomeBinCount()
+        g_b = self.GB.getGenomeBinningID()
+        i_no = self.GB.getGenomeBinCount()
         self.output_lines.append(f'#meta=>genome_binning={g_b};interval_number={i_no}')
         for f_set in self.frequencysets:
             line = ["#group=>"]
@@ -100,7 +101,7 @@ class PGXfreq:
     # -------------------------------------------------------------------------#
 
     def __add_matrix_header_line(self):
-        g_b_s = GenomeBins().getGenomeBins()
+        g_b_s = self.GB.getGenomeBins()
         line = ["group_id"]
         for iv in g_b_s:
             line.append(f'{iv["reference_name"]}:{int(iv["start"]):09}-{int(iv["end"]):09}:DUP')
@@ -387,8 +388,8 @@ class PGXbed:
 ################################################################################
 ################################################################################
 
-def __pgxmatrix_interval_header(info_columns):
-    GBins = GenomeBins().getGenomeBins()
+def __pgxmatrix_interval_header(GB, info_columns):
+    GBins = GB.getGenomeBins()
     int_line = info_columns.copy()
     for iv in GBins:
         int_line.append(f'{iv["reference_name"]}:{int(iv["start"]):09}-{int(iv["end"]):09}:DUP')
@@ -413,8 +414,11 @@ def print_filters_meta_line():
 def export_callsets_matrix(datasets_results, ds_id):
     skip = BYC_PARS.get("skip", 0)
     limit = BYC_PARS.get("limit", 0)
-    g_b = BYC_PARS.get("genome_binning", "")
-    i_no = GenomeBins().getGenomeBinCount()
+    GB = GenomeBins()
+    g_b = GB.getGenomeBinningID()
+    i_no = GB.getGenomeBinCount()
+
+    cnv_maps_coll_name = GB.analysisCNVmapCollection()
 
     m_format = "values" if "val" in BYC_PARS.get("output", "") else "coverage"
 
@@ -422,7 +426,7 @@ def export_callsets_matrix(datasets_results, ds_id):
         return
     bs_coll     = ByconMongo(ds_id).openMongoColl("biosamples")
     cs_coll     = ByconMongo(ds_id).openMongoColl("analyses")
-    cnv_coll    = ByconMongo(ds_id).openMongoColl("analyses_1Mb_maps")
+    cnv_coll    = ByconMongo(ds_id).openMongoColl(cnv_maps_coll_name)
 
     open_text_streaming("interval_callset_matrix.pgxmatrix")
 
@@ -433,7 +437,7 @@ def export_callsets_matrix(datasets_results, ds_id):
     print(f'#meta=>data_format=interval_{m_format}')
 
     info_columns = [ "analysis_id", "biosample_id", "group_id" ]
-    h_line = __pgxmatrix_interval_header(info_columns)
+    h_line = __pgxmatrix_interval_header(GB, info_columns)
     info_col_no = len(info_columns)
     int_col_no = len(h_line) - len(info_columns)
     print(f'#meta=>genome_binning={g_b};interval_number={i_no}')

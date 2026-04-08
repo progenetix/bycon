@@ -69,6 +69,10 @@ end:
 ################################################################################
 
 class GenomeBins:
+    # WiP & TODO: separate genome interval generation from interval use
+    # not all functions need the intervals (?) & the binning is time consuming
+    # ??? standard bins as file ???
+    # ??? have the argument definitions as separate class and then imported ???
     def __init__(self, binning=None):
         self.genome_definitions = BYC.get("genome_definitions", {})
         self.genome_bin_default = self.genome_definitions.get("genome_bin_default", "1Mb")
@@ -78,6 +82,8 @@ class GenomeBins:
             self.binning = binning
         else:
             self.binning = BYC_PARS.get("genome_binning", self.genome_bin_default)
+        self.analysis_cnv_collection = f"analyses_{self.binning}_maps"
+        self.collation_cnv_collection = f"collations_{self.binning}_maps"
 
         self.cnv_lengths    = False
 
@@ -94,9 +100,28 @@ class GenomeBins:
 
         self.__generate_cytoband_intervals()
         self.__generate_genomic_intervals()
+        self.interval_count = len(self.genomic_intervals)
 
     # -------------------------------------------------------------------------#
     # ----------------------------- public -------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def getGenomeBinningID(self):
+        return self.binning
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def analysisCNVmapCollection(self):
+        return self.analysis_cnv_collection
+
+    # -------------------------------------------------------------------------#
+    # -------------------------------------------------------------------------#
+
+    def collationCNVmapCollection(self):
+        return self.collation_cnv_collection
+
+    # -------------------------------------------------------------------------#
     # -------------------------------------------------------------------------#
 
     def getGenomeBinningID(self):
@@ -206,16 +231,11 @@ class GenomeBins:
                 })
                 no += 1
 
-        self.interval_count = len(self.genomic_intervals)
-
 
     #--------------------------------------------------------------------------#
     #--------------------------------------------------------------------------#
 
     def __generate_genomic_intervals(self):
-        i_d = self.genome_definitions
-        c_l = self.cytolimits
-
         # cytobands ############################################################
         if self.binning == "cytobands":
             self.genomic_intervals = deepcopy(self.cytoband_intervals)
@@ -227,6 +247,15 @@ class GenomeBins:
             return
         
         # otherwise intervals ##################################################
+        self.__generate_binned_intervals()
+
+
+    #--------------------------------------------------------------------------#
+    #--------------------------------------------------------------------------#
+
+    def __generate_binned_intervals(self):
+        i_d = self.genome_definitions
+        c_l = self.cytolimits
         assert self.binning in i_d["genome_bin_sizes"]["values"].keys(), f'¡¡ Binning value "{self.binning}" not in list !!'
 
         int_b = i_d["genome_bin_sizes"]["values"][self.binning]
@@ -256,25 +285,21 @@ class GenomeBins:
                 if end >= p_max:
                     arm = "q"
                 size = end - start
-                cbs = Cytobands().cytobands_label_from_positions(chro, start, end)
+                cbs = str(self.CB.cytobands_label_from_positions(chro, start, end))
 
-                self.genomic_intervals.append(
-                    {
-                        "no": no,
-                        "id": f"{chro}{arm}:{start:09}-{end:09}",
-                        "reference_name": chro,
-                        "cytobands": f"{cbs}",
-                        "start": start,
-                        "end": end,
-                        "size": size,
-                    }
-                )
+                self.genomic_intervals.append({
+                    "no":               no,
+                    "id":               f"{chro}{arm}:{start:09}-{end:09}",
+                    "reference_name":   chro,
+                    "cytobands":        f"{cbs}",
+                    "start":            start,
+                    "end":              end,
+                    "size":             size
+                })
 
-                start = end
-                end += int_p
-                no += 1
-
-        self.interval_count = len(self.genomic_intervals)
+                start   = end
+                end     += int_p
+                no      += 1
 
 
     # -------------------------------------------------------------------------#

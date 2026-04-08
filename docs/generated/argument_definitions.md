@@ -14,7 +14,7 @@ TODO: Temporary(?) for authentication testing.
 * this only is used for command-line tests instead of the REST path
   value seen by the stack in web server mode    
 **type:** string    
-**cmdFlags:** `-p,--requestEntityPathId`    
+**cmdFlags:** `-e,--requestEntityPathId`    
 **default:** `info`    
 
 #### `response_entity_path_id` 
