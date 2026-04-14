@@ -65,7 +65,7 @@ class ByconSummaries:
             for a in a_t_s:
                 t_a = []
                 if not isinstance(a, list):
-                    for a_id in re.split("::", a):
+                    for a_id in re.split(r'::|\&', a):
                         t_a.append(a_id)
                 else:
                     for a_o in a:

@@ -98,6 +98,14 @@ def main(no_sudo):
     else:
         exit()
 
+
+    if not (d_r_d := path.join( *install.get("server_doc_dir_loc"))):
+        print(f'¡¡¡ No documentation directory defined as `server_doc_dir_loc` in `{i_f}`!!!')
+    else:
+        system(f'mkdocs build')
+        system(f'sudo rsync -avh ./site/* {d_r_d}')
+        system(f'rm -rf ./site')
+
     if not (w_r_d := path.join( *install.get("server_site_dir_loc"))):
         print(f'¡¡¡ No web directory defined as `server_site_dir_loc` in `{i_f}`!!!')
         exit()

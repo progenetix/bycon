@@ -50,15 +50,16 @@ The `bycon` project contains
 
 * documentation, in Markdown, as source for documentation builded with `mkdocs`
 
-### `rsrc`
-
-* various resources beyond configuration data
-    - mapping input table(s) for ontology trees
-    - ...
-
 ### `importers` and `housekeepers`
 
 * Python utility applications for data import and maintenance; see below
+
+!!! warning "Removal of utilities"
+
+    Starting with v2.8 / Spring 2026 utilities and resources are consecutively
+    moved to the separate [`byconaut` project](https://codeberg.org/Progenetix/byconaut) on [Codeberg](https://codeberg.org) to keep some
+    separation between a "general beacon framework" and utilities, many
+    of which are geared towards the specific Progenetix use cases
 
 ### Overview
 

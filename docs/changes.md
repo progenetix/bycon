@@ -8,6 +8,11 @@ milestones.
 
 ### WiP
 
+
+### 2026-04-14 (v2.8.1)
+
+* continuing the migration of housekeeping/utilities to the [`byconaut` project](https://codeberg.org/Progenetix/byconaut) on [Codeberg](https://codeberg.org); now also `collationsCreator.py` and the
+  `rsrc` there
 * The new version of the `_byconServicesDB.genes` collection now has VRS-like `location` parameters (albite as list of locations for GRCh38 and CHM13). Now - if no `geneId` is provided - a positional query is evaluated & performed.
 * fix broken `services/api` (when eliminating * imports the `BEACON_ROOT` was forgotten...)
 * update/fix of the `publicationsinserter`

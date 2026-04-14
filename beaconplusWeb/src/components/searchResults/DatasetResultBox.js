@@ -90,7 +90,7 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
     }
   }
 
-  // const phenopacketsHandover = handoverById(HANDOVER_IDS.phenopackets)
+  const phenopacketsHandover = handoverById(HANDOVER_IDS.phenopackets) === undefined ? false : handoverById(HANDOVER_IDS.phenopackets).url
   const UCSCbedHandoverURL = handoverById(HANDOVER_IDS.UCSClink) === undefined ? false : handoverById(HANDOVER_IDS.UCSClink).url
   const biosamplesmapURL = handoverById(HANDOVER_IDS.biosamplesmap) === undefined ? false : handoverById(HANDOVER_IDS.biosamplesmap).url
 
@@ -311,7 +311,6 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
           </div>
         </div>
       )}
-{/* 
       {phenopacketsHandover?.pages && (
         <div className="tabs">
           <div>
@@ -325,7 +324,6 @@ export function DatasetResultBox({ data: responseSet, responseMeta, query }) {
           </div>
         </div>
       )}
-*/}    
     </div>
   )
 }

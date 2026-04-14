@@ -21,6 +21,8 @@ defaults:
     - id: sampleSex
   - - id: sampleICDO3histology
     - id: sampleAge
+  - - id: sampleAge
+    - id: sampleICDO3histology
   - - id: sampleICDO3histology
     - id: sampleSex
   - - id: individualDisease

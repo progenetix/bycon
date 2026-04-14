@@ -43,6 +43,16 @@ server_site_dir_loc:
   - Sites
   - beaconplus
 
+server_doc_dir_loc:
+  - /
+  - opt
+  - homebrew
+  - var
+  - www
+  - Documents
+  - Sites
+  - bycon
+
 housekeeping_log_dir_loc:
   - /
   - Users

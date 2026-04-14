@@ -1,10 +1,9 @@
 #!/usr/local/bin/python3
 
-from os import path, pardir, system
+from os import path, system
 from bycon import *
 
 dir_path = path.dirname( path.relpath(__file__) )
-project_path = path.join( dir_path, pardir )
 
 """
 This script uses the `datatable_definitions.yaml` from `bycon` tpo generate import
@@ -18,7 +17,7 @@ def main():
     dt_m = BYC["datatable_mappings"].get("$defs", {})
     ordered_mcs = BYC["datatable_mappings"].get("ordered_metadata_core", [])
     ordered_vcs = BYC["datatable_mappings"].get("ordered_variants_core", [])
-    rsrc_p = path.join(project_path, "rsrc", "templates")
+    rsrc_p = path.join(dir_path, "templates")
     root_path = input(f'Templates will be saved inside\n=> {rsrc_p}\nEnter a different path or just hit ENTER to use the default:\n')
 
     if len(root_path) > 0:
@@ -116,7 +115,6 @@ def main():
         f.write("{}\n".format("\t".join(d_line)))
     f.close()  
     print(f'===> Wrote {c_p}')
-
 
     # genomicVariant
     a_v_s = dt_m["genomicVariant"]["parameters"].keys()

@@ -916,6 +916,8 @@ class ByconQuery:
                 )
                 continue
 
+            f_id = f_info.get("id")
+
             if f_neg is True:
                 f_info.update({"is_negated": True})
 
@@ -932,10 +934,10 @@ class ByconQuery:
             # TODO: The whole negation is a bit non-standard since the logic
             # of "excluded" versus "not found" is complex. To be revised...
             if "alphanumeric" in f_info.get("type", "ontology"):
-                prdbug(f"__query_from_filters ... alphanumeric: {f_info['id']}")
-                if re.match(r"^(\w+):?([<>=]+?)?(\w[\w.]+?)$", f_info["id"]):
+                prdbug(f"__query_from_filters ... alphanumeric: {f_id}")
+                if re.match(r"^(\w+):?([<>=]+?)?(\w[\w.]+?)$", f_id):
                     f_class, comp, val = re.match(
-                        r"^(\w+):?([<>=]+?)?(\w[\w.]+?)$", f_info["id"]
+                        r"^(\w+):?([<>=]+?)?(\w[\w.]+?)$", f_id
                     ).group(1, 2, 3)
                     if "iso8601duration" in f_info.get("format", "___none___"):
                         val = days_from_iso8601duration(val)
@@ -943,17 +945,17 @@ class ByconQuery:
                         self.__mongo_comparator_query(comp, val)
                     )
                 else:
-                    f_lists[f_entity][f_field].append(f_info["id"])
+                    f_lists[f_entity][f_field].append(f_id)
             elif f_desc is True:
                 if f_neg is True:
-                    f_lists[f_entity][f_field].append({"$nin": f_info["child_terms"]})
+                    f_lists[f_entity][f_field].append({"$nin": f_info.get("child_terms", f_id)})
                 else:
-                    f_lists[f_entity][f_field].append({"$in": f_info["child_terms"]})
+                    f_lists[f_entity][f_field].append({"$in": f_info.get("child_terms", f_id)})
             else:
                 if f_neg is True:
-                    f_lists[f_entity][f_field].append({"$nin": [f_info["id"]]})
+                    f_lists[f_entity][f_field].append({"$nin": [f_id]})
                 else:
-                    f_lists[f_entity][f_field].append(f_info["id"])
+                    f_lists[f_entity][f_field].append(f_id)
 
         return f_lists
 
