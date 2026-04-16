@@ -1604,7 +1604,7 @@ class ByconPlot:
             return
         g_l = []
         for q_g in g_s_s:
-            cytoBands, chro, start, end = self.cytobands.bands_from_cytostring(q_g)
+            cytoBands, chro, start, end = self.cytobands.bandsFromCytostring(q_g)
             if len(cytoBands) < 1:
                 continue
             m = self.__make_marker_object(

@@ -30,10 +30,11 @@ class ByconVariant:
         Progenetix platform and does not cover some use cases outside of Progenetix
         and Beacon "common use" scenarios (as of Beacon v2 / 2023).
         """
-        self.vcf_variant    = {}
-        self.ChroNames      = ChroNames()
-        self.variant_types  = BYC.get("variant_type_definitions", {})
-        self.variant_types_map = {}
+        self.vcf_variant        = {}
+        self.ChroNames          = ChroNames()
+        self.variant_types      = BYC.get("variant_type_definitions", {})
+        self.variant_types_map  = {}
+
         for v_t, v_d in self.variant_types.items():
             if (variant_type := v_d.get("variant_type")) and (
                 variant_type_id := v_d.get("variant_type_id")
@@ -70,6 +71,7 @@ class ByconVariant:
         self.__create_canonical_variant()
         return self.byc_variant
 
+
     # -------------------------------------------------------------------------#
 
     def referenceBases(self, refseq, pos_range):
@@ -78,6 +80,7 @@ class ByconVariant:
         if type(pos_range) is int:
             return seq_proxy[pos_range]
         return seq_proxy[pos_range[0] : pos_range[1]]
+
 
     # -------------------------------------------------------------------------#
 
@@ -140,10 +143,10 @@ class ByconVariant:
         self.byc_variant = variant
         self.__create_canonical_variant()
 
-        vt_defs = self.variant_types
-        state_id = self.byc_variant.get("variant_state", {}).get("id", "___none___")
-        state_defs = vt_defs.get(state_id, {})
-        vrs_type = state_defs.get(
+        vt_defs     = self.variant_types
+        state_id    = self.byc_variant.get("variant_state", {}).get("id", "___none___")
+        state_defs  = vt_defs.get(state_id, {})
+        vrs_type    = state_defs.get(
             "VRS_type", self.byc_variant.get("type", "___none___")
         )
 
@@ -194,12 +197,11 @@ class ByconVariant:
         This remapping just covers the formats supported in the `bycon` environment
         but does not try to accommodate all use cases.
         """
-        v = self.byc_variant
-        l_o = v.get("location", {})
-        v_s = v.get("variant_state", {})
-        s_id = l_o.get("sequence_id")
-        chro = l_o.get("chromosome")
-        # pgxseg_l = self.__pgxseg_line().replace("\t", "::")
+        v       = self.byc_variant
+        l_o     = v.get("location", {})
+        v_s     = v.get("variant_state", {})
+        s_id    = l_o.get("sequence_id")
+        chro    = l_o.get("chromosome")
 
         gnomad_chr = chro
         gnomad_pos = l_o.get("start") + 1
@@ -295,18 +297,17 @@ class ByconVariant:
         A variant with a specified order as a subtype of VRS `Adjacency`.
         """
 
-        v = self.byc_variant
-        v_i = v.get("info", {})
+        v       = self.byc_variant
+        v_i     = v.get("info", {})
         adjseqs = v.get("adjoined_sequences", [])
-
-        adj_l = []
-        chros = []  # to update the VRS locations by order, later
-        refss = []  # to update the VRS locations by order, later
+        adj_l   = []
+        chros   = []  # to update the VRS locations by order, later
+        refss   = []  # to update the VRS locations by order, later
         pos_type = "end"  # canonical for simple fusions's first partner
 
         for l_o in adjseqs:
-            refseq = l_o.get("sequence_id")
-            chro = chro = self.ChroNames.chro(refseq)
+            refseq  = l_o.get("sequence_id")
+            chro    = self.ChroNames.chro(refseq)
             if "start" in l_o and "end" in l_o:  # assignment test would fail on 0
                 s = l_o.get("start")
                 e = l_o.get("end")
@@ -321,7 +322,7 @@ class ByconVariant:
             pos_type = "start"  # init guess for second partner
 
         pgxadjoined = "&&".join(adj_l).replace("refseq:", "")
-        vrs_v = self.vrs_adjacency_translator.translate_from(pgxadjoined, "pgxadjoined")
+        vrs_v       = self.vrs_adjacency_translator.translate_from(pgxadjoined, "pgxadjoined")
         self.vrs_variant = decamelize(vrs_v.model_dump(exclude_none=True))
 
         for i in [0, 1]:

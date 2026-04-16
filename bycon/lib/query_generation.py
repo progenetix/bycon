@@ -630,7 +630,7 @@ class ByconQuery:
             return False
 
         CB = Cytobands()
-        cbs, chro, start, end = CB.bands_from_cytostring(cb_s)
+        cbs, chro, start, end = CB.bandsFromCytostring(cb_s)
         sequence_id = self.ChroNames.refseq(chro)
         v_pars.update({"reference_name": sequence_id, "start": [start], "end": [end]})
         self.variant_request_type = "variantRangeRequest"

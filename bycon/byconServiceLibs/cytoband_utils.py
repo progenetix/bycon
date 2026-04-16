@@ -53,7 +53,7 @@ def deparse_ISCN_to_variants(iscn):
                     continue
 
                 CB = Cytobands()
-                cytoBands, chro, start, end = CB.bands_from_cytostring(q_g)
+                cytoBands, chro, start, end = CB.bandsFromCytostring(q_g)
                 v_l = end - start
                 cytostring = "{}({})".format(cnv_t, i_v).lower()
                 if "amp" in revish and v_l > i_d.get("cnv_amp_max_size", 3000000):

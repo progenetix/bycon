@@ -277,7 +277,7 @@ class Cytobands:
 
     # -------------------------------------------------------------------------#
 
-    def bands_from_cytostring(self, cytoband=""):
+    def bandsFromCytostring(self, cytoband=""):
         self.cytostring = cytoband
         self.__bands_from_cytobands()
         return self.filtered_bands, self.chro, self.start, self.end

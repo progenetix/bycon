@@ -84,10 +84,10 @@ class _Translator(ABC):  # noqa: B024
     pgxadjoined_re = re.compile(
         r"""
         (?P<adj_seqid_1>(?:refseq:)?[\w\.]+)::
-        (?P<pos_type_1>\w+)::
+        (?:(?P<pos_type_1>\w+)::)?
         (?P<range_1>\d+,\d+)&&
         (?P<adj_seqid_2>(?:refseq:)?[\w\.]+)::
-        (?P<pos_type_2>\w+)::
+        (?:(?P<pos_type_2>\w+)::)?
         (?P<range_2>\d+,\d+)
         (::(?P<other>.*))?
         """, re.X)
@@ -420,6 +420,9 @@ class AlleleTranslator(_Translator):
 
         return spdi_exprs
 
+
+    # ------------------------------------------------------------------------ #
+
     def _post_process_imported_allele(
         self, allele: models.Allele, **kwargs
     ) -> models.Allele:
@@ -448,6 +451,8 @@ class AlleleTranslator(_Translator):
 
         return allele
 
+
+################################################################################
 
 class CnvTranslator(_Translator):
     """Class for translating formats from format to VRS Copy Number"""
@@ -506,6 +511,9 @@ class CnvTranslator(_Translator):
 
         return self._post_process_imported_cnv(cnv)
 
+
+    # ------------------------------------------------------------------------ #
+
     def _post_process_imported_cnv(
         self, copy_number: models.CopyNumberChange | models.CopyNumberCount
     ) -> models.CopyNumberChange | models.CopyNumberCount:
@@ -516,6 +524,8 @@ class CnvTranslator(_Translator):
 
         return copy_number
 
+
+################################################################################
 
 class AdjacencyTranslator(_Translator):
     """Class for translating formats from format to VRS Adjacency
@@ -541,22 +551,29 @@ class AdjacencyTranslator(_Translator):
         self, pgxadjoined: str, **kwargs
     ) -> models.Adjacency | None:
         """
-
+        Parse `pgxadjoined` into a VRS Adjacency Object
         """
 
-        m = self.pgxadjoined_re.match(pgxadjoined)
-        if not m:
+        if not (m := self.pgxadjoined_re.match(pgxadjoined)):
             return None
-        g = m.groupdict()
 
-        adjoined_sequences = []
-        for ri in ["1", "2"]:
-            refseq = g.get(f"adj_seqid_{ri}", "___unknown___")
+        adj_comps           = m.groupdict()
+        adjoined_sequences  = []
+        pos_defaults        = {"pos_type_1": "end", "pos_type_2": "start"}
+
+        # locations for both sides of the adjacency
+        for ri in [1, 2]:
+            refseq = adj_comps.get(f"adj_seqid_{ri}", "___unknown___")
             refget_accession = self.data_proxy.derive_refget_accession(refseq)
             if not refget_accession:
                 return None
-            range_l = list(int(x) for x in re.split(",", g.get(f"range_{ri}", [])))
-            pos_type = g.get(f"pos_type_{ri}", "end")
+
+            pos_k       = f"pos_type_{ri}"
+            range_k     = f"range_{ri}"
+            range_l     = list(int(x) for x in re.split(",", adj_comps.get(range_k, [])))
+            if not (pos_type := adj_comps.get(pos_k)):
+                pos_type = pos_defaults[pos_k]
+
             adjoined_sequences.append(
                 models.SequenceLocation(
                     sequenceReference=models.SequenceReference(
@@ -566,13 +583,13 @@ class AdjacencyTranslator(_Translator):
                 )
             )
 
-        adjacency = models.Adjacency(
-            adjoinedSequences=adjoined_sequences
-        )
+        adjacency = models.Adjacency(adjoinedSequences=adjoined_sequences)
+        return self.__post_process_imported_adjacency(adjacency)
 
-        return self._post_process_imported_adjacency(adjacency)
 
-    def _post_process_imported_adjacency(
+    # ------------------------------------------------------------------------ #
+
+    def __post_process_imported_adjacency(
         self, adjacency: models.Adjacency
     ) -> models.Adjacency:
         """Provide common post-processing for imported Copy Numbers IN-PLACE."""

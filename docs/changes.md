@@ -8,8 +8,10 @@ milestones.
 
 ### WiP
 
-* removed Github `.github/workflows` since now self hosting the documentation site at <https://bycon.progenetix.org> 
+#### 2026-04-16 (v2.8.2)
 
+* minor adjustments to `vrs_translator.py` for adjacencies
+* removed Github `.github/workflows` since now self hosting the documentation site at <https://bycon.progenetix.org> 
 
 ### 2026-04-14 (v2.8.1)
 
