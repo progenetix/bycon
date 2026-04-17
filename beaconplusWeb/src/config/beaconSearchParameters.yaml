@@ -36,7 +36,7 @@ parameters:
   analysisOperation:
     infoText: The general type of analysis - i.e. copy number profiling or sequence
       variation analysis
-    isHidden: false
+    isHidden: true
     label: Genomic Analysis Type
     options:
     - label: all analyses

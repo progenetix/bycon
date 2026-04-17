@@ -157,9 +157,9 @@ export function CytoBandsUtility({ onClose, setFormValue }) {
   const [searchValue, setSearchValue] = useState("")
   const apiReply = useCytomapper(searchValue)
   const onApply = (data) => {
-    setFormValue("start", data.response.results[0].genomic_location.interval.start.value)
-    setFormValue("end", data.response.results[0].genomic_location.interval.end.value)
-    setFormValue("referenceName", data.response.results[0].genomic_location.sequence_id)
+    setFormValue("start", data.response.results[0].location.start)
+    setFormValue("end", data.response.results[0].location.end)
+    setFormValue("referenceName", data.response.results[0].location.sequence_id)
     onClose()
   }
   const onSubmit = (e) => {
@@ -239,13 +239,13 @@ function CytoBandsData({ data }) {
         Chromosome: <b>{data[0].chromosome_location.chr}</b>
       </div>
       <div>
-        Sequence ID: <b>{data[0].genomic_location.sequence_id}</b>
+        Sequence ID: <b>{data[0].location.sequence_id}</b>
       </div>
       <div>
-        Start: <b>{data[0].genomic_location.interval.start.value}</b>
+        Start: <b>{data[0].location.start}</b>
       </div>
       <div>
-        End: <b>{data[0].genomic_location.interval.end.value}</b>
+        End: <b>{data[0].location.end}</b>
       </div>
       <div>
         Please use the <b>Apply</b> button to copy the values to the{" "}

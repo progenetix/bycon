@@ -147,6 +147,7 @@ $defs:
     enum:
       - boolean
       - count
+      - aggregated
       - record
     default: boolean
   TestMode:

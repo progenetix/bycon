@@ -326,6 +326,7 @@ class Cytobands:
         size = int(self.end - self.start)
         chro_bases = f'{self.chro}:{self.start}-{self.end}'
         sequence_id = self.ChroNames.refseq(self.chro)
+        ga4ghSQ_id = self.ChroNames.ga4ghSQ(self.chro)
 
         self.cytoband_response = {
             "info": {
@@ -337,28 +338,20 @@ class Cytobands:
             },        
             "chromosome_location": {
                 "type": "ChromosomeLocation",
-                "species_id": "taxonomy:9606",
                 "chr": self.chro,
-                "interval": {
-                    "start": self.filtered_bands[0]["cytoband"],
-                    "end": self.filtered_bands[-1]["cytoband"],
-                    "type": "CytobandInterval"
-                }
+                "start": self.filtered_bands[0]["cytoband"],
+                "end": self.filtered_bands[-1]["cytoband"]
             },
-            "genomic_location": {
+            "location": {
                 "type": "SequenceLocation",
                 "sequence_id": sequence_id,
-                "interval": {
-                    "start": {
-                        "type": "Number",
-                        "value": self.start
-                    },
-                    "end": {
-                        "type": "Number",
-                        "value": self.end
-                    },
-                    "type": "SequenceInterval"
-                }
+                "sequence_reference": {
+                  "type": "SequenceReference",
+                  "refget_accession": ga4ghSQ_id
+                },
+                "start": self.start,
+                "end": self.end,
+                "chromosome": self.chro
             }
         }
 
@@ -367,7 +360,6 @@ class Cytobands:
     # -------------------------------------------------------------------------#
 
     def __parse_cytoband_file(self):
-        # TODO: use ByconTSVreader
         data, fields = ByconTSVreader().fileToDictlist(self.cb_file, self.header)
 
         no = 1

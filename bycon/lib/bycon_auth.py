@@ -1,7 +1,7 @@
 # ------------------------------- bycon imports -------------------------------#
 
 from bycon_helpers import prdbug
-from config import AUTHORIZATIONS, BYC, BYC_PARS, HTTP_HOST, GRANULARITY_LEVELS
+from config import AUTHORIZATIONS, BYC, BYC_PARS, HTTP_HOST, GRANULARITIES
 
 """
 This experimental authorization setup so far so far tests a method to define
@@ -49,7 +49,9 @@ class ByconAuth():
         g_l_s = [0]
         # requested granularity level
         rg = BYC_PARS.get("requested_granularity", "record")
-        r_g_l = GRANULARITY_LEVELS.get(rg, 0)
+        r_g_l = 0
+        if rg in GRANULARITIES:
+            r_g_l = GRANULARITIES.index(rg)
 
         for ds_id in BYC["BYC_DATASET_IDS"]:
             BYC["authorized_granularities"].update({ds_id: rg})
@@ -62,7 +64,9 @@ class ByconAuth():
             if ds_id in ugs:
                 g_l_l = ugs[ds_id]
 
-            d_g_l = GRANULARITY_LEVELS.get(g_l_l, 0)
+            d_g_l = 0
+            if g_l_l in GRANULARITIES:
+                d_g_l = GRANULARITIES.index(g_l_l)
             if d_g_l <= r_g_l:
                 BYC["authorized_granularities"].update({ds_id: g_l_l})
             g_l_s.append(d_g_l)
@@ -70,6 +74,6 @@ class ByconAuth():
 
         if m_g_l < r_g_l:
             prdbug(f'Warning: Requested granularity exceeds user authorization - using a maximum of {m_g_l}')
-            BYC.update({"returned_granularity": list(GRANULARITY_LEVELS.keys())[m_g_l]})
+            BYC.update({"returned_granularity": GRANULARITIES[m_g_l]})
         else:
-            BYC.update({"returned_granularity": list(GRANULARITY_LEVELS.keys())[r_g_l]})
+            BYC.update({"returned_granularity": GRANULARITIES[r_g_l]})

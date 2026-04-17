@@ -189,14 +189,14 @@ AUTHORIZATIONS = {
     }
 }
 
-# integer granularities for some sorting of levels
-GRANULARITY_LEVELS = {
-  "none": 0,
-  "boolean": 1,
-  "count": 2,
-  "aggregated": 3,
-  "record": 4
-}
+# sorted granularities (least access to full)
+GRANULARITIES = [
+  "none",
+  "boolean",
+  "count",
+  "aggregated",
+  "record"
+]
 
 #------------------------------------------------------------------------------#
 # not really to be modified...

@@ -42,7 +42,7 @@ parameters:
   cohorts:
     isHidden: true
   analysisOperation:
-    isHidden: false
+    isHidden: true
   bioontology:
     isHidden: false
   referenceid:

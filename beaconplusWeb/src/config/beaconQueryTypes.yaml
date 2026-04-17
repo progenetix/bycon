@@ -25,9 +25,10 @@
       placeholder: "21000001-21975098"
       isHidden: false
     end:
-      placeholder: "21967753-23000000"
       isHidden: false
+      placeholder: "21967753-23000000"
     variantType:
+      isHidden: false
       placeholder: "EFO:0030067 (DEL)"
     alternateBases:
       isHidden: true
@@ -38,7 +39,6 @@
     variantMaxLength:
       isHidden: true
     allTermsFilters:
-      placeholder: [NCIT:C3058]
       isHidden: false
   examples: []
 
@@ -106,6 +106,8 @@
       isHidden: false
     referenceBases:
       isHidden: false
+    sex:
+      isHidden: false
   examples: []
 
 - label: "Sequence"
@@ -142,34 +144,34 @@
   examples: []
   img: false
 
-- label: "Genomic Fusion"
-  infoText: 'This is an experimental implementation for a fusion query (by positions).'
-  description: |
-    The current implementation uses the xisting `mateName` as well as the proposed
-    `mateStart` and `mateEnd` parameters to pass positional information (similar
-    to a *range request*) for a second genomic location, _i.e._ the fusion partner
-    (in the sense of a VRS v2 *Adjacency*.)
-  parameters:
-    referenceName:
-      isHidden: false
-    mateName:
-      isHidden: false
-    start:
-      isHidden: false
-    end:
-      isHidden: false
-    mateStart:
-      isHidden: false
-    mateEnd:
-      isHidden: false
-    variantType:
-      defaultValue: "SO:0000806"
-    alternateBases:
-      isHidden: false
-    referenceBases:
-      isHidden: false
-  examples: []
-  img: /img/BeaconFusionQuery-graphics.png
+# - label: "Genomic Fusion"
+#   infoText: 'This is an experimental implementation for a fusion query (by positions).'
+#   description: |
+#     The current implementation uses the xisting `mateName` as well as the proposed
+#     `mateStart` and `mateEnd` parameters to pass positional information (similar
+#     to a *range request*) for a second genomic location, _i.e._ the fusion partner
+#     (in the sense of a VRS v2 *Adjacency*.)
+#   parameters:
+#     referenceName:
+#       isHidden: false
+#     mateName:
+#       isHidden: false
+#     start:
+#       isHidden: false
+#     end:
+#       isHidden: false
+#     mateStart:
+#       isHidden: false
+#     mateEnd:
+#       isHidden: false
+#     variantType:
+#       defaultValue: "SO:0000806"
+#     alternateBases:
+#       isHidden: false
+#     referenceBases:
+#       isHidden: false
+#   examples: []
+#   img: /img/BeaconFusionQuery-graphics.png
 
 - label: "Sample Data"
   infoText: ""
