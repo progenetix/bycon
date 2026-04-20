@@ -200,8 +200,8 @@ class ByconPlot:
         self.plot_variant_types = bpp.plotVariantTypes()
 
         self.cytobands = Cytobands()
-        self.cytolimits = self.cytobands.get_all_cytolimits()
-        self.cytobands = self.cytobands.get_all_cytobands()
+        self.cytolimits = self.cytobands.getAllCytolimits()
+        self.cytobands = self.cytobands.getAllCytobands()
 
         self.plot_data_bundle = plot_data_bundle
         self.svg = None

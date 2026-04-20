@@ -251,19 +251,19 @@ class Cytobands:
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
 
-    def get_all_cytobands(self):
+    def getAllCytobands(self):
         return self.cytobands
 
 
     # -------------------------------------------------------------------------#
 
-    def get_all_cytolimits(self):
+    def getAllCytolimits(self):
         return self.cytolimits
 
 
     # -------------------------------------------------------------------------#
 
-    def get_genome_size(self):
+    def getGenomeSize(self):
         return self.genome_size
 
 

@@ -88,17 +88,14 @@ class GenomeBins:
         self.cnv_lengths    = False
 
         self.CB             = Cytobands()
-        self.cytolimits     = self.CB.get_all_cytolimits()
-        self.genome_size    = self.CB.get_genome_size()
+        self.cytolimits     = self.CB.getAllCytolimits()
+        self.genome_size    = self.CB.getGenomeSize()
 
         self.int_min_frac   =   self.genome_definitions.get("interval_min_fraction", {}).get("value", 0.001)
  
         self.genomic_intervals  = []
-        self.cytoband_intervals = []
 
         self.genome_definitions.update({"genome_binning": self.binning})
-
-        self.__generate_cytoband_intervals()
         self.__generate_genomic_intervals()
         self.interval_count = len(self.genomic_intervals)
 
@@ -178,9 +175,30 @@ class GenomeBins:
     # ---------------------------- private ------------------------------------#
     # -------------------------------------------------------------------------#
 
+    def __generate_chroarm_intervals(self):
+        ca_intervals = []
+        no = 1
+        for chro in self.cytolimits.keys():
+            for arm in ["p", "q"]:
+                chroarm = f'{chro}{arm}'
+                armrange = self.cytolimits[chro][arm]
+                ca_intervals.append({
+                    "no": no,
+                    "id": chroarm,
+                    "reference_name": chro,
+                    "cytobands": chroarm,
+                    "start": int(armrange[0]),
+                    "end": int(armrange[-1]),
+                    "size": int(armrange[-1]) - int(armrange[0])
+                })
+        return ca_intervals
+
+
+    #--------------------------------------------------------------------------#
     def __generate_cytoband_intervals(self):
-        for cb in self.CB.get_all_cytobands():
-            self.cytoband_intervals.append({
+        cb_intervals = []
+        for cb in self.CB.getAllCytobands():
+            cb_intervals.append({
                 "no": int(cb["no"]),
                 "id": f'{cb["chro"]}:{cb["start"]}-{cb["end"]}',
                 "reference_name": cb["chro"],
@@ -189,6 +207,7 @@ class GenomeBins:
                 "end": int(cb["end"]),
                 "size": int(cb["end"]) - int(cb["start"])
             })
+        return cb_intervals
 
 
     #--------------------------------------------------------------------------#
@@ -236,9 +255,14 @@ class GenomeBins:
     #--------------------------------------------------------------------------#
 
     def __generate_genomic_intervals(self):
+        # chromosome arms ######################################################
+        if self.binning == "chroarms":
+            self.genomic_intervals = self.__generate_chroarm_intervals()
+            return
+
         # cytobands ############################################################
         if self.binning == "cytobands":
-            self.genomic_intervals = deepcopy(self.cytoband_intervals)
+            self.genomic_intervals = self.__generate_cytoband_intervals()
             return
 
         # gene intervals #######################################################
