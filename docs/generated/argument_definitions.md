@@ -493,6 +493,7 @@ ids in the path
     - `type`: `string`      
     - `pattern`: `^\w[\w,:-]+\w$`    
 **byc_entity:** biosample    
+**is_variant_par:** True    
 **cmdFlags:** `--biosampleIds`    
 **description:**
 biosample ids    
@@ -503,6 +504,7 @@ biosample ids
     - `type`: `string`      
     - `pattern`: `^\w[\w,:-]+\w$`    
 **byc_entity:** analysis    
+**is_variant_par:** True    
 **cmdFlags:** `--analysisIds`    
 **description:**
 analysis ids    
@@ -513,6 +515,7 @@ analysis ids
     - `type`: `string`      
     - `pattern`: `^\w[\w,:-]+\w$`    
 **byc_entity:** individual    
+**is_variant_par:** True    
 **cmdFlags:** `--individualIds`    
 **description:**
 subject ids    

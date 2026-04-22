@@ -154,6 +154,7 @@ class ByconDatasetResults():
                 for d_k in d_k_s:
                     dist_k = f'distincts_{d_k}'
                     id_matches.update({d_k: result[0].get(dist_k, [])})
+                    prdbug(f"{d_k}: {result[0].get(dist_k, [])}")
 
             for id_k in id_matches:
                 if (ex_resp := self.id_responses.get(id_k)):

@@ -8,7 +8,8 @@ from bycon_helpers import (
     ByconH,
     ByconMongo,
     days_from_iso8601duration,
-    prdbug
+    prdbug,
+    prjsonnice
 )
 from config import BYC, BYC_DBS, BYC_PARS
 from genome_utils import ChroNames, Cytobands, GeneInfo, VariantTypes
@@ -159,16 +160,17 @@ class ByconQuery:
             q = False
             if len(id_v_s) < 1:
                 continue
+
             elif len(id_v_s) == 1:
                 q = [{"id": id_v_s[0]}]
-                self.__id_query_add_variant_query(entity, id_v_s)
             elif len(id_v_s) > 1:
                 q = [{"id": {"$in": id_v_s}}]
-                self.__id_query_add_variant_query(entity, id_v_s)
+            self.__id_query_add_variant_query(entity, id_v_s)
 
-            if q is not False:
-                self.__update_queries_for_entity(q, entity)
-                self.queries.update({"expand": False})
+            # prjsonnice(self.queries["entities"])
+
+            self.__update_queries_for_entity(q, entity)
+            # self.queries.update({"expand": False})
 
 
     # -------------------------------------------------------------------------#
@@ -188,7 +190,10 @@ class ByconQuery:
         else:
             return
 
-        BYC.update({"AGGREGATE_VARIANT_RESULTS": False})
+        # BYC.update({"AGGREGATE_VARIANT_RESULTS": False})
+
+        if (v_q := self.queries["entities"].get("genomicVariant", {}).get("query")):
+            q = {"$and": [q, v_q]}
 
         self.queries["entities"].update(
             {"genomicVariant": {"query": q, "collection": "variants"}}
