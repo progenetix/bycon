@@ -6,7 +6,34 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal development
 milestones.
 
-### WiP
+### 2024-04-25 (v2.9.0 "Foggy Bottom")
+
+!!! info "Service libraries now in `byconplus` (dependency)"
+
+    The non-essential libraries have been moved to a new project `byconplus`,
+    available through [Codeberg](https://codeberg.org/Progenetix/byconplus) and PyPi.
+    This includes e.g. plotting and I/O functions.
+
+* (ongoing) re-structuring of the project towards more standard layout & file structure/naming (**not all already reflected in the docs**)
+* changes to the handling of requests containing variant request parameters and `id` queries with `genomicVariant` response entity
+    - `id` parameters from upstream entities (biosample ...) are now directly
+      added to variant queries; either combined w/ existing ones or as single
+      query parameters, e.g.:
+          * `beacon/biosamples/__id__/g_variants` => `{"biosample_id": "__id__"}`
+    - this creates an explicit variant request e.g. for "all variants of biosample"
+      but also uses the same for "does biosample have this variant" requests and
+      avoids additional logic since otherwise variants are otherwise  __not__ 
+      returned for "no variant parameters" queries
+    - added a specific error message 
+
+!!! warning "Variant Response w/o Query"
+
+    Variants are only returned if **variant query parameters** or **entity ids** (e.g. biosample ids...) are provided in the request, not for "filters only" queries.
+
+* some codeSmetics
+    - removal of `byconServiceLibs.collation_utils.py` (only used in `byconaut`)
+    - some `ByconPlot` cleaning w/o functional changes
+    - slightly improved error handling in `beacon_responses.py`
 
 #### 2026-04-16 (v2.8.2)
 

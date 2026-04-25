@@ -13,9 +13,9 @@ from bycon import (
     GeoQuery,
     prdbug
 )
-from byconServiceLibs import ByconMap, ByconServiceResponse, read_service_prefs
 
-services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
+from byconplus import ByconMap, read_service_prefs
+from lib.service_response_generation import ByconServiceResponse
 
 ################################################################################
 

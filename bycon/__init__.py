@@ -40,15 +40,15 @@ try:
     from bycon_helpers import *
     from bycon_info import *
     from bycon_summaries import *
-    from genome_utils import *
+    from genome_utils import ChroNames, Cytobands, GeneInfo, GeneIntervals, VariantTypes
     from interval_utils import *
     from parameter_parsing import *
-    from query_execution import *
+    from query_execution import ByconDatasetResults
     from query_generation import *
     from response_remapping import *
     from schema_parsing import *
-    from variant_mapping import *
-    from vrs_translator import *
+    from variant_mapping import ByconVariant
+    from vrs_translator import AdjacencyTranslator, AlleleTranslator, CnvTranslator
 
     # Configuration: Loading Stage #############################################
 
@@ -108,11 +108,6 @@ try:
             except Exception as e:
                 logger.error(f"Error loading dataset {d}: {str(e)}")
                 raise
-
-    # Load priority genes definitions
-    gene_list = GeneIntervals().get_all_genes()
-    for i, g in enumerate(gene_list):
-        BYC["priority_genes"].update({g.get("gene_symbol", str(i)): g})
 
     # Configuration: End of Loading Stage ######################################
 

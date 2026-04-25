@@ -1,5 +1,5 @@
 from bycon import *
-from byconServiceLibs import ByconDatatableExporter
+from byconplus import ByconDatatableExporter
 
 
 def sampletable():

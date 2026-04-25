@@ -2,8 +2,8 @@
 
 from os import pardir, path, sys
 
-from bycon import byconServiceLibs
-from bycon_importer import ByconImporter
+from lib.service_response_generation import ByconServiceResponse
+from byconplus import ByconImporter
 
 BI = ByconImporter()
 BI.delete_records("biosample")

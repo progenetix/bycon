@@ -20,7 +20,7 @@ where = ["."]
 include = ["bycon*"]
 
 [project]
-version = "v2.8.2"
+version = "v2.9.0"
 name = "bycon"
 urls = {source = "https://github.com/progenetix/bycon", documentation = "https://bycon.progenetix.org"}
 
@@ -42,6 +42,7 @@ classifiers = [
 ]
 dependencies = [
     "base36",
+    "byconplus",
     "deepmerge",
     "Cython",
 	"isodate",

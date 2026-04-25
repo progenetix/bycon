@@ -5,7 +5,7 @@ from bycon import (
     prdbug,
     print_uri_rewrite_response
 )
-from byconServiceLibs import PGXbed
+from byconplus import PGXbed
 
 def variantsbedfile():
     """

@@ -1,5 +1,5 @@
 from bycon import print_json_response
-from byconServiceLibs import ByconServiceResponse
+from lib.service_response_generation import ByconServiceResponse
 
 def collations():
     """

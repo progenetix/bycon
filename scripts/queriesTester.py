@@ -4,7 +4,7 @@ import random
 
 from bycon import *
 
-from bycon import byconServiceLibs, ByconError
+from lib.service_response_generation import ByconServiceResponse, ByconError
 from service_helpers import assert_single_dataset_or_exit
 
 

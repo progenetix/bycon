@@ -2,12 +2,7 @@ from os import path
 from pathlib import Path
 
 from bycon import BYC, BYC_PARS, ByconResultSets, prdbug
-from byconServiceLibs import (
-    ByconBundler,
-    ByconPlot, 
-    ByconPlotPars,
-    ExportFile
-)
+from byconplus import ByconPlot, ByconPlotPars, ByconBundler, ExportFile
 
 ################################################################################
 

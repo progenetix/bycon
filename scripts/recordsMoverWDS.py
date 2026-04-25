@@ -12,12 +12,7 @@ from bycon import (
     ByconResultSets,
     prdbug
 )
-from byconServiceLibs import assert_single_dataset_or_exit, ByconDatatableExporter, ByconImporter
-
-# loc_path = path.dirname( path.abspath(__file__) )
-# lib_path = path.join(loc_path , pardir, "importers", "lib")
-# sys.path.append( lib_path )
-# from bycon_importer import ByconImporter
+from lib.service_response_generation import assert_single_dataset_or_exit, ByconDatatableExporter, ByconImporter
 
 """
 The `recordsMoverWDS.py` script is used to move records from a source database

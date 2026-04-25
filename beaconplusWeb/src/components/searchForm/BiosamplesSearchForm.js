@@ -75,10 +75,6 @@ export function BeaconSearchForm({
       null
   })
 
-  // const handleReset = () => {
-  //   reset();
-  // };
-
   const {
     register,
     handleSubmit,
@@ -182,6 +178,7 @@ export function BeaconSearchForm({
   return (
     <>
       <div>
+{/*
         <QuerytypesTabs
           onQuerytypeClicked={handleQuerytypeClicked(
             reset,
@@ -190,6 +187,8 @@ export function BeaconSearchForm({
           )}
           beaconQueryTypes={beaconQueryTypes}
         />
+*/}
+
         <form>
           {errors?.global?.message && (
             <div className="notification is-warning">
@@ -542,6 +541,16 @@ export function BeaconSearchForm({
           />
         </div>
         <div className="buttons">
+          <QueryTypesButtons
+            onExampleClicked={handleExampleClicked(
+              reset,
+              setExample,
+              setUrlQuery
+            )}
+            beaconQueryTypes={beaconQueryTypes}
+          />
+        </div>
+        <div className="buttons">
           <ExamplesButtons
             onExampleClicked={handleExampleClicked(
               reset,
@@ -564,31 +573,31 @@ export function BeaconSearchForm({
   )
 }
 
-function QuerytypesTabs({ beaconQueryTypes, onQuerytypeClicked }) {
-  // console.log(beaconQueryTypes)
-  const startType = beaconQueryTypes[0]
-  const [selectedTab, setSelectedTab] = useState(startType)
-  // onQuerytypeClicked(selectedTab)
-  return (
-    <div className="tabs is-boxed">
-      <ul>
-        {Object.entries(beaconQueryTypes || []).map(([id, value]) => (
-          <li
-            className={cn({
-              "is-active": selectedTab.label === value.label
-            })}
-            key={id}
-            onClick={() => {
-              onQuerytypeClicked(value), setSelectedTab(value)
-            }}
-          >
-            <a>{value.label}</a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
+// function QuerytypesTabs({ beaconQueryTypes, onQuerytypeClicked }) {
+//   // console.log(beaconQueryTypes)
+//   const startType = beaconQueryTypes[0]
+//   const [selectedTab, setSelectedTab] = useState(startType)
+//   // onQuerytypeClicked(selectedTab)
+//   return (
+//     <div className="tabs is-boxed">
+//       <ul>
+//         {Object.entries(beaconQueryTypes || []).map(([id, value]) => (
+//           <li
+//             className={cn({
+//               "is-active": selectedTab.label === value.label
+//             })}
+//             key={id}
+//             onClick={() => {
+//               onQuerytypeClicked(value), setSelectedTab(value)
+//             }}
+//           >
+//             <a>{value.label}</a>
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   )
+// }
 
 export function InfodotTab(short, full) {
   return (
@@ -608,6 +617,27 @@ function ExamplesButtons({ requestTypeExamples, onExampleClicked }) {
             <button
               key={id}
               className="button is-link is-outlined"
+              onClick={() => onExampleClicked(value)}
+            >
+              {value.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function QueryTypesButtons({ beaconQueryTypes, onExampleClicked }) {
+  return (
+    <div className="column is-full" style={{ padding: "0px" }}>
+      <div className="columns">
+        <div className="column is-one-fifth label">Query Types</div>
+        <div className="column">
+          {Object.entries(beaconQueryTypes || []).map(([id, value]) => (
+            <button
+              key={id}
+              className="button is-link"
               onClick={() => onExampleClicked(value)}
             >
               {value.label}
@@ -803,11 +833,11 @@ const handleExampleClicked = (reset, setExample, setUrlQuery) => (example) => {
   setExample(example)
 }
 
-const handleQuerytypeClicked =
-  (reset, setExample, setUrlQuery) => (example) => {
-    setUrlQuery({}, { replace: true })
-    setExample(example)
-  }
+// const handleQuerytypeClicked =
+//   (reset, setExample, setUrlQuery) => (example) => {
+//     setUrlQuery({}, { replace: true })
+//     setExample(example)
+//   }
 
 // Maps FilteringTerms hook to apiReply usable by DataFetchSelect
 function useFilteringTerms(watchForm, ct) {

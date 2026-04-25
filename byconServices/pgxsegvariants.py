@@ -1,5 +1,5 @@
 from bycon import *
-from byconServiceLibs import PGXseg
+from byconplus import PGXseg
 
 """
 The service uses the standard bycon data retrieval pipeline with `biosample`

@@ -10,7 +10,8 @@ from bycon import (
     print_uri_rewrite_response,
     ByconParameters
 )
-from byconServiceLibs import read_service_prefs
+
+from byconplus import read_service_prefs
 
 ################################################################################
 

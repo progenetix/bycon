@@ -14,7 +14,7 @@ from bycon import (
     print_json_response
 )
 
-from byconServiceLibs import ByconServiceResponse, read_service_prefs
+from lib.service_response_generation import ByconServiceResponse
 
 services_conf_path = path.join( path.dirname( path.abspath(__file__) ), "config" )
 

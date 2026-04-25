@@ -6,8 +6,8 @@ from os import pardir, path, sys
 #lib_path = path.join(loc_path , pardir, "importers", "lib")
 #sys.path.append( lib_path )
 
-from bycon import byconServiceLibs
-from bycon_importer import ByconImporter
+from lib.service_response_generation import ByconServiceResponse
+from byconplus import ByconImporter
 
 BI = ByconImporter()
 BI.delete_records_and_downstream("individual")

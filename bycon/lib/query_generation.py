@@ -14,6 +14,7 @@ from bycon_helpers import (
 from config import BYC, BYC_DBS, BYC_PARS
 from genome_utils import ChroNames, Cytobands, GeneInfo, VariantTypes
 from parameter_parsing import ByconFilters
+from schema_parsing import RecordsHierarchy
 
 ################################################################################
 ################################################################################
@@ -53,11 +54,8 @@ class ByconQuery:
 
         self.argument_definitions = BYC.get("argument_definitions", {}).get("$defs", {})
         self.cytoband_definitions = BYC.get("cytobands", [])
-        self.ChroNames = ChroNames()
-
-        # WiP - currently disabled
-        # self.priority_genes       = list(BYC.get("priority_genes", {}).keys())
-        self.priority_genes     = []
+        self.ChroNames            = ChroNames()
+        self.RecordsHierarchy     = RecordsHierarchy()
 
         self.requested_entity   = BYC.get("request_entity_id", False)
         self.response_entity    = BYC.get("response_entity", {})
@@ -69,6 +67,7 @@ class ByconQuery:
         self.variant_par_names          = []
         self.request_profiles           = BYC.get("request_profiles", {}).get("$defs", {})
         self.variant_type_definitions   = BYC.get("variant_type_definitions", {})
+        self.VariantTypes               = VariantTypes()
 
         self.limit              = BYC_PARS.get("limit")
         self.skip               = BYC_PARS.get("skip")
@@ -77,6 +76,7 @@ class ByconQuery:
         prdbug(f"ByconQuery self.filters: {self.filters}")
 
         self.queries    = {"expand": True, "entities": {}}
+        self.id_queries = {}
 
         self.__set_variant_par_names()
         self.__queries_for_test_mode()
@@ -144,6 +144,8 @@ class ByconQuery:
         for a_k, a_d in self.argument_definitions.items():
             if a_d.get("is_variant_par") or a_d.get("is_vqs_par"):
                 self.variant_par_names.append(a_k)
+            for u_id in self.RecordsHierarchy.upstream("GenomicVariant"):
+                self.variant_par_names.append(u_id)
 
 
     # -------------------------------------------------------------------------#
@@ -158,46 +160,22 @@ class ByconQuery:
             if not (entity := argdefs[p_k].get("byc_entity")):
                 continue
             q = False
+            f_key = f"{entity}_id"
+
             if len(id_v_s) < 1:
                 continue
-
             elif len(id_v_s) == 1:
-                q = [{"id": id_v_s[0]}]
+                q_v = id_v_s[0]
             elif len(id_v_s) > 1:
-                q = [{"id": {"$in": id_v_s}}]
-            self.__id_query_add_variant_query(entity, id_v_s)
-
-            # prjsonnice(self.queries["entities"])
+                q_v =  {"$in": id_v_s}
+            
+            q = [{"id": q_v}]
+            # if not "genomicVariant" in entity:
+            self.id_queries.update({f_key: q_v})
 
             self.__update_queries_for_entity(q, entity)
-            # self.queries.update({"expand": False})
-
-
-    # -------------------------------------------------------------------------#
-
-    def __id_query_add_variant_query(self, entity, entity_ids):
-        # NOTE: _all_ variants cannot be retrieved for collections
-        if "variant" in entity.lower():
-            return
-
-        v_q_id = f"{entity}_id"
-        v_q_id = re.sub("run", "analysis", v_q_id)
-
-        if len(entity_ids) == 1:
-            q = [{v_q_id: entity_ids[0]}]
-        elif len(entity_ids) > 1:
-            q = [{v_q_id: {"$in": entity_ids}}]
-        else:
-            return
 
         # BYC.update({"AGGREGATE_VARIANT_RESULTS": False})
-
-        if (v_q := self.queries["entities"].get("genomicVariant", {}).get("query")):
-            q = {"$and": [q, v_q]}
-
-        self.queries["entities"].update(
-            {"genomicVariant": {"query": q, "collection": "variants"}}
-        )
 
 
     # -------------------------------------------------------------------------#
@@ -283,7 +261,7 @@ class ByconQuery:
         for p_k, v_p in variant_pars.items():
             v_p_k = humps.decamelize(p_k)
             if "variant_type" in v_p_k:
-                v_s_c = VariantTypes().variantStateChildren(v_p)
+                v_s_c = self.VariantTypes.variantStateChildren(v_p)
                 v_p_c.update({v_p_k: {"$in": v_s_c}})
                 continue
             if "reference_name" in v_p_k or "mate_name" in v_p_k:
@@ -313,7 +291,7 @@ class ByconQuery:
                 continue
             # VQS
             if "copy_change" in v_p_k:
-                v_s_c = VariantTypes().variantStateChildren(v_p)
+                v_s_c = self.VariantTypes.variantStateChildren(v_p)
                 v_p_c.update({"variant_type": {"$in": v_s_c}})
                 pop_list.append(p_k)
                 continue
@@ -391,8 +369,17 @@ class ByconQuery:
                     queries.append(q)
                     continue
 
-        # if len(queries) == 1:
-        #     queries = queries[0]
+            if self.id_queries.items():
+                # upstream ids are added to all queries if existing so here
+                # creating only a dummy one if no other query type existed
+                queries.append({})
+                continue
+
+        prdbug(f"__loop_multivars id_queries: {self.id_queries}")
+        for i, v_p_c in enumerate(queries):
+            for id_k, id_q in self.id_queries.items():
+                prdbug(f"Updating variant query {i} with id query for {id_k}: {id_q}")
+                queries[i].update({id_k: id_q})
 
         prdbug(f"__loop_multivars queries: {queries}")
 
@@ -448,12 +435,21 @@ class ByconQuery:
         for vrt in brts_k:
             matched_par_no = 0
             needed_par_no = 0
+            if "any_of" in brts[vrt]:
+                needed_par_no = 1
+                for any_of in brts[vrt]["any_of"]:
+                    if any_of in v_pars:
+                        matched_par_no += 1
+                        continue
             if "one_of" in brts[vrt]:
+                one_par_no = 0
                 needed_par_no = 1
                 for one_of in brts[vrt]["one_of"]:
                     if one_of in v_pars:
-                        matched_par_no = 1
-                        continue
+                        one_par_no += 1
+                if one_par_no == 1:
+                    matched_par_no += 1
+                    continue
             if "all_of" in brts[vrt]:
                 needed_par_no += len(brts[vrt]["all_of"])
                 for required in brts[vrt]["all_of"]:
@@ -466,6 +462,8 @@ class ByconQuery:
         if len(vrt_matches) > 0:
             vrt_matches = sorted(vrt_matches, key=lambda k: k["par_no"], reverse=True)
             variant_request_type = vrt_matches[0]["type"]
+        elif len(self.id_queries.keys()) > 0:
+            variant_request_type = "UpstreamIdRequest"
 
         prdbug(f"...variant_request_type: {variant_request_type}")
         return variant_request_type
@@ -481,15 +479,10 @@ class ByconQuery:
         queries = []
         for g in gene_id:
             g = g.upper()
-            # NOTE: priority genes are not queried for coordinates but directly 
-            # by gene symbol against the `analyses` collection
-            if self.__create_genemap_query(g, v_pars):
-                continue
             # TODO: error report/warning
             if not (gene_data := GeneInfo().returnGene(g)):
                 continue
             gene = gene_data[0]
-            prdbug(f"...GeneIdRequest gene_data: {gene}")
             # Since this is a pre-processor to the range request
             v_pars.update(
                 {
@@ -506,61 +499,6 @@ class ByconQuery:
             return False
 
         return queries
-
-
-    # -------------------------------------------------------------------------#
-
-    def __create_genemap_query(self, g, v_pars):
-        """
-        The Genemap Query accesses the special data structure for mapped genes
-        in the `analyses` collection which is currently only used for a set of
-        priority genes. The query is created based on the gene symbol
-        and potentially the variant type (if provided) and the respective mapping
-        information for this type (if available). Since the mapped gene info
-        does not contain the types of variants hitting this analysis' instance
-        the type of (CNV) variants is interpolated through their respective
-        coverage values.
-        Also: max variant length
-        """
-        v_t_defs    = self.variant_type_definitions
-        gene        = g.upper()
-        query_obj   = {}
-        entity      = "analysis"
-
-        if g not in self.priority_genes:
-            return False
-
-        query_obj   = {"gene_symbol": gene}
-
-        q_p = None
-        if (v_t := BYC_PARS.get("variant_type")):
-            if (hl := v_t_defs.get(v_t, {}).get("HLDUPDEL")):
-                q_p = f"{hl.lower()}"
-            elif (ll := v_t_defs.get(v_t, {}).get("DUPDEL")):
-                q_p = f"{ll.lower()}"
-            if q_p:
-                query_obj.update({q_p: {"$gt": 0}})
-            else:
-                prdbug(f"!!! no mapping for variant type {v_t} in genemap query!")
-                return False
-
-        if maxl := v_pars.get("variant_max_length"):
-            query_obj.update({"max_segment": {"$lte": maxl}})
-
-        if len(query_obj.keys()) > 1:
-            query = {"var_genemaps": {"$elemMatch": query_obj}}
-        else:
-            # direct dotted query
-            query = {"var_genemaps.gene_symbol": gene}
-
-        self.__update_queries_for_entity(query, entity)
-
-        # returning True since the query is directly added to the queries list
-        # and no further geneId parsing is needed
-        return True
-
-        # ./beaconServer/beacon.py -d progenetix -r analyses --geneId CDKN2A --variantType "EFO:0020073"
-        # db.analyses.findOne({"var_genemaps":{$elemMatch:{"gene_symbol":"CDKN2A","max_segment":{$lte:500000}, "hldel": 1}}})
 
 
     # -------------------------------------------------------------------------#
@@ -603,7 +541,7 @@ class ByconQuery:
                 v_pars.update(
                     {
                         "variant_type": {
-                            "$in": VariantTypes().variantStateChildren(change)
+                            "$in": self.VariantTypes.variantStateChildren(change)
                         }
                     }
                 )

@@ -103,35 +103,10 @@ class ByconParameters:
         self.__pars_from_shell()
         self.__pars_from_POST()
         self.__pars_from_GET()
-        # self.__add_gene_id_filter()
         self.__set_debug_mode()
 
 
     # -------------------------------------------------------------------------#
-
-    def __add_gene_id_filter(self):
-        if not (gene_ids := self.byc_pars.get("gene_id")):
-            return
-        if not isinstance(gene_ids, list):
-            gene_ids = [gene_ids]
-        n_g_pars = []
-        for g_id in gene_ids:
-            if not g_id:
-                continue
-            prdbug("... adding gene_id filter for gene id => " + str(g_id))
-            if str(g_id).upper() not in BYC.get("priority_genes", {}).keys():
-                n_g_pars.append(g_id)
-                continue
-            if "fiters" not in self.byc_pars:
-                self.byc_pars.update({"filters": []})
-            self.byc_pars["filters"].append({"id": f"__GENEID__:{g_id}"})
-        if len(n_g_pars) > 0:
-            self.byc_pars.update({"gene_id": n_g_pars})
-        else:
-            self.byc_pars.pop("gene_id", None)
-
-    # -------------------------------------------------------------------------#
-
 
     def __arguments_set_defaults(self):
         for a, d in self.arg_defs.items():

@@ -130,7 +130,7 @@
       isHidden: false
       defaultValue: ["pgx:icdom-85003"]
 
-- label: "Identifier - HeLa"
+- label: "Identifier Example"
   note: "Samples can be identified through identifiers."
   description: |
     This example retrieves _HeLa_ instances - including cell lines derived from

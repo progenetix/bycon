@@ -3,7 +3,7 @@ import { merge } from "lodash"
 import BiosamplesSearchPanel from "../components/searchForm/BiosamplesSearchPanel"
 import parConfig from "../config/beaconSearchParameters.yaml"
 import searchParLoc from "../site-specific/beaconSearchParameters.yaml"
-import beaconQueryTypes from  "../config/beaconQueryTypes.yaml"
+// import beaconQueryTypes from  "../config/beaconQueryTypes.yaml"
 import { Layout } from "./../site-specific/Layout"
 import baseSearchExamples from "../config/beaconSearchExamples.yaml"
 import locSearchExamples from "../site-specific/beaconSearchExamples.yaml"
@@ -19,9 +19,17 @@ const searchExamples = merge(
   locSearchExamples
 )
 
-searchExamples.forEach(function (v) {
-  console.log(v.label)
-  console.log(v.parameters)
+// searchExamples.forEach(function (v) {
+//   console.log(v.label)
+//   console.log(v.parameters)
+// })
+
+let beaconQueryTypes = structuredClone(searchExamples)
+beaconQueryTypes.forEach(function (v) {
+  Object.keys(v.parameters).forEach(p => {
+    v["label"] = v.label.replace(" Example", "")
+    v.parameters[p]["defaultValue"] = "" 
+  })
 })
 
 if (!parametersConfig.parameters?.datasetIds?.defaultValue) {

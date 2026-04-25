@@ -1,5 +1,5 @@
 from bycon import BYC_PARS, ByconResultSets, prdbug
-from byconServiceLibs import ByconMap
+from byconplus import ByconMap
 
 
 def sampleglobe():

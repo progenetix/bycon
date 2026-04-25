@@ -1,5 +1,6 @@
 from bycon import *
-from byconServiceLibs import ByconMap, ByconServiceResponse, open_text_streaming, ByconGeolocs
+from byconplus import ByconGeolocs, ByconMap, open_text_streaming
+from lib.service_response_generation import ByconServiceResponse
 
 def geolocations():
     """

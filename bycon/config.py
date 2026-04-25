@@ -146,7 +146,6 @@ BYC = {
     "genome_definitions":       {},
     "geo_defaults":             {},
     "plot_defaults":            {},
-    "priority_genes":           {},
     "request_profiles":         {},
     "service_configuration":    {},
     "test_queries":             {},

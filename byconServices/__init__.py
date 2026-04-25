@@ -1,8 +1,14 @@
 # __init__.py
 import sys
-from os import path
+from os import path, pardir
 
-sys.path.append( path.dirname( path.abspath(__file__) ) )
+services_path = path.dirname( path.abspath(__file__) )
+services_lib_path = path.join( services_path, pardir, "lib" )
+sys.path.append( services_lib_path )
+
+from service_response_generation import *
+
+sys.path.append(services_path)
 
 from api import api
 from byconschemas import byconschemas

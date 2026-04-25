@@ -1,5 +1,6 @@
-from bycon import BYC_PARS, BeaconErrorResponse, BeaconDataResponse, print_json_response
-from byconServiceLibs import ByconBundler, GenomeBins, ByconServiceResponse, PGXfreq
+from bycon import BYC_PARS, BeaconErrorResponse, BeaconDataResponse, GenomeBins, print_json_response
+from byconplus import ByconBundler, PGXfreq
+from lib.service_response_generation import ByconServiceResponse
 
 """
 * https://progenetix.org/services/intervalFrequencies/?datasetIds=progenetix&filters=NCIT:C7376,pubmed:22824167,pgx:icdom-85003

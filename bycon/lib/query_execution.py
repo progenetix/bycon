@@ -116,7 +116,7 @@ class ByconDatasetResults():
 
 
         """
-        prdbug(h_o_def)
+        # prdbug(h_o_def)
         t_c     = h_o_def.get("collection")
         d_k_s   = h_o_def.get("upstream_ids", [])
         m_k     = h_o_def.get("id_parameter", "id")
@@ -163,6 +163,8 @@ class ByconDatasetResults():
                     self.id_responses.update({id_k: {"values": id_matches[id_k]}})
                 self.id_responses[id_k].update({"count": len(self.id_responses[id_k]["values"])})
 
+                prdbug(f"... id matches for {id_k} got {len(id_matches[id_k])} {id_k} values")
+
 
     # -------------------------------------------------------------------------#
 
@@ -170,13 +172,15 @@ class ByconDatasetResults():
         t_c     = h_o_def.get("collection")
         id_k    = h_o_def.get("id_parameter")
         ids     = self.bycon_mongo.distinctsFromQuery(t_c, "id", query)
-        prdbug(f"__refetch_entity_id_response {id_k} => {query}")
+        # prdbug(f"__refetch_entity_id_response {id_k} => {query}")
 
         if (ex_resp := self.id_responses.get(id_k)):
             self.id_responses.update({id_k: {"values": list(set(ex_resp.get("values", [])) & set(ids))}})
         else:
             self.id_responses.update({id_k: {"values": ids}})
         self.id_responses[id_k].update({"count": len(self.id_responses[id_k]["values"])})
+
+        prdbug(f"... refetch for {id_k} got {len(self.id_responses[id_k]["values"])} values")
 
 
     # -------------------------------------------------------------------------#
@@ -208,31 +212,36 @@ class ByconDatasetResults():
                 ]
             }
             ent_resp_def = self.res_obj_defs.get(f'variants.id')
-            prdbug("... requerying variants with analysis_ids")
+            prdbug(f"... requerying variants with analysis_ids and {len(self.id_responses.get("genomicVariant_id", {}).get("values", []))} variants")
             self.__refetch_entity_id_response(ent_resp_def, query)
 
-        if "genomicVariant" in self.res_ent_id:
-            # TODO: Has to be optimized for large numbers...
-            e = "genomicVariant"
-            id_p = f"{e}_id"
-            v_ids = []
-            for ana_id in self.id_responses.get("analysis_id", {}).get("values", []):
-                v_ids += self.bycon_mongo.distinctsFromQuery("variants", "id", {"analysis_id": ana_id})
-            v_ids = list(set(v_ids))
+        # if "genomicVariant" in self.res_ent_id:
+        #     # TODO: Has to be optimized for large numbers...
+        #     e = "genomicVariant"
+        #     id_p = f"{e}_id"
+        #     v_ids = []
+        #     for ana_id in self.id_responses.get("analysis_id", {}).get("values", []):
+        #         query = {"$and": [
+        #                 {"analysis_id": ana_id},
+        #                 {"id": {"$in": self.id_responses.get("genomicVariant_id", {}).get("values", [])}}
+        #             ]
+        #         }
+        #         v_ids += self.bycon_mongo.distinctsFromQuery("variants", "id", query)
+        #     v_ids = list(set(v_ids))
 
-            v_no = len(v_ids)
-            if v_no > VARIANTS_RESPONSE_LIMIT:
-                v_ids = ByconH().paginated_list(v_ids, 0, VARIANTS_RESPONSE_LIMIT)
-                BYC["WARNINGS"].append(f"Too many {e} values ({v_no}) for dataset {self.dataset_id}. Only the first {VARIANTS_RESPONSE_LIMIT} will be returned.")
+        #     v_no = len(v_ids)
+        #     if v_no > VARIANTS_RESPONSE_LIMIT:
+        #         v_ids = ByconH().paginated_list(v_ids, 0, VARIANTS_RESPONSE_LIMIT)
+        #         BYC["WARNINGS"].append(f"Too many {e} values ({v_no}) for dataset {self.dataset_id}. Only the first {VARIANTS_RESPONSE_LIMIT} will be returned.")
 
-            self.id_responses.update({id_p: {"values": v_ids, "count": v_no}})
-            c = BYC_DBS.get("collections", {}).get(e, "___none___")
-            self.res_obj_defs.update({f'{c}.id': {
-                "collection": c,
-                "entity_id": e,
-                "id_parameter": id_p,
-                "upstream_ids": [f'{x}_id' for x in RecordsHierarchy().upstream(e)]
-            }})
+        #     self.id_responses.update({id_p: {"values": v_ids, "count": v_no}})
+        #     c = BYC_DBS.get("collections", {}).get(e, "___none___")
+        #     self.res_obj_defs.update({f'{c}.id': {
+        #         "collection": c,
+        #         "entity_id": e,
+        #         "id_parameter": id_p,
+        #         "upstream_ids": [f'{x}_id' for x in RecordsHierarchy().upstream(e)]
+        #     }})
 
 
     # -------------------------------------------------------------------------#

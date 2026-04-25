@@ -562,7 +562,7 @@ $defs:
       pattern: '^\w[\w,:-]+\w$'
     cmdFlags:
       - --pathIds
-    description: ids in the path
+    description: ids in the path, mapped to the respective entity id parametrs
 
   biosample_ids:
     type: array
@@ -570,7 +570,6 @@ $defs:
       type: string
       pattern: '^\w[\w,:-]+\w$'
     byc_entity: biosample
-    is_variant_par: True
     cmdFlags:
       - --biosampleIds
     description: biosample ids
@@ -581,7 +580,6 @@ $defs:
       type: string
       pattern: '^\w[\w,:-]+\w$'
     byc_entity: analysis
-    is_variant_par: True
     cmdFlags:
       - --analysisIds
     description: analysis ids
@@ -592,7 +590,6 @@ $defs:
       type: string
       pattern: '^\w[\w,:-]+\w$'
     byc_entity: individual
-    is_variant_par: True
     cmdFlags:
       - --individualIds
     description: subject ids

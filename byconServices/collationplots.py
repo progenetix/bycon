@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 
 from bycon import BeaconErrorResponse, BYC, BYC_PARS, prdbug
-from byconServiceLibs import ByconBundler, ByconPlot
+from byconplus import ByconBundler, ByconPlot
 
 ################################################################################
 

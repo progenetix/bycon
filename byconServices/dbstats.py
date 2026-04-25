@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 from bycon import BYC, BYC_DBS, print_json_response
-from byconServiceLibs import ByconServiceResponse
+from lib.service_response_generation import ByconServiceResponse
 
 def dbstats():
     """

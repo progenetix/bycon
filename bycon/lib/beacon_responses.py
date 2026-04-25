@@ -273,14 +273,16 @@ class BeaconDataResponse:
         self.beacon_schema = BYC["response_entity"].get("defaultSchema", "___none___")
         self.record_queries = {}
         self.response_schema = BYC.get("response_schema", "___none___")
-        self.data_response = ByconSchemas(
-            BYC["response_schema"], ""
-        ).get_schema_instance()
+
+        self.data_response = ByconSchemas(BYC["response_schema"], "").get_schema_instance()
         self.data_response.update(
             {"meta": BeaconResponseMeta(self.data_response).populatedMeta()}
         )
         for m in ["beacon_handovers", "info"]:
             self.data_response.pop(m, None)
+
+        self.ByconError = ByconError()
+
         self.data_time_init = datetime.now()
 
 
@@ -396,8 +398,12 @@ class BeaconDataResponse:
     # -------------------------------------------------------------------------#
 
     def __check_switch_to_error_response(self):
-        if not self.record_queries.get("entities"):
-            ByconError().addError("no valid query")
+        if not (q_e := self.record_queries.get("entities")):
+            self.ByconError.addError("no valid query")
+        elif self.response_entity_id == "genomicVariant" and not q_e.get("genomicVariant"):
+            self.ByconError.addError("Variants are only returned if variant query parameters or entity ids (e.g. biosample ids...) are provided in the request.")
+
+        if len(BYC["ERRORS"]) > 0:
             self.data_response.update(
                 {
                     "error": {
@@ -536,35 +542,36 @@ class BeaconDataResponse:
 ################################################################################
 ################################################################################
 
-
 class ByconFilteringTerms:
     def __init__(self, dataset_id=None):
-        self.response_entity_id = BYC.get("response_entity_id", "filteringTerm")
+        self.ds_id                  = BYC["BYC_DATASET_IDS"][0] if dataset_id is None else dataset_id
+        self.response_entity_id     = BYC.get("response_entity_id", "filteringTerm")
+        self.data_collection        = "collations"
+        self.filter_collation_types = set()
+        self.filtering_terms        = []
+        self.filter_resources       = []
+        self.filtering_terms_query  = {}
+        self.special_mode           = BYC_PARS.get("mode", "___none___")
+        self.filter_id_match_mode   = "full"
+        self.filters                = ByconFilters().get_filters()
+        self.ByconError             = ByconError()
+
         self.ft_instance = ByconSchemas(
             "beaconFilteringTermsResults", "$defs/FilteringTerm"
         ).get_schema_instance()
-        self.data_collection = "collations"
-        self.filter_collation_types = set()
-        self.filtering_terms = []
-        self.filter_resources = []
-        self.filtering_terms_query = {}
-        self.ds_id = BYC["BYC_DATASET_IDS"][0] if dataset_id is None else dataset_id
-        self.special_mode = BYC_PARS.get("mode", "___none___")
-        self.filter_id_match_mode = "full"
-        self.filters = ByconFilters().get_filters()
 
-        def_keys = self.ft_instance.get("default", self.ft_instance.keys())
-        if "termTree" in self.special_mode:
-            def_keys = [
-                "id",
-                "label",
-                "count",
-                "hierarchy_paths",
-                "cnv_analyses",
-                "collation_type",
-            ]
-
-        self.delivery_keys = BYC_PARS.get("delivery_keys", def_keys)
+        if not (def_keys := BYC_PARS.get("delivery_keys")):
+            def_keys = self.ft_instance.get("default", self.ft_instance.keys())
+            if "termTree" in self.special_mode:
+                def_keys = [
+                    "id",
+                    "label",
+                    "count",
+                    "hierarchy_paths",
+                    "cnv_analyses",
+                    "collation_type",
+                ]
+        self.delivery_keys = def_keys
 
 
     # -------------------------------------------------------------------------#
@@ -803,9 +810,11 @@ class ByconResultSets:
 
         m_d = BYC_DBS["housekeeping_db"]
         m_c = BYC_DBS.get("collections", {}).get("handover")
-        self.ho_coll = ByconMongo(m_d).openMongoColl(m_c)
 
+        self.ho_coll        = ByconMongo(m_d).openMongoColl(m_c)
         self.record_queries = ByconQuery().recordsQuery()
+        self.ByconError     = ByconError()
+
         self.__create_empty_result_sets()
         self.__get_handover_access_key()
         self.__retrieve_datasets_results()
@@ -847,7 +856,7 @@ class ByconResultSets:
         self.response_entity_id = "individual"
         self.__retrieve_datasets_data()
         if ds_id not in self.datasets_data:
-            ByconError().addError(
+            self.ByconError.addError(
                 "no correct dataset id provided to `dataset_results_biosample_ids`"
             )
             return []
@@ -866,7 +875,7 @@ class ByconResultSets:
         self.response_entity_id = "analysis"
         self.__retrieve_datasets_data()
         if ds_id not in self.datasets_data:
-            ByconError().addError(
+            self.ByconError.addError(
                 "no correct dataset id provided to `dataset_results_biosample_ids`"
             )
             return []
@@ -901,7 +910,7 @@ class ByconResultSets:
                         {"id": h_o["id"]}, {"$set": h_o}, upsert=True
                     )
                 else:
-                    ByconError().addError(
+                    self.ByconError.addError(
                         f"Storage size for {ds_id}.{h_o_k}: {h_o_size / 1000}kb ==>> not saved"
                     )
 

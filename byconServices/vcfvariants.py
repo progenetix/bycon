@@ -1,5 +1,5 @@
 from bycon import BYC, ByconResultSets
-from byconServiceLibs import PGXvcf
+from byconplus import PGXvcf
 
 ################################################################################
 
