@@ -63,7 +63,7 @@ def main(no_sudo):
         exit()
 
     server_source = path.join(dir_path, "beaconServer", "")
-    services_source = path.join(dir_path, "byconServices", "")
+    # services_source = path.join(dir_path, "byconServices", "")
     l_server_target = path.join(b_i_d_p, "local", "")
     server_target = path.join(b_i_d_p, "beaconServer", "")
     services_target = path.join(b_i_d_p, "services", "")
@@ -72,14 +72,14 @@ def main(no_sudo):
     print(f'==> Copied server configuration files from {local_conf_source} to {l_server_target}')
     system(f'{sudo_cmd} rsync -avh --delete {server_source} {server_target}')
     print(f'==> Copied server files from {server_source} to {server_target}')
-    system(f'{sudo_cmd} rsync -avh --delete {services_source} {services_target}')
-    print(f'==> Copied server files from {services_source} to {services_target}')
+    # system(f'{sudo_cmd} rsync -avh --delete {services_source} {services_target}')
+    # print(f'==> Copied server files from {services_source} to {services_target}')
 
     system(f'{sudo_cmd} chown -R {s_u}:{s_g} {b_i_d_p}')
     system(f'{sudo_cmd} chmod 775 {server_target}*.py')
     print(f'{sudo_cmd} chmod 775 {server_target}*.py')
-    system(f'{sudo_cmd} chmod 775 {services_target}*.py')
-    print(f'{sudo_cmd} chmod 775 {services_target}*.py')
+    # system(f'{sudo_cmd} chmod 775 {services_target}*.py')
+    # print(f'{sudo_cmd} chmod 775 {services_target}*.py')
 
     print(f'Updated bycon executable files from\n{path.join(dir_path, "bycon")}\nto\n{b_i_d_p}')
 

@@ -30,8 +30,8 @@ try:
 
     # the package namespace imports _all_ functions from _all_ modules
 
-    bycon_lib_path = path.join( pkg_path, "lib" )
-    sys.path.append( bycon_lib_path )
+    # bycon_lib_path = path.join( pkg_path, "lib" )
+    # sys.path.append( bycon_lib_path )
 
     # the star imports should be replaced w/ functions/classes permitted for
     # external use; so far a `from bycon import *` will make _all_ available

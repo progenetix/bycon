@@ -71,23 +71,25 @@ bycon
   |- beaconServer
   |   |
   |   `- beacon.py
-  |- bycon
+  |- src
   |   |
-  |   |- config
-  |   |   |
-  |   |   |- beacon_mappings.yaml
-  |   |   |- dataset_definitions.yaml
-  |   |   |- filter_definitions.yaml
-  |   |   `- ..._definitions.yaml
-  |   |- lib
-  |   |   |
-  |   |   |- parameter_parsing.py
-  |   |   |- read_specs.py
-  |   |   |- query_generation.py
-  |   |   |- query_execution.py
-  |   |    `- ...
-  |   `- rsrc
-  |        `- ...
+  |   `- bycon
+  |       |
+  |       |- config
+  |       |   |
+  |       |   |- beacon_mappings.yaml
+  |       |   |- dataset_definitions.yaml
+  |       |   |- filter_definitions.yaml
+  |       |   `- ..._definitions.yaml
+  |       |- lib
+  |       |   |
+  |       |   |- parameter_parsing.py
+  |       |   |- read_specs.py
+  |       |   |- query_generation.py
+  |       |   |- query_execution.py
+  |       |    `- ...
+  |       `- rsrc
+  |           `- ...
   |- docs
   |    `- ... documentation website source files ...
   |

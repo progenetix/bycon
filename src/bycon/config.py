@@ -19,7 +19,7 @@ BYC_LOCAL_CONF ==> LOC_PATH
 
 PKG_PATH            = path.dirname( path.abspath(__file__) )
 CONF_PATH           = path.join(PKG_PATH, "config")
-LIB_PATH            = path.join(PKG_PATH, "lib")
+LIB_PATH            = path.join(PKG_PATH)
 
 # path of the calling script is used to point to a local config directory
 CALLER_PATH         = path.dirname( path.abspath(sys.argv[0]))
