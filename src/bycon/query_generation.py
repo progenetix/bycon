@@ -3,7 +3,8 @@ import humps
 
 # ------------------------------- bycon imports -------------------------------#
 
-from bycon_helpers import (
+from bycon import BYC, BYC_DBS, BYC_PARS
+from .bycon_helpers import (
     ByconError,
     ByconH,
     ByconMongo,
@@ -11,10 +12,9 @@ from bycon_helpers import (
     prdbug,
     prjsonnice
 )
-from config import BYC, BYC_DBS, BYC_PARS
-from genome_utils import ChroNames, Cytobands, GeneInfo, VariantTypes
-from parameter_parsing import ByconFilters
-from schema_parsing import RecordsHierarchy
+from .genome_utils import ChroNames, Cytobands, GeneInfo, VariantTypes
+from .parameter_parsing import ByconFilters
+from .schema_parsing import RecordsHierarchy
 
 ################################################################################
 ################################################################################
@@ -1178,7 +1178,6 @@ class GeoQuery:
 ################################################################################
 ################################################################################
 ################################################################################
-
 
 class CollationQuery:
     def __init__(self):

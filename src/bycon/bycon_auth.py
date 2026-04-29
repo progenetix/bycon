@@ -1,7 +1,13 @@
 # ------------------------------- bycon imports -------------------------------#
 
-from bycon_helpers import prdbug
-from config import AUTHORIZATIONS, BYC, BYC_PARS, HTTP_HOST, GRANULARITIES
+from bycon import (
+    AUTHORIZATIONS,
+    BYC,
+    BYC_PARS,
+    HTTP_HOST,
+    GRANULARITIES
+)
+from .bycon_helpers import prdbug
 
 """
 This experimental authorization setup so far so far tests a method to define

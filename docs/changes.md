@@ -3,10 +3,20 @@
 ## Changes Tracker
 
 While changes are documented for individual point versions we actually do not
-push releases out for all of them; they serve more as internal development
+push releases out for all of them; they serve more as internal
 milestones.
 
-### 2024-04-25 (v2.9.0 "Foggy Bottom")
+### 2026-04-29 (v2.9.2)
+
+v2.9.2 integrates the content of the formerly separate & special `config.py` into
+the main `__init__.py`. Additionally, star imports have been removed.
+This is aligned w/ v0.2.1 of [`byconplus`](https://codeberg.org/Progenetix/byconplus) - please update (source or `pip`).
+
+### 2026-04-26 (v2.9.1 "Amtrak")
+
+In a major change to the previous versions the 2.9.1 release  removes all of the byconServices apps and libraries - now refactored in https://codeberg.org/Progenetix/byconservices (additionally to the previous library move & rewrites to https://codeberg.org/Progenetix/byconplus). Still no full release; more work on documentation, settings/configuration & deployment methods needed.
+
+### 2026-04-25 (v2.9.0 "Foggy Bottom")
 
 !!! info "Service libraries now in `byconplus` (dependency)"
 

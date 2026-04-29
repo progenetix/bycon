@@ -3,9 +3,7 @@
 import random
 
 from bycon import *
-
-from lib.service_response_generation import ByconServiceResponse, ByconError
-from service_helpers import assert_single_dataset_or_exit
+from byconplus import assert_single_dataset_or_exit
 
 
 """
@@ -18,13 +16,13 @@ from service_helpers import assert_single_dataset_or_exit
 ################################################################################
 
 def main():
-	ds_id = assert_single_dataset_or_exit()
+	ds_id          = assert_single_dataset_or_exit()
 	target_path_id = "individuals"
-	ho_key = f'{target_path_id}.id'
+	ho_key         = f'{target_path_id}.id'
 	BYC_PARS.update({"response_entity_path_id": target_path_id})
 	ByconEntities().set_entities()
 
-	r_ids = MultiQueryResponses(ds_id).get_individual_ids()
+	r_ids          = MultiQueryResponses(ds_id).get_individual_ids()
 
 	print(f'{"\n".join(BYC.get("NOTES", []))}')
 

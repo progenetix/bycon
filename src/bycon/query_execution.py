@@ -1,20 +1,21 @@
 from uuid import uuid4
 
-# ------------------------------- bycon imports -------------------------------#
 
-from config import BYC, BYC_DBS, VARIANTS_RESPONSE_LIMIT
-from bycon_helpers import ByconMongo, prdbug
-from schema_parsing import RecordsHierarchy
+# ------------------------------- bycon imports -------------------------------#
+from bycon import BYC, BYC_DBS
+from .bycon_helpers import ByconMongo, prdbug
+from .schema_parsing import RecordsHierarchy
 
 ################################################################################
 
-class ByconDatasetResults():
+
+class ByconDatasetResults:
     def __init__(self, ds_id, BQ):
-        self.dataset_results    = {}
-        self.dataset_id         = ds_id
-        self.entity_defaults    = BYC["entity_defaults"]
-        self.res_ent_id         = r_e_id = str(BYC.get("response_entity_id", "___none___"))
-        self.bycon_mongo        = ByconMongo(ds_id)
+        self.dataset_results = {}
+        self.dataset_id = ds_id
+        self.entity_defaults = BYC["entity_defaults"]
+        self.res_ent_id = str(BYC.get("response_entity_id", "___none___"))
+        self.bycon_mongo = ByconMongo(ds_id)
 
         # This is bycon and model specific; in the default model there would also
         # be `run` (which has it's data here as part of `analysis`). Also in
@@ -30,12 +31,18 @@ class ByconDatasetResults():
             bycon_entity = RecordsHierarchy().entityAlias(e)
             prdbug(f"... setting up response object definition for {bycon_entity}")
             c = BYC_DBS.get("collections", {}).get(bycon_entity, "___none___")
-            self.res_obj_defs.update({f'{c}.id': {
-                "collection": c,
-                "entity_id": bycon_entity,
-                "id_parameter": f'{bycon_entity}_id',
-                "upstream_ids": [f'{x}_id' for x in RecordsHierarchy().upstream(e)]
-            }})
+            self.res_obj_defs.update(
+                {
+                    f"{c}.id": {
+                        "collection": c,
+                        "entity_id": bycon_entity,
+                        "id_parameter": f"{bycon_entity}_id",
+                        "upstream_ids": [
+                            f"{x}_id" for x in RecordsHierarchy().upstream(e)
+                        ],
+                    }
+                }
+            )
 
         self.id_responses = {}
 
@@ -44,7 +51,6 @@ class ByconDatasetResults():
         self.__requery_to_aggregate()
         self.__set_dataset_results()
 
-
     # -------------------------------------------------------------------------#
     # ----------------------------- public ------------------------------------#
     # -------------------------------------------------------------------------#
@@ -52,24 +58,20 @@ class ByconDatasetResults():
     def retrieveResults(self):
         return self.dataset_results
 
-
     # -------------------------------------------------------------------------#
 
     def retrieve_individual_ids(self):
         return self.dataset_results.get("individuals.id", {}).get("target_values", [])
-
 
     # -------------------------------------------------------------------------#
 
     def retrieve_biosample_ids(self):
         return self.dataset_results.get("biosamples.id", {}).get("target_values", [])
 
-
     # -------------------------------------------------------------------------#
 
     def retrieve_analysis_ids(self):
         return self.dataset_results.get("analyses.id", {}).get("target_values", [])
-
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
@@ -80,12 +82,11 @@ class ByconDatasetResults():
         q_e_s = BQ.get("entities", {})
         for e, q_o in q_e_s.items():
             prdbug(f"... generating query for {e}")
-            if (q := q_o.get("query")):
-                prdbug(f"... {BYC_DBS.get("collections", {}).get(e)}")
+            if q := q_o.get("query"):
+                prdbug(f"... {BYC_DBS.get('collections', {}).get(e)}")
                 if str(c := BYC_DBS.get("collections", {}).get(e)) in c_n_s:
                     self.queries.update({e: q})
                     prdbug(f"... generated query for {e}: {q}")
-
 
     # -------------------------------------------------------------------------#
 
@@ -98,35 +99,31 @@ class ByconDatasetResults():
             return
 
         for e in self.queried_entities:
-            if not (e in q_e_s):
+            if e not in q_e_s:
                 continue
             query = self.queries.get(e)
-            bycon_entity = RecordsHierarchy().entityAlias(e)
             c = BYC_DBS.get("collections", {}).get(e, "___none___")
-            ent_resp_def = self.res_obj_defs.get(f'{c}.id')
-            prdbug(f"... prefetching entity multi id response for {e} with query {query}")
+            ent_resp_def = self.res_obj_defs.get(f"{c}.id")
+            prdbug(
+                f"... prefetching entity multi id response for {e} with query {query}"
+            )
             self.__prefetch_entity_multi_id_response(ent_resp_def, query)
-
 
     # -------------------------------------------------------------------------#
 
     def __prefetch_entity_multi_id_response(self, h_o_def, query):
-        """
-
-
-
-        """
+        """ """
         # prdbug(h_o_def)
-        t_c     = h_o_def.get("collection")
-        d_k_s   = h_o_def.get("upstream_ids", [])
-        m_k     = h_o_def.get("id_parameter", "id")
+        t_c = h_o_def.get("collection")
+        d_k_s = h_o_def.get("upstream_ids", [])
+        m_k = h_o_def.get("id_parameter", "id")
 
-        t_coll  = self.bycon_mongo.openMongoColl(t_c)
+        t_coll = self.bycon_mongo.openMongoColl(t_c)
 
-        d_group = {'_id': 0, "distincts_id": {'$addToSet': f'$id'}}
+        d_group = {"_id": 0, "distincts_id": {"$addToSet": "$id"}}
         for d_k in d_k_s:
-            dist_k = f'distincts_{d_k}'
-            d_group.update({dist_k: {'$addToSet': f'${d_k}'}})
+            dist_k = f"distincts_{d_k}"
+            d_group.update({dist_k: {"$addToSet": f"${d_k}"}})
 
         if type(query) is not list:
             query = [query]
@@ -139,9 +136,9 @@ class ByconDatasetResults():
                 qq = {"id": {"$in": ids}}
 
             pipeline = [
-                { '$match': qq },
-                { "$sample": { "size": 220000 }},
-                { '$group': d_group }
+                {"$match": qq},
+                {"$sample": {"size": 220000}},
+                {"$group": d_group},
             ]
             result = list(t_coll.aggregate(pipeline))
 
@@ -152,36 +149,53 @@ class ByconDatasetResults():
             if result:
                 id_matches.update({m_k: result[0].get("distincts_id", [])})
                 for d_k in d_k_s:
-                    dist_k = f'distincts_{d_k}'
+                    dist_k = f"distincts_{d_k}"
                     id_matches.update({d_k: result[0].get(dist_k, [])})
                     prdbug(f"{d_k}: {result[0].get(dist_k, [])}")
 
             for id_k in id_matches:
-                if (ex_resp := self.id_responses.get(id_k)):
-                    self.id_responses.update({id_k: {"values": list(set(ex_resp.get("values", [])) & set(id_matches[id_k]))}})
+                if ex_resp := self.id_responses.get(id_k):
+                    self.id_responses.update(
+                        {
+                            id_k: {
+                                "values": list(
+                                    set(ex_resp.get("values", []))
+                                    & set(id_matches[id_k])
+                                )
+                            }
+                        }
+                    )
                 else:
                     self.id_responses.update({id_k: {"values": id_matches[id_k]}})
-                self.id_responses[id_k].update({"count": len(self.id_responses[id_k]["values"])})
+                self.id_responses[id_k].update(
+                    {"count": len(self.id_responses[id_k]["values"])}
+                )
 
-                prdbug(f"... id matches for {id_k} got {len(id_matches[id_k])} {id_k} values")
-
+                prdbug(
+                    f"... id matches for {id_k} got {len(id_matches[id_k])} {id_k} values"
+                )
 
     # -------------------------------------------------------------------------#
 
     def __refetch_entity_id_response(self, h_o_def, query):
-        t_c     = h_o_def.get("collection")
-        id_k    = h_o_def.get("id_parameter")
-        ids     = self.bycon_mongo.distinctsFromQuery(t_c, "id", query)
+        t_c = h_o_def.get("collection")
+        id_k = h_o_def.get("id_parameter")
+        ids = self.bycon_mongo.distinctsFromQuery(t_c, "id", query)
         # prdbug(f"__refetch_entity_id_response {id_k} => {query}")
 
-        if (ex_resp := self.id_responses.get(id_k)):
-            self.id_responses.update({id_k: {"values": list(set(ex_resp.get("values", [])) & set(ids))}})
+        if ex_resp := self.id_responses.get(id_k):
+            self.id_responses.update(
+                {id_k: {"values": list(set(ex_resp.get("values", [])) & set(ids))}}
+            )
         else:
             self.id_responses.update({id_k: {"values": ids}})
-        self.id_responses[id_k].update({"count": len(self.id_responses[id_k]["values"])})
+        self.id_responses[id_k].update(
+            {"count": len(self.id_responses[id_k]["values"])}
+        )
 
-        prdbug(f"... refetch for {id_k} got {len(self.id_responses[id_k]["values"])} values")
-
+        prdbug(
+            f"... refetch for {id_k} got {len(self.id_responses[id_k]['values'])} values"
+        )
 
     # -------------------------------------------------------------------------#
 
@@ -194,25 +208,48 @@ class ByconDatasetResults():
         # entity and use this for all lover level handovers instead of
         # pre-generating them
 
-        query = {"individual_id": {"$in": self.id_responses.get("individual_id", {}).get("values", [])}}
-        ent_resp_def = self.res_obj_defs.get(f'biosamples.id')
+        query = {
+            "individual_id": {
+                "$in": self.id_responses.get("individual_id", {}).get("values", [])
+            }
+        }
+        ent_resp_def = self.res_obj_defs.get("biosamples.id")
         self.__refetch_entity_id_response(ent_resp_def, query)
 
-        query = {"biosample_id": {"$in": self.id_responses.get("biosample_id", {}).get("values", [])}}
-        ent_resp_def = self.res_obj_defs.get(f'analyses.id')
+        query = {
+            "biosample_id": {
+                "$in": self.id_responses.get("biosample_id", {}).get("values", [])
+            }
+        }
+        ent_resp_def = self.res_obj_defs.get("analyses.id")
         self.__refetch_entity_id_response(ent_resp_def, query)
 
         # another special case - variants are only queried if previously queried
         # otherwise one creates a variant storage for potentially millions
         # of variants just matching biosamples ... etc.
         if self.id_responses.get("genomicVariant_id"):
-            query = {"$and": [
-                    {"analysis_id": {"$in": self.id_responses.get("analysis_id", {}).get("values", [])}},
-                    {"id": {"$in": self.id_responses.get("genomicVariant_id", {}).get("values", [])}}
+            query = {
+                "$and": [
+                    {
+                        "analysis_id": {
+                            "$in": self.id_responses.get("analysis_id", {}).get(
+                                "values", []
+                            )
+                        }
+                    },
+                    {
+                        "id": {
+                            "$in": self.id_responses.get("genomicVariant_id", {}).get(
+                                "values", []
+                            )
+                        }
+                    },
                 ]
             }
-            ent_resp_def = self.res_obj_defs.get(f'variants.id')
-            prdbug(f"... requerying variants with analysis_ids and {len(self.id_responses.get("genomicVariant_id", {}).get("values", []))} variants")
+            ent_resp_def = self.res_obj_defs.get("variants.id")
+            prdbug(
+                f"... requerying variants with analysis_ids and {len(self.id_responses.get('genomicVariant_id', {}).get('values', []))} variants"
+            )
             self.__refetch_entity_id_response(ent_resp_def, query)
 
         # if "genomicVariant" in self.res_ent_id:
@@ -243,7 +280,6 @@ class ByconDatasetResults():
         #         "upstream_ids": [f'{x}_id' for x in RecordsHierarchy().upstream(e)]
         #     }})
 
-
     # -------------------------------------------------------------------------#
 
     def __set_dataset_results(self):
@@ -253,13 +289,15 @@ class ByconDatasetResults():
             if not (t_v_s := self.id_responses.get(m_k)):
                 continue
 
-            e_r.update({
-                "id": str(uuid4()),
-                "ds_id": self.dataset_id,
-                "target_values": t_v_s.get("values", []),
-                "target_count": t_v_s.get("count", 0),
-                "original_queries": self.queries
-            })
+            e_r.update(
+                {
+                    "id": str(uuid4()),
+                    "ds_id": self.dataset_id,
+                    "target_values": t_v_s.get("values", []),
+                    "target_count": t_v_s.get("count", 0),
+                    "original_queries": self.queries,
+                }
+            )
 
             self.dataset_results.update({h_o_k: e_r})
 

@@ -6,8 +6,8 @@ from pathlib import Path
 
 # ------------------------------- bycon imports -------------------------------#
 
-from bycon_helpers import dict_replace_values, prjsonnice, prdbug, prdbughead
-from config import *
+from bycon import BEACON_ROOT, BYC, PKG_PATH
+from .bycon_helpers import dict_replace_values, prjsonnice, prdbug, prdbughead
 
 ################################################################################
 
@@ -82,16 +82,16 @@ class RecordsHierarchy:
 
 class ByconSchemas:
     def __init__(self, schema_name="", root_key=""):
-        self.entity_defaults = BYC.get("entity_defaults", {})
-        self.schemas_root = Path(path.join(PKG_PATH, "schemas"))
-        self.schema_files = []
-        self.schema_def = {}
-        self.schema_instance = {}
-        self.schema_name = schema_name
-        self.schema_path_id = schema_name
-        self.root_key = root_key
-        self.ext = "yaml" # json
-        self.schema_path = False
+        self.entity_defaults    = BYC.get("entity_defaults", {})
+        self.schemas_root       = Path(path.join(PKG_PATH, "schemas"))
+        self.schema_files       = []
+        self.schema_def         = {}
+        self.schema_instance    = {}
+        self.schema_name        = schema_name
+        self.schema_path_id     = schema_name
+        self.root_key           = root_key
+        self.ext                = "yaml" # json
+        self.schema_path        = False
 
         # TODO: commented out since on 2025-07-04 in bycon the
         # `bycon-model/__request_entity_path_id__/defaultSchema.yaml`
@@ -140,17 +140,6 @@ class ByconSchemas:
 
     # -------------------------------------------------------------------------#
     # ----------------------------- private -----------------------------------#
-    # -------------------------------------------------------------------------#
-
-    # def __get_default_schema_file_path(self):
-    #     f_n = f'defaultSchema.{self.ext}'
-    #     s_p_s = [ f for f in self.schemas_root.rglob("*") if f.is_file() ]
-    #     s_p_s = [ f for f in s_p_s if f.name == f_n ]
-    #     s_p_s = [ f for f in s_p_s if f.parent.name == self.schema_path_id ]
-    #     if len(s_p_s) == 1:
-    #         self.schema_path = f'{s_p_s[0].resolve()}'
-
-
     # -------------------------------------------------------------------------#
 
     def __get_schema_file_path(self):

@@ -1,5 +1,14 @@
 # __init__.py
 
+import socket
+import sys
+import logging
+import traceback
+
+from deepmerge import always_merger
+from os import environ, pardir, path, scandir
+from pathlib import Path
+
 """
 bycon package initialization module.
 
@@ -8,47 +17,221 @@ Handles:
 - Module imports
 - Configuration loading
 - Parameter processing
+
+Runtime global variables that might be modified through providing them
+in the environment:
+
+DATABASE_NAMES
+BYCON_MONGO_HOST
+BYC_LOCAL_CONF ==> LOC_PATH
 """
-
-import sys
-import logging
-import traceback
-
-from deepmerge import always_merger
-from os import path, scandir
-from pathlib import Path
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+################################################################################
+# BASE CONFIG & GLOBALS ########################################################
+################################################################################
+
+BEACON_API_VERSION = "v2.3.0-beaconplus"
+
+PKG_PATH = path.dirname(path.abspath(__file__))
+CONF_PATH = path.join(PKG_PATH, "config")
+LIB_PATH = path.join(PKG_PATH)
+
+# path of the calling script is used to point to a local config directory
+CALLER_PATH = path.dirname(path.abspath(sys.argv[0]))
+PROJECT_PATH = path.join(CALLER_PATH, pardir)
+# local dataset configurations etc.
+LOC_PATH = environ.get("BYC_LOCAL_CONF", path.join(PROJECT_PATH, "local"))
+
+# ------------------------------------------------------------------------------#
+# Web settings
+# ------------------------------------------------------------------------------#
+
+HOSTNAME = environ.get("HOSTNAME", socket.gethostname())
+REQUEST_SCHEME = environ.get("REQUEST_SCHEME", "___shell___")
+REQUEST_URI = environ.get("REQUEST_URI", False)
+REQUEST_METHOD = environ.get("REQUEST_METHOD", "")
+SCRIPT_URI = environ.get("SCRIPT_URI", "")
+HTTP_HOST = environ.get("HTTP_HOST", "___shell___")
+X_FORWARDED_PROTO = str(environ.get("HTTP_X_FORWARDED_PROTO"))
+
+BEACON_ROOT = f"{REQUEST_SCHEME}://{HTTP_HOST}"
+if "https" not in BEACON_ROOT and "https" not in X_FORWARDED_PROTO:
+    BEACON_ROOT = BEACON_ROOT.replace("https://", "http://")
+if HTTP_HOST == "___shell___":
+    BEACON_ROOT = f"cli://{HOSTNAME}"
+
+REQUEST_PATH_ROOT = "beacon"
+if "services" in PROJECT_PATH:
+    REQUEST_PATH_ROOT = "services"
+
+# collection object for cmd arguments and web parameters (depending on the HTTP_HOST)
+# all possible parameters rare defined in `argument_definitions.yaml`, partially
+# provifding default values
+BYC_PARS = {}
+
+# path elements after the `beacon` or `services` REQUEST_PATH_ROOT
+# .../{REQUEST_PATH_ROOT}/{request_entity_path_id}/  {path_ids}   /{response_entity_path_id}
+# .../       beacon      /      individuals       /pgxind-kftx25eh/      biosamples
+REQUEST_PATH_PARAMS = ["request_entity_path_id", "path_ids", "response_entity_path_id"]
+
+# globals for treating "Null" value versions (e.g. from JS frontend to parameter
+# to stack interpretation); tests are performed in a case-insensitive
+PARAM_NONE_VALUES = ["none", "null", "undefined"]
+
+# ------------------------------------------------------------------------------#
+# Database settings
+# ------------------------------------------------------------------------------#
+
+BYC_DBS = {
+    "mongodb_host": environ.get("BYCON_MONGO_HOST", "localhost"),
+    "housekeeping_db": "_byconHousekeepingDB",
+    "services_db": "_byconServicesDB",
+    "collections": {
+        "info": "beaconinfo",
+        "handover": "querybuffer",
+        "genes": "genes",
+        "geolocs": "geolocs",
+        "genomicVariant": "variants",
+        "biosample": "biosamples",
+        "individual": "individuals",
+        "analysis": "analyses",
+        "run": "analyses",
+        "phenopacket": "individuals",
+        "filteringTerm": "collations",
+        "cohort": "collations",
+        "collation": "collations",
+        "publication": "publications",
+        "analysis_cnv_map": "analyses_1Mb_maps",
+        "analysis_gene_map": "analyses_genes_maps",
+        "collation_cnv_map": "collations_1Mb_frequencymaps",
+    },
+}
+
+# limits for MongoDB queries to avoid databasse errors
+MONGO_DISTINCT_STORAGE_LIMIT = 300000
+VARIANTS_RESPONSE_LIMIT = 300000
+
+################################################################################
+# potentially to be modified during execution ##################################
+################################################################################
+
+BYC = {
+    "DEBUG_MODE": False,
+    "TEST_MODE": False,
+    "ERRORS": [],
+    "WARNINGS": [],
+    "NOTES": [],
+    "USER": "anonymous",
+    "BYC_DATASET_IDS": [],
+    "default_dataset_id": "examplez",
+    "test_domains": ["localhost"],
+    "info_responses": [
+        "beaconInfoResponse",
+        "beaconConfigurationResponse",
+        "beaconMapResponse",
+        "beaconEntryTypesResponse",
+    ],
+    "data_responses": [
+        "beaconCollectionsResponse",
+        "beaconResultsetsResponse",
+        "beaconAggregationConceptsResponse",
+        "beaconFilteringTermsResponse",
+    ],
+    # ..._mappings / ..._definitions are generated from YAML files & should stay
+    # static unless overridden by local defaults
+    "aggregation_terms": {},
+    "argument_definitions": {},
+    "authorizations": {},
+    "dataset_definitions": {},
+    "datatable_mappings": {},
+    "beacon_configuration": {},
+    "env_paths": {},
+    "filter_definitions": {},
+    "handover_definitions": {},
+    "genome_definitions": {},
+    "geo_defaults": {},
+    "plot_defaults": {},
+    "request_profiles": {},
+    "service_configuration": {},
+    "test_queries": {},
+    "variant_type_definitions": {},
+    # parameter spaces for which local overrides are accepted
+    # these are generated from the YAML files in `local`
+    "loc_mod_pars": [
+        "authorizations",
+        "env_paths",
+        "filter_definitions",
+        "datatable_mappings",
+        "test_queries",
+        "plot_defaults",
+    ],
+    # -------------------------------------------------------------------------- #
+    "authorized_granularities": {},
+    "request_entity_id": None,
+    "response_entity_id": None,
+    "response_entity": {},
+    "response_schema": "beaconInfoResponse",
+    "returned_granularity": "boolean",
+}
+
+# default authorization levels; a local `authorizations.yaml` file can add to
+# these / override the values
+# additionally to the default local `dataset_id` values can be added (as in
+# "examplez" here)
+AUTHORIZATIONS = {
+    "anonymous": {"default": "boolean", "examplez": "record"},
+    "local": {"default": "record"},
+}
+
+# sorted granularities (least access to full)
+GRANULARITIES = ["none", "boolean", "count", "aggregated", "record"]
+
+# ------------------------------------------------------------------------------#
+# not really to be modified...
+# ------------------------------------------------------------------------------#
+
+BYC_UNCAMELED = [
+    "gVariants",
+    "gVariant",
+    "sequenceId",
+    "relativeCopyClass",
+    "speciesId",
+    "chromosomeLocation",
+    "genomicLocation",
+]
+
+BYC_UPPER = ["EFO", "UBERON", "NCIT", "PATO"]
+
+################################################################################
+# / BASE CONFIG & GLOBALS ######################################################
+################################################################################
+
 # try block to give at least some feedback on errors
+# CAVE: bycon libraries depend on the configurations above and imports from them
+# have to be defined *after* those variables
 try:
-    pkg_path = path.dirname(path.abspath(__file__))
-    sys.path.append(pkg_path)
-    from config import BYC, CONF_PATH, HTTP_HOST, LOC_PATH
-
-    # the package namespace imports _all_ functions from _all_ modules
-
-    # bycon_lib_path = path.join( pkg_path, "lib" )
-    # sys.path.append( bycon_lib_path )
-
-    # the star imports should be replaced w/ functions/classes permitted for
-    # external use; so far a `from bycon import *` will make _all_ available
-    from beacon_responses import *
-    from bycon_auth import ByconAuth
-    from bycon_helpers import *
-    from bycon_info import *
-    from bycon_summaries import *
-    from genome_utils import ChroNames, Cytobands, GeneInfo, GeneIntervals, VariantTypes
-    from interval_utils import *
-    from parameter_parsing import *
-    from query_execution import ByconDatasetResults
-    from query_generation import *
-    from response_remapping import *
-    from schema_parsing import *
-    from variant_mapping import ByconVariant
-    from vrs_translator import AdjacencyTranslator, AlleleTranslator, CnvTranslator
+    from .beacon_responses import BeaconErrorResponse, BeaconInfoResponse, BeaconDataResponse, ByconResultSets
+    from .bycon_auth import ByconAuth
+    from .bycon_helpers import (
+        ByconError, ByconH, ByconID, ByconMongo, ByconTSVreader,
+        dict_replace_values, get_nested_value, load_yaml_empty_fallback,
+        print_json_response, print_yaml_response, print_text_response, print_html_response, print_uri_rewrite_response,
+        prdlhead, prdbug, prjsonnice, prtexthead
+    )
+    from .bycon_info import ByconInfo
+    from .bycon_summaries import ByconSummaries
+    from .genome_utils import ChroNames, Cytobands, GeneInfo, GeneIntervals, VariantTypes
+    from .parameter_parsing import ByconDatasets, ByconEntities, ByconFilters, ByconParameters, RefactoredValues
+    from .query_execution import ByconDatasetResults
+    from .query_generation import ByconQuery, CollationQuery, GeoQuery
+    from .response_remapping import reshape_resultset_results
+    from .schema_parsing import ByconSchemas, RecordsHierarchy
+    from .variant_mapping import ByconVariant
+    from .vrs_translator import AdjacencyTranslator, AlleleTranslator, CnvTranslator
 
     # Configuration: Loading Stage #############################################
 

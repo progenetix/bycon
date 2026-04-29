@@ -6,8 +6,8 @@ from os import path
 
 # ------------------------------- bycon imports -------------------------------#
 
-from bycon_helpers import ByconError, ByconMongo, ByconTSVreader, prdbug
-from config import BYC, BYC_DBS, BYC_PARS, PKG_PATH
+from bycon import BYC, BYC_DBS, BYC_PARS, PKG_PATH
+from .bycon_helpers import ByconError, ByconMongo, ByconTSVreader, prdbug
 
 ################################################################################
 ################################################################################

@@ -5,11 +5,11 @@ from humps import decamelize
 
 # ------------------------------- bycon imports -------------------------------#
 
-from bycon_helpers import get_nested_value
-from config import BYC
-from genome_utils import ChroNames
-from parameter_parsing import RefactoredValues
-from vrs_translator import AdjacencyTranslator, AlleleTranslator, CnvTranslator
+from bycon import BYC
+from .bycon_helpers import get_nested_value
+from .genome_utils import ChroNames
+from .parameter_parsing import RefactoredValues
+from .vrs_translator import AdjacencyTranslator, AlleleTranslator, CnvTranslator
 
 ################################################################################
 ################################################################################

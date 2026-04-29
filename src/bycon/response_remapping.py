@@ -8,9 +8,9 @@ from isodate import date_isoformat
 
 # ------------------------------- bycon imports -------------------------------#
 
-from bycon_helpers import prdbug, clean_empty_properties
-from config import *
-from variant_mapping import ByconVariant
+from bycon import BYC
+from .bycon_helpers import prdbug, clean_empty_properties
+from .variant_mapping import ByconVariant
 
 ################################################################################
 ################################################################################

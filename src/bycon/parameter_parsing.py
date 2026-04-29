@@ -10,8 +10,8 @@ from os import environ
 
 # ------------------------------- bycon imports -------------------------------#
 
-from bycon_helpers import prdbug, prdbughead, ByconError, ByconH, ByconMongo
-from config import (
+from .bycon_helpers import prdbug, prdbughead, ByconError, ByconH, ByconMongo
+from bycon import (
     BYC,
     BYC_DBS,
     BYC_PARS,

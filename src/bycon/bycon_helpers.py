@@ -16,9 +16,10 @@ from pymongo import MongoClient
 
 # ------------------------------- bycon imports -------------------------------#
 
-from config import (
+from bycon import (
     BYC,
     BYC_DBS,
+    BYC_PARS,
     BYC_UNCAMELED,
     BYC_UPPER,
     HTTP_HOST
@@ -507,4 +508,70 @@ def get_nested_value(parent, dotted_key):
             return ""
             
     return current
+
+################################################################################
+# common response functions ####################################################
+################################################################################
+
+def print_json_response(this={}, status_code=200):
+    if "yaml" in BYC_PARS.get("mode", ""):
+        print_yaml_response(this, status_code)
+    if "___shell___" not in HTTP_HOST:
+        print(f"Status: {status_code}")
+        print("Content-Type: application/json")
+        print()
+
+    prjsoncam(this)
+    print()
+    exit()
+
+
+################################################################################
+
+def print_yaml_response(this={}, status_code=200):
+    if "___shell___" not in HTTP_HOST:
+        print(f"Status: {status_code}")
+        print("Content-Type: application/x-yaml")
+        print()
+
+    this = camelize(this)
+    print(yaml.dump(camelize(this)))
+    print()
+    exit()
+
+
+################################################################################
+
+def print_text_response(this="", status_code=200):
+    if "___shell___" not in HTTP_HOST:
+        print(f"Status: {status_code}")
+        print("Content-Type: text/plain")
+        print()
+
+    print(this)
+    print()
+    exit()
+
+
+################################################################################
+
+def print_html_response(this="", status_code=200):
+    if "___shell___" not in HTTP_HOST:
+        print(f"Status: {status_code}")
+        print("Content-Type: text/html")
+        print()
+
+    print(this)
+    print()
+    exit()
+
+
+################################################################################
+
+
+def print_uri_rewrite_response(uri=""):
+    print("Status: 302")
+    print(f"Location: {uri}")
+    print()
+    exit()
 

@@ -2,8 +2,8 @@ import re
 
 # ------------------------------- bycon imports -------------------------------#
 
-from config import BYC, BYC_DBS, BYC_PARS
-from bycon_helpers import ByconMongo, days_from_iso8601duration, prdbug, prjsonnice
+from bycon import BYC, BYC_DBS, BYC_PARS
+from .bycon_helpers import ByconMongo, days_from_iso8601duration, prdbug, prjsonnice
 
 ################################################################################
 ################################################################################

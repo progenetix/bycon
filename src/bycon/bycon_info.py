@@ -4,9 +4,9 @@ from progress.bar import Bar
 
 # ------------------------------- bycon imports -------------------------------#
 
-from bycon_helpers import ByconMongo, prjsonnice
-from config import BYC, BYC_DBS
-from parameter_parsing import ByconDatasets
+from bycon import BYC, BYC_DBS
+from .bycon_helpers import ByconMongo, prjsonnice
+from .parameter_parsing import ByconDatasets
 
 ################################################################################
 

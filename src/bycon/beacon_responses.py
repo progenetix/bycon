@@ -8,14 +8,20 @@ from humps import camelize
 
 # ------------------------------- bycon imports -------------------------------#
 
-from bycon_helpers import ByconError, ByconH, ByconMongo, clean_empty_properties, dict_replace_values, prdbug, prjsoncam
-from bycon_summaries import ByconSummaries
-from config import BEACON_ROOT, BYC, BYC_DBS, BYC_PARS, HTTP_HOST
-from parameter_parsing import ByconFilters
-from query_execution import ByconDatasetResults  # execute_bycon_queries
-from query_generation import ByconQuery, CollationQuery
-from response_remapping import reshape_resultset_results
-from schema_parsing import ByconSchemas, RecordsHierarchy
+from bycon import (
+    BEACON_ROOT,
+    BYC,
+    BYC_DBS,
+    BYC_PARS,
+    HTTP_HOST
+)
+from .bycon_helpers import ByconError, ByconH, ByconMongo, clean_empty_properties, dict_replace_values, prdbug, prjsoncam
+from .bycon_summaries import ByconSummaries
+from .parameter_parsing import ByconFilters
+from .query_execution import ByconDatasetResults
+from .query_generation import ByconQuery, CollationQuery
+from .response_remapping import reshape_resultset_results
+from .schema_parsing import ByconSchemas, RecordsHierarchy
 
 ################################################################################
 
@@ -1118,69 +1124,3 @@ class ByconHO:
         return url
 
 
-################################################################################
-# common response functions ####################################################
-################################################################################
-
-def print_json_response(this={}, status_code=200):
-    if "yaml" in BYC_PARS.get("mode", ""):
-        print_yaml_response(this, status_code)
-    if "___shell___" not in HTTP_HOST:
-        print(f"Status: {status_code}")
-        print("Content-Type: application/json")
-        print()
-
-    prjsoncam(this)
-    print()
-    exit()
-
-
-################################################################################
-
-def print_yaml_response(this={}, status_code=200):
-    if "___shell___" not in HTTP_HOST:
-        print(f"Status: {status_code}")
-        print("Content-Type: application/x-yaml")
-        print()
-
-    this = camelize(this)
-    print(yaml.dump(camelize(this)))
-    print()
-    exit()
-
-
-################################################################################
-
-def print_text_response(this="", status_code=200):
-    if "___shell___" not in HTTP_HOST:
-        print(f"Status: {status_code}")
-        print("Content-Type: text/plain")
-        print()
-
-    print(this)
-    print()
-    exit()
-
-
-################################################################################
-
-
-def print_html_response(this="", status_code=200):
-    if "___shell___" not in HTTP_HOST:
-        print(f"Status: {status_code}")
-        print("Content-Type: text/html")
-        print()
-
-    print(this)
-    print()
-    exit()
-
-
-################################################################################
-
-
-def print_uri_rewrite_response(uri=""):
-    print("Status: 302")
-    print(f"Location: {uri}")
-    print()
-    exit()
