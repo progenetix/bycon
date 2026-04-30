@@ -3,4 +3,4 @@ BY=(./dist/bycon*tar.gz)
 pip3 install $BY --no-index --no-build-isolation --break-system-packages
 rm -rf ./build                           
 rm -rf ./dist
-rm -rf ./src/bycon.egg-info
+rm -rf ./bycon.egg-info
