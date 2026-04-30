@@ -214,7 +214,7 @@ BYC_UPPER = ["EFO", "UBERON", "NCIT", "PATO"]
 # CAVE: bycon libraries depend on the configurations above and imports from them
 # have to be defined *after* those variables
 try:
-    from .beacon_responses import BeaconErrorResponse, BeaconInfoResponse, BeaconDataResponse, ByconResultSets
+    from .beacon_responses import BeaconErrorResponse, BeaconInfoResponse, BeaconDataResponse, BeaconResponseMeta, ByconResultSets
     from .bycon_auth import ByconAuth
     from .bycon_helpers import (
         ByconError, ByconH, ByconID, ByconMongo, ByconTSVreader,

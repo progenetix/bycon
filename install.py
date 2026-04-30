@@ -81,7 +81,7 @@ def main(no_sudo):
     # system(f'{sudo_cmd} chmod 775 {services_target}*.py')
     # print(f'{sudo_cmd} chmod 775 {services_target}*.py')
 
-    print(f'Updated bycon executable files from\n{path.join(dir_path, "bycon")}\nto\n{b_i_d_p}')
+    print(f'\nUpdated bycon executable files from\n{path.join(dir_path, "bycon")}\nto\n{b_i_d_p}')
 
     ############################################################################
 
@@ -97,7 +97,6 @@ def main(no_sudo):
         cmd = "local"
     else:
         exit()
-
 
     if not (d_r_d := path.join( *install.get("server_doc_dir_loc"))):
         print(f'¡¡¡ No documentation directory defined as `server_doc_dir_loc` in `{i_f}`!!!')
