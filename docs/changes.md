@@ -6,6 +6,10 @@ While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal
 milestones.
 
+### WiP
+
+* fixed missing export for `days_from_iso8601duration`
+
 ### 2026-04-29 (v2.9.2)
 
 v2.9.2 integrates the content of the formerly separate & special `config.py` into

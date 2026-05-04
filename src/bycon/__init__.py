@@ -218,7 +218,7 @@ try:
     from .bycon_auth import ByconAuth
     from .bycon_helpers import (
         ByconError, ByconH, ByconID, ByconMongo, ByconTSVreader,
-        dict_replace_values, get_nested_value, load_yaml_empty_fallback,
+        days_from_iso8601duration, dict_replace_values, get_nested_value, load_yaml_empty_fallback,
         print_json_response, print_yaml_response, print_text_response, print_html_response, print_uri_rewrite_response,
         prdlhead, prdbug, prjsonnice, prtexthead
     )
