@@ -22,7 +22,7 @@ class RecordsHierarchy:
 
     def __init__(self):
         self.record_entities = ["individual", "biosample", "analysis", "genomicVariant"]
-        self.record_aliases = {
+        self.entity_aliases = {
             "individual": "individual",
             "phenopacket": "individual",
             "biosample": "biosample",
@@ -37,13 +37,13 @@ class RecordsHierarchy:
 
     def entities(self):
         # return self.record_entities
-        return list(self.record_aliases.keys())
+        return list(self.entity_aliases.keys())
 
 
     # -------------------------------------------------------------------------#
 
     def entityAlias(self, entity):
-        return self.record_aliases.get(entity, entity)
+        return self.entity_aliases.get(entity, entity)
 
 
     # -------------------------------------------------------------------------#

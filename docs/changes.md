@@ -1,6 +1,6 @@
 # Changes & To Do
 
-## Changes Tracker
+## Changes Tracker (`bycon`, `byconplus` and `byconservices`)
 
 While changes are documented for individual point versions we actually do not
 push releases out for all of them; they serve more as internal
@@ -9,7 +9,7 @@ milestones.
 ### WiP
 
 * fixed missing export for `days_from_iso8601duration`
-* fixed potential problem in which dbstats did not retrieve results for a specified
+* fixed potential problem in which the `dbstats` service did not retrieve results for a specified
   collection if this was not included in the latest stats update
 
 ### 2026-04-29 (v2.9.2)
