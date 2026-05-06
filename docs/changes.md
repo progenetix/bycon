@@ -9,6 +9,8 @@ milestones.
 ### WiP
 
 * fixed missing export for `days_from_iso8601duration`
+* fixed potential problem in which dbstats did not retrieve results for a specified
+  collection if this was not included in the latest stats update
 
 ### 2026-04-29 (v2.9.2)
 
