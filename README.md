@@ -1,5 +1,16 @@
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0%201.0-lightgrey.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
 
+> [!IMPORTANT]
+>
+> The `bycon` project v2 branch is the about to be frozen (May 2026). Further development [has already continued, hosted on Codeberg](https://codeberg.org/Progenetix/bycon/).
+> A developer setup for the complete `bycon` Beacon ecosystem can be achieved with the additional projects
+>
+> *  [byconplus](https://codeberg.org/Progenetix/byconplus/)
+> *  [byconaut](https://codeberg.org/Progenetix/byconaut/)
+> *  [beaconplus-web](https://codeberg.org/Progenetix/beaconplus-web/)
+>
+> The combined documentation at [bycon.progenetix.org](https://bycon.progenetix.org) has still to catch up.
+
 # Bycon - a Python-based full stack environment for the Beacon genomics API
 
 The `bycon` project implements a data hosting environment for genomic and pheno-clinical data aligned with the GA4GH Beacon data model. It provides a Beacon API for data query and retrieval but also has extended functionality with a focus on genomic copy number variation data. For a prominent implementation example showcasing `bycon` features please see the [*Progenetix* oncogenomic resource](https://progenetix.org).
